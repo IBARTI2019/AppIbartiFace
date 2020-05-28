@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item
+        android:id="@+id/nav_standby"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="StandBy" />
+
+    <item android:title="Maestros">
+        <menu>
+            <item
+                android:id="@+id/nav_categorias"
+                android:icon="@drawable/ic_home_black_24dp"
+                android:title="Categorias" />
+            <item
+                android:id="@+id/nav_status"
+                android:icon="@drawable/ic_home_black_24dp"
+                android:title="Status" />
+            <item
+                android:id="@+id/nav_personas"
+                android:icon="@drawable/ic_home_black_24dp"
+                android:title="Personas" />
+        </menu>
+    </item>
+
+    <item android:title="Reportes">
+        <menu>
+            <item
+                android:id="@+id/nav_asistencia_ibarti"
+                android:icon="@drawable/ic_home_black_24dp"
+                android:title="Asistencia Ibarti" />
+        </menu>
+    </item>
+</menu>
