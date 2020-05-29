@@ -1,64 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp">
+    android:layout_height="match_parent"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:paddingStart="4dp"
+    android:paddingEnd="4dp">
 
     <TextView
         android:id="@+id/cedula"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/cliente"
-        tools:text="27195451" />
+        android:layout_column="1"
+        android:textAppearance="@style/item_list"
+        android:text="27198030" />
 
     <TextView
         android:id="@+id/cliente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/cedula"
-        app:layout_constraintEnd_toStartOf="@id/categoria"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:text="001"/>
+        android:layout_column="1"
+        android:textAppearance="@style/item_list"
+        android:text="0001" />
 
     <TextView
         android:id="@+id/categoria"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/status"
-        app:layout_constraintStart_toEndOf="@id/cliente"
-        tools:text="j4dhfk56k56"/>
+        android:layout_column="1"
+        android:textAppearance="@style/item_list"
+        android:text="Categoafhjofhdfhjofhjoria" />
 
     <TextView
-        android:id="@+id/status"
+        android:id="@+id/estatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@id/categoria"
-        app:layout_constraintEnd_toStartOf="@id/edit"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:text="454g56"/>
-
-    <ImageView
-        android:id="@+id/edit"
-        android:layout_width="?listPreferredItemHeight"
-        android:layout_height="match_parent"
-        android:scaleType="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_edit_black_24dp"
-        tools:ignore="PrivateResource" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_column="1"
+        android:textAppearance="@style/item_list"
+        android:text="nfjdkjghjkdkjh" />
+</TableRow>

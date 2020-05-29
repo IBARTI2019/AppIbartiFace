@@ -29,13 +29,13 @@ class PersonsAdapter() : RecyclerView.Adapter<PersonsAdapter.PersonViewHolder>()
     }
 
     override fun onBindViewHolder(holder: PersonViewHolder, position: Int) {
-        holder.bind(persons[position])
+       // holder.bind(persons[position])
     }
 
     override fun getItemCount(): Int = persons.size
 
     inner class PersonViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        private val cedula: TextView by lazy { view.cedula }
+        /*private val cedula: TextView by lazy { view.cedula }
         private val categoria: TextView by lazy { view.categoria }
         private val cliente: TextView by lazy { view.cliente }
         private val status: TextView by lazy { view.status }
@@ -45,6 +45,6 @@ class PersonsAdapter() : RecyclerView.Adapter<PersonsAdapter.PersonViewHolder>()
             categoria.text = person.category
             cliente.text = person.client
             status.text = person.status
-        }
+        }*/
     }
 }
