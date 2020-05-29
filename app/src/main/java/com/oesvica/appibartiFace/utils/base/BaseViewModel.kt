@@ -38,7 +38,6 @@ abstract class BaseViewModel(
 
     val compositeDisposable by lazy { CompositeDisposable() }
 
-
     private val job = SupervisorJob()
 
     override val coroutineContext: CoroutineContext

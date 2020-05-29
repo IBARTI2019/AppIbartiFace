@@ -6,58 +6,39 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.oesvica.appibartiFace.R
-
-
-import com.oesvica.appibartiFace.ui.categories.CategoriesFragment.OnListFragmentInteractionListener
-import com.oesvica.appibartiFace.ui.categories.dummy.DummyContent.DummyItem
+import com.oesvica.appibartiFace.data.model.Category
 
 import kotlinx.android.synthetic.main.fragment_category.view.*
 
 /**
- * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
- * specified [OnListFragmentInteractionListener].
+ * [RecyclerView.Adapter] that can display a [Category]
  */
-class CategoriesAdapter(
-    private val mValues: List<DummyItem>,
-    private val mListener: OnListFragmentInteractionListener?
-) : RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
+class CategoriesAdapter() : RecyclerView.Adapter<CategoriesAdapter.CategoryViewHolder>() {
 
-    private val mOnClickListener: View.OnClickListener
+    var categories: List<Category> = ArrayList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
-    init {
-        mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as DummyItem
-            // Notify the active callbacks interface (the activity, if the fragment is attached to
-            // one) that an item has been selected.
-            mListener?.onListFragmentInteraction(item)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
+        return CategoryViewHolder(LayoutInflater.from(parent.context)
+            .inflate(R.layout.fragment_category, parent, false)).apply {
+
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_category, parent, false)
-        return ViewHolder(view)
+    override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
+        holder.bind(categories[position])
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = mValues[position]
-        holder.mIdView.text = item.id
-        holder.mContentView.text = item.content
+    override fun getItemCount(): Int = categories.size
 
-        with(holder.mView) {
-            tag = item
-            setOnClickListener(mOnClickListener)
-        }
-    }
+    inner class CategoryViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+        private val description: TextView by lazy { view.description }
 
-    override fun getItemCount(): Int = mValues.size
-
-    inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mIdView: TextView = mView.item_number
-        val mContentView: TextView = mView.content
-
-        override fun toString(): String {
-            return super.toString() + " '" + mContentView.text + "'"
+        fun bind(category: Category){
+            description.text = category.description
         }
     }
 }
