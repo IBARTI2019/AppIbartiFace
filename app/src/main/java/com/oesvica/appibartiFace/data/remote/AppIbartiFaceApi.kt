@@ -4,6 +4,7 @@ import com.oesvica.appibartiFace.data.model.Category
 import com.oesvica.appibartiFace.data.model.Person
 import com.oesvica.appibartiFace.data.model.Status
 import io.reactivex.rxjava3.core.Single
+import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 import retrofit2.http.Url
 

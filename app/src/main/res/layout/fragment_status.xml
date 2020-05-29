@@ -7,13 +7,25 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
-        android:id="@+id/description"
+        android:id="@+id/categoria"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Lorem ipsum xdddddd"
+        tools:text="Lorem ipsum"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/description"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="descripcion"
+        app:layout_constraintStart_toEndOf="@id/categoria"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/edit"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <ImageView
@@ -21,6 +33,7 @@
         android:layout_width="?listPreferredItemHeight"
         android:layout_height="match_parent"
         android:scaleType="center"
+        app:layout_constraintStart_toEndOf="@id/description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/delete"
         app:layout_constraintTop_toTopOf="parent"
@@ -32,6 +45,7 @@
         android:layout_width="?listPreferredItemHeight"
         android:layout_height="match_parent"
         app:srcCompat="@drawable/ic_delete_black_24dp"
+        app:layout_constraintStart_toEndOf="@id/edit"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -12,4 +12,8 @@
   <string name="menu_slideshow">Slideshow</string>
 
   <string name="home_second">Home Second</string>
+    <string name="menu_persons">Personas</string>
+  <string name="menu_status">Status</string>
+  <string name="menu_category">Categorias</string>
+  <string name="menu_standby">StandBy</string>
 </resources>

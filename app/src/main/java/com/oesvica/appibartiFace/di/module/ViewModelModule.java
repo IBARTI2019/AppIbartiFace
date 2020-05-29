@@ -23,6 +23,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.oesvica.appibartiFace.ViewModelProviderFactory;
 import com.oesvica.appibartiFace.di.ViewModelKey;
 import com.oesvica.appibartiFace.ui.categories.CategoriesViewModel;
+import com.oesvica.appibartiFace.ui.persons.PersonsViewModel;
+import com.oesvica.appibartiFace.ui.statuses.StatusesViewModel;
 
 import dagger.Binds;
 import dagger.Module;
@@ -35,6 +37,16 @@ public abstract class ViewModelModule {
   @IntoMap
   @ViewModelKey(CategoriesViewModel.class)
   abstract ViewModel bindCategoriesViewModel(CategoriesViewModel viewModel);
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(PersonsViewModel.class)
+  abstract ViewModel bindPersonsViewModel(PersonsViewModel PersonsViewModel);
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(StatusesViewModel.class)
+  abstract ViewModel bindStatusesViewModel(StatusesViewModel StatusesViewModel);
 
   @Binds
   abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelProviderFactory factory);

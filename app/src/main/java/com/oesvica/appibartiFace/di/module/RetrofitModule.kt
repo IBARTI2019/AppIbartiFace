@@ -37,7 +37,6 @@ class RetrofitModule {
     fun provideRetrofit(okHttpClient: OkHttpClient, gson: Gson): Retrofit = Retrofit.Builder()
         .baseUrl(AppIbartiFaceApi.END_POINT)
         .client(okHttpClient)
-        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 

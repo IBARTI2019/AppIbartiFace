@@ -7,26 +7,25 @@
 
     <fragment
         android:id="@+id/nav_standby"
-        android:name="com.oesvica.appibartiFace.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home"/>
+        android:name="com.oesvica.appibartiFace.ui.categories.CategoriesFragment"
+        android:label="@string/menu_standby"/>
 
     <fragment
         android:id="@+id/nav_categorias"
         android:name="com.oesvica.appibartiFace.ui.categories.CategoriesFragment"
-        android:label="Categorias"
-        tools:layout="@layout/fragment_gallery" />
+        android:label="@string/menu_category"
+        tools:layout="@layout/fragment_category_list" />
 
     <fragment
         android:id="@+id/nav_status"
-        android:name="com.oesvica.appibartiFace.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:name="com.oesvica.appibartiFace.ui.statuses.StatusesFragment"
+        android:label="@string/menu_status"
+        tools:layout="@layout/fragment_status_list"/>
 
     <fragment
         android:id="@+id/nav_personas"
-        android:name="com.oesvica.appibartiFace.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:name="com.oesvica.appibartiFace.ui.persons.PersonsFragment"
+        android:label="@string/menu_persons"
+        tools:layout="@layout/fragment_person_list"/>
 
 </navigation>
