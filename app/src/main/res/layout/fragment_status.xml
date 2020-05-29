@@ -8,7 +8,8 @@
 
     <TextView
         android:id="@+id/categoria"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent="0.45"
         android:layout_height="wrap_content"
         tools:text="Lorem ipsum"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,7 +20,8 @@
 
     <TextView
         android:id="@+id/description"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent="0.35"
         android:layout_height="wrap_content"
         tools:text="descripcion"
         app:layout_constraintStart_toEndOf="@id/categoria"
@@ -30,7 +32,8 @@
 
     <ImageView
         android:id="@+id/edit"
-        android:layout_width="?listPreferredItemHeight"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent="0.1"
         android:layout_height="match_parent"
         android:scaleType="center"
         app:layout_constraintStart_toEndOf="@id/description"
@@ -42,7 +45,8 @@
 
     <ImageView
         android:id="@+id/delete"
-        android:layout_width="?listPreferredItemHeight"
+        android:layout_width="0dp"
+        app:layout_constraintWidth_percent="0.1"
         android:layout_height="match_parent"
         app:srcCompat="@drawable/ic_delete_black_24dp"
         app:layout_constraintStart_toEndOf="@id/edit"
