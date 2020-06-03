@@ -2,6 +2,7 @@
   <dictionary name="sneyd">
     <words>
       <w>categoria</w>
+      <w>descripcion</w>
     </words>
   </dictionary>
 </component>

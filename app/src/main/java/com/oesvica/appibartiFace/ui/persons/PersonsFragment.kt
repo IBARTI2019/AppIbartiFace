@@ -38,14 +38,8 @@ class PersonsFragment : DaggerFragment() {
         super.onActivityCreated(savedInstanceState)
     }
 
-    private fun setUpTable() {/*
-        val view = layoutInflater.inflate(R.layout.fragment_person, null)
-        personsTableLayout.addView(view)*/
+    private fun setUpTable() {
 
-     /*   with(personsRecyclerView) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = personsAdapter
-        }*/
     }
 
     private fun observeCategories() {
@@ -60,7 +54,6 @@ class PersonsFragment : DaggerFragment() {
                     view.estatus.text = person.status
                     personsTableLayout.addView(view)
                 }
-                //personsAdapter.persons = it
             }
         })
     }

@@ -8,13 +8,11 @@ import io.reactivex.rxjava3.core.Completable
 
 abstract class MaestrosRepository {
 
-    abstract fun insertCategory(category: Category): Completable
-
-    abstract fun updateCategory(category: Category): Completable
-
-    abstract fun deleteCategory(category: Category): Completable
-
     abstract suspend fun findCategories(): Result<List<Category>>
+    abstract suspend fun insertCategory(description: String): Result<Category>
+    abstract suspend fun updateCategory(category: Category): Result<Category>
+    abstract suspend fun deleteCategory(idCategory: String): Result<Unit>
+
     abstract suspend fun findStatuses(): Result<List<Status>>
     abstract suspend fun findPersons(): Result<List<Person>>
 

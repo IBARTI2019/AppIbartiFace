@@ -1,9 +1,6 @@
 package com.oesvica.appibartiFace.data.repository
 
-import com.oesvica.appibartiFace.data.model.Category
-import com.oesvica.appibartiFace.data.model.Person
-import com.oesvica.appibartiFace.data.model.Result
-import com.oesvica.appibartiFace.data.model.Status
+import com.oesvica.appibartiFace.data.model.*
 import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi
 import io.reactivex.rxjava3.core.Completable
 import java.lang.Exception
@@ -16,20 +13,21 @@ class AppMaestrosRepository
     private val appIbartiFaceApi: AppIbartiFaceApi
 ) : MaestrosRepository() {
 
-    override fun insertCategory(category: Category): Completable {
-        TODO("Not yet implemented")
-    }
-
-    override fun updateCategory(category: Category): Completable {
-        TODO("Not yet implemented")
-    }
-
-    override fun deleteCategory(category: Category): Completable {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun findCategories(): Result<List<Category>> {
+
         return mapToResult { appIbartiFaceApi.findCategories() }
+    }
+
+    override suspend fun insertCategory(description: String): Result<Category> {
+        return mapToResult { appIbartiFaceApi.addCategory(CategoryRequest(description)) }
+    }
+
+    override suspend fun updateCategory(category: Category): Result<Category> {
+        return mapToResult { appIbartiFaceApi.updateCategory(category.id, CategoryRequest(category.description)) }
+    }
+
+    override suspend fun deleteCategory(idCategory: String): Result<Unit> {
+        return mapToResult { appIbartiFaceApi.deleteCategory(idCategory) }
     }
 
     override suspend fun findStatuses(): Result<List<Status>> {

@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_category.view.*
 /**
  * [RecyclerView.Adapter] that can display a [Category]
  */
-class CategoriesAdapter(val context: Context) :
+class CategoriesAdapter(val context: Context, private val onEdit: (category: Category) -> Unit, private val onDelete: (category: Category) -> Unit) :
     RecyclerView.Adapter<CategoriesAdapter.CategoryViewHolder>() {
 
     var categories: List<Category> = ArrayList()
@@ -47,10 +47,12 @@ class CategoriesAdapter(val context: Context) :
         fun bind(category: Category) {
             description.text = category.description
             view.edit.setOnClickListener {
-                debug("edit clicked")
+                debug("edit clicked on $category")
+                onEdit(category)
             }
             view.delete.setOnClickListener {
-                debug("delete clicked")
+                debug("delete clicked $category")
+                onDelete(category)
             }
         }
     }

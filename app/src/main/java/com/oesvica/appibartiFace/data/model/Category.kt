@@ -2,11 +2,14 @@ package com.oesvica.appibartiFace.data.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = Category.TABLE_NAME)
 data class Category(
-    @SerializedName("_id") @Expose var id: String = "",
+    @PrimaryKey @SerializedName("_id") @Expose var id: String = "",
     @SerializedName("descripcion") @Expose var description: String = ""
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -25,6 +28,7 @@ data class Category(
     }
 
     companion object CREATOR : Parcelable.Creator<Category> {
+        const val TABLE_NAME = "Category"
         override fun createFromParcel(parcel: Parcel): Category {
             return Category(parcel)
         }

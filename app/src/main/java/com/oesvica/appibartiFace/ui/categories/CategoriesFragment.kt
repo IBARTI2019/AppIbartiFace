@@ -1,5 +1,6 @@
 package com.oesvica.appibartiFace.ui.categories
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -7,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 import com.oesvica.appibartiFace.R
+import com.oesvica.appibartiFace.data.model.Category
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.dialogs.EditTextDialog
@@ -16,7 +19,14 @@ import kotlinx.android.synthetic.main.fragment_category_list.*
 /**
  * A fragment representing a list of ca.
  */
-class CategoriesFragment : DaggerFragment(), EditTextDialog.EditTextListener {
+class CategoriesFragment : DaggerFragment() {
+
+    companion object {
+        const val REQUEST_ADD_CATEGORY = 1001
+        const val REQUEST_UPDATE_CATEGORY = 1002
+        const val DESCRIPTION = "DESCRIPTION"
+        const val ID = "ID"
+    }
 
     private val categoriesViewModel by lazy { getViewModel<CategoriesViewModel>() }
 
@@ -28,28 +38,51 @@ class CategoriesFragment : DaggerFragment(), EditTextDialog.EditTextListener {
     }
 
     private val categoriesAdapter by lazy {
-        CategoriesAdapter(requireContext())
-    }
-
-    override fun onTextTyped(textTyped: String) {
-        debug("typed $textTyped")
+        CategoriesAdapter(requireContext(), onEdit = {
+            showCategoryDialog(REQUEST_UPDATE_CATEGORY, "Editar categoria", it.description, it.id)
+        }, onDelete = {
+            categoriesViewModel.deleteCategory(it.id)
+        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         setUpRecyclerView()
         addCategoryButton.setOnClickListener {
-            debug("adding category")
-            val nf = EditTextDialog.newInstance("", "Descripcion", "Agregar categoria")
-            nf.setTargetFragment(this, 54)
-            nf.show(requireFragmentManager(), "")
+            showCategoryDialog(REQUEST_ADD_CATEGORY, "Agregar categoria")
         }
         observeCategories()
+        categoriesViewModel.snackBarMsg.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                debug("snack $it")
+                Snackbar.make(categoriesFrameLayout, it, Snackbar.LENGTH_SHORT).show()
+            }
+        })
         categoriesViewModel.loadCategories()
         super.onActivityCreated(savedInstanceState)
     }
 
+    private fun showCategoryDialog(
+        requestCode: Int,
+        title: String,
+        defaultValue: String = "",
+        id: String = ""
+    ) {
+        val addCategoryDialog = EditTextDialog.newInstance(title, defaultValue, "Descripcion", id)
+        addCategoryDialog.setTargetFragment(this, requestCode)
+        addCategoryDialog.isCancelable = false
+        addCategoryDialog.show(requireFragmentManager(), "")
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         debug("onActivityResult $requestCode $resultCode ${data?.getStringExtra("DESCRIPTION")}")
+        if (resultCode == Activity.RESULT_OK) {
+            val id = data?.getStringExtra(EditTextDialog.ARG_ID) ?: ""
+            val desc = data?.getStringExtra("DESCRIPTION")
+            if (!desc.isNullOrEmpty()) {
+                if (id.isEmpty()) categoriesViewModel.addCategory(desc)
+                else categoriesViewModel.updateCategory(Category(id, desc))
+            }
+        }
     }
 
     private fun setUpRecyclerView() {

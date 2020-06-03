@@ -1,6 +1,7 @@
 package com.oesvica.appibartiFace.utils.dialogs
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
@@ -16,56 +17,61 @@ class EditTextDialog : DialogFragment() {
 
     companion object {
 
-        private const val ARG_FIELD_TO_ENTER = "fieldToEnter"
         private const val ARG_TITLE = "title"
+        private const val ARG_VALUE = "value"
         private const val ARG_HINT = "hint"
+        const val ARG_ID = "ID"
 
-        fun newInstance(fieldToEnter: String, hint: String, title: String): EditTextDialog {
+        fun newInstance(title: String, value: String, hint: String, id: String = ""): EditTextDialog {
             return EditTextDialog().apply {
-                arguments = bundleOf(ARG_FIELD_TO_ENTER to fieldToEnter, ARG_HINT to hint, ARG_TITLE to title)
+                arguments = bundleOf(
+                    ARG_TITLE to title,
+                    ARG_VALUE to value,
+                    ARG_HINT to hint,
+                    ARG_ID to id
+                )
             }
         }
     }
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val fieldToEnter = arguments?.getString(ARG_FIELD_TO_ENTER)
-                ?: throw Exception("No value passed to argument ARG_FIELD_TO_ENTER in EditTextDialog")
         val title = arguments?.getString(ARG_TITLE)
-                ?: throw Exception("No value passed to argument ARG_TITLE in EditTextDialog")
+            ?: throw Exception("No value passed to argument ARG_TITLE in EditTextDialog")
+        val value = arguments?.getString(ARG_VALUE)
+            ?: throw Exception("No value passed to argument ARG_VALUE in EditTextDialog")
         val hint = arguments?.getString(ARG_HINT)
-                ?: throw Exception("No value passed to argument ARG_HINT in EditTextDialog")
+            ?: throw Exception("No value passed to argument ARG_HINT in EditTextDialog")
+        val id = arguments?.getString(ARG_ID)
+            ?: throw Exception("No value passed to argument ARG_ID in EditTextDialog")
 
         val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_edit_text, null)
 
-        val fieldToEnterEditText = view.findViewById<EditText>(R.id.fieldToEnterEditText)
-        fieldToEnterEditText.setText(fieldToEnter)
-        fieldToEnterEditText.hint = hint
+        val inputEditText = view.findViewById<EditText>(R.id.inputEditText)
+        inputEditText.setText(value)
+        if (value.isNotEmpty()) inputEditText.setSelection(value.length)
+        inputEditText.hint = hint
 
         return AlertDialog.Builder(requireContext())
-                .setView(view)
-                .setTitle(title)
-                .setPositiveButton(android.R.string.ok) { _, _ ->
-                    val textTyped = fieldToEnterEditText.text.toString().trim()
-                    if (textTyped != fieldToEnter) getRegisteredListener()?.onTextTyped(textTyped)
-                    val resultCode = 12
-                    targetFragment?.onActivityResult(targetRequestCode, resultCode, Intent().apply { putExtra("DESCRIPTION", textTyped) })
-                }
-                .setNegativeButton(android.R.string.cancel) { dialog, _ -> dialog.cancel() }
-                .create()
+            .setView(view)
+            .setTitle(title)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                val textTyped = inputEditText.text.toString().trim()
+                targetFragment?.onActivityResult(
+                    targetRequestCode,
+                    Activity.RESULT_OK,
+                    Intent().apply {
+                        putExtra("DESCRIPTION", textTyped)
+                        putExtra(ARG_ID, id)
+                    })
+            }
+            .setNegativeButton(android.R.string.cancel) { dialog, _ ->
+                targetFragment?.onActivityResult(
+                    targetRequestCode,
+                    Activity.RESULT_CANCELED,
+                    Intent())
+                dialog.cancel()
+            }
+            .create()
     }
-
-    private fun getRegisteredListener(): EditTextListener? {
-        return when {
-            targetFragment is EditTextListener -> targetFragment as EditTextListener
-            context is EditTextListener -> context as EditTextListener
-            activity is EditTextListener -> activity as EditTextListener
-            else -> null //throw Exception("You must implement EditTextListener in your activity, " + "context or targetFragment associated with this EditTextDialog")
-        }
-    }
-
-    interface EditTextListener {
-        fun onTextTyped(textTyped: String)
-    }
-
 }

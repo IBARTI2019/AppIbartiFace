@@ -27,7 +27,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 
-@Module(includes = [(ViewModelModule::class), (RepositoriesModule::class), (RetrofitModule::class)])
+@Module(includes = [(ViewModelModule::class), (RepositoriesModule::class), (RoomDatabaseModule::class), (RetrofitModule::class)])
 abstract class AppModule {
 
     @Binds
