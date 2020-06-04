@@ -1,5 +1,6 @@
 package com.oesvica.appibartiFace.ui.standby
 
+import androidx.lifecycle.MediatorLiveData
 import com.oesvica.appibartiFace.data.model.StandBy
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
@@ -14,19 +15,42 @@ class StandByViewModel @Inject constructor(
     schedulerProvider: SchedulerProvider
 ) : BaseViewModel(schedulerProvider) {
 
-    val standBys by lazy { maestrosRepository.findCurrentDayStandBys() }
+    private val todayStandBys by lazy { maestrosRepository.findCurrentDayStandBys() }
+
+    var standBys = MediatorLiveData<List<StandBy>>()
+    private var todayStandBysLoaded = false
 
     fun loadTodayStandBys() {
         debug("loading today standbys")
+        if(!todayStandBysLoaded){
+            standBys.addSource(todayStandBys) {
+                standBys.value = it
+            }
+        }
+        todayStandBysLoaded = true
         launch {
             val standbys = withContext(IO) { maestrosRepository.refreshCurrentDayStandBys() }
-            debug("result standBys=$standbys")
+            debug("loadTodayStandBys result standBys=$standbys")
         }
     }
 
-    fun deleteStandBy(standBy: StandBy){
+    fun searchStandBys(client: String, date: String) {
+        debug("searchStandBys($client: String, $date: String)")
         launch {
-            val resultDelete = withContext(IO){
+            val standsBysResult = withContext(IO) {
+                maestrosRepository.refreshStandBysByClientAndDate(client, date)
+            }
+            debug("searchStandBys standsBysResult=$standsBysResult")
+            standBys.removeSource(todayStandBys)
+            standBys.addSource(maestrosRepository.findStandBysByClientAndDate(client, date)) {
+                standBys.value = it
+            }
+        }
+    }
+
+    fun deleteStandBy(standBy: StandBy) {
+        launch {
+            val resultDelete = withContext(IO) {
                 maestrosRepository.deleteStandBy(standBy.client, standBy.date, standBy.url)
             }
             debug("resultDelete=$resultDelete")

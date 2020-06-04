@@ -1,9 +1,12 @@
 package com.oesvica.appibartiFace.ui.addPerson
 
+import com.oesvica.appibartiFace.data.model.AddPersonRequest
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.schedulers.SchedulerProvider
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class AddPersonViewModel
@@ -22,7 +25,9 @@ class AddPersonViewModel
         client: String,
         device: String,
         date: String,
-        photo: String
+        photo: String,
+        onSuccess: () -> Unit,
+        onError: () -> Unit
     ) {
 
         debug(
@@ -35,6 +40,28 @@ class AddPersonViewModel
                     "        $date: String,\n" +
                     "        $photo: String"
         )
+
+        launch {
+            withContext(IO) {
+                val result = maestrosRepository.insertPerson(
+                    AddPersonRequest(
+                        cedula = cedula,
+                        category = category,
+                        status = status,
+                        cliente = client,
+                        dispositivo = device,
+                        fecha = date,
+                        foto = photo
+                    )
+                )
+                debug("result add person=$result")
+                if (result.success != null) {
+                    onSuccess()
+                } else {
+                    onError()
+                }
+            }
+        }
     }
 
 }

@@ -20,13 +20,19 @@ abstract class StandByDao : BaseDao<StandBy> {
     abstract fun findAllStandBys(): LiveData<List<StandBy>>
 
     @Query("SELECT * FROM ${StandBy.TABLE_NAME} WHERE date=:today")
-    abstract fun findTodayStandBys(today: String = currentDay()): LiveData<List<StandBy>>
+    abstract fun findStandBysByDate(today: String = currentDay()): LiveData<List<StandBy>>
+
+    @Query("SELECT * FROM ${StandBy.TABLE_NAME} WHERE client=:client AND date=:date")
+    abstract fun findStandBysByClientAndDate(client: String, date: String = currentDay()): LiveData<List<StandBy>>
 
     // Delete
     @Query("DELETE FROM ${StandBy.TABLE_NAME}")
     abstract suspend fun deleteAllStandBys()
 
     @Query("DELETE FROM ${StandBy.TABLE_NAME} WHERE date=:today")
-    abstract suspend fun deleteTodayStandBys(today: String = currentDay())
+    abstract suspend fun deleteStandBysByDate(today: String = currentDay())
+
+    @Query("DELETE FROM ${StandBy.TABLE_NAME} WHERE client=:client AND date=:today")
+    abstract suspend fun deleteStandBysByClientAndDate(client: String, today: String = currentDay())
 
 }

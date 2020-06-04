@@ -19,6 +19,7 @@ package com.oesvica.appibartiFace.di.builder
 import com.oesvica.appibartiFace.ui.addPerson.AddPersonActivity
 import com.oesvica.appibartiFace.ui.addStatus.AddStatusActivity
 import com.oesvica.appibartiFace.ui.categories.CategoriesProvider
+import com.oesvica.appibartiFace.ui.editPerson.EditPersonActivity
 import com.oesvica.appibartiFace.ui.main.MainActivity
 import com.oesvica.appibartiFace.ui.persons.PersonsProvider
 import com.oesvica.appibartiFace.ui.standby.StandByProvider
@@ -37,5 +38,8 @@ abstract class ActivityBuilder {
 
     @ContributesAndroidInjector()
     abstract fun bindAddPersonActivity(): AddPersonActivity
+
+    @ContributesAndroidInjector()
+    abstract fun bindEditPersonActivity(): EditPersonActivity
 
 }

@@ -25,4 +25,6 @@
     <string name="cedula">Cedula</string>
     <string name="add_person">Registrar persona</string>
     <string name="edit_person">Editar persona</string>
+    <string name="standby_client">Cliente</string>
+    <string name="standby_date">Fecha</string>
 </resources>

@@ -7,6 +7,7 @@ import com.oesvica.appibartiFace.data.database.StandByDao
 import com.oesvica.appibartiFace.data.database.StatusDao
 import com.oesvica.appibartiFace.data.model.*
 import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi
+import com.oesvica.appibartiFace.utils.currentDay
 import com.oesvica.appibartiFace.utils.debug
 import java.lang.Exception
 import javax.inject.Inject
@@ -94,15 +95,30 @@ class AppMaestrosRepository
     }
 
     override fun findCurrentDayStandBys(): LiveData<List<StandBy>> {
-        return standByDao.findTodayStandBys()
+        return standByDao.findStandBysByDate()
+    }
+
+    override fun findStandBysByClientAndDate(client: String, date: String): LiveData<List<StandBy>> {
+        debug("changing dao")
+        return standByDao.findStandBysByClientAndDate(client, date)
     }
 
     override suspend fun refreshCurrentDayStandBys(): Result<Unit> {
         return mapToResult {
             val todayStandBys = appIbartiFaceApi.findStandBysCurrentDay()
             debug("todayStandBys=$todayStandBys")
-            standByDao.deleteTodayStandBys()
+            standByDao.deleteStandBysByDate(currentDay())
             standByDao.insertStandBys(*todayStandBys.toTypedArray())
+        }
+    }
+
+    override suspend fun refreshStandBysByClientAndDate(client: String, date: String): Result<Unit> {
+        debug("refreshStandBysByClientAndDate($client: String, $date: String)")
+        return mapToResult {
+            val standBys = appIbartiFaceApi.findStandBysByClientAndDate(client, date)
+            debug("refreshStandBysByClientAndDate($client, $date)=$standBys")
+            standByDao.deleteStandBysByClientAndDate(client, date)
+            standByDao.insertStandBys(*standBys.toTypedArray())
         }
     }
 

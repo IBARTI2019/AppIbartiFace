@@ -25,6 +25,7 @@ import com.oesvica.appibartiFace.di.ViewModelKey;
 import com.oesvica.appibartiFace.ui.addPerson.AddPersonViewModel;
 import com.oesvica.appibartiFace.ui.addStatus.AddStatusViewModel;
 import com.oesvica.appibartiFace.ui.categories.CategoriesViewModel;
+import com.oesvica.appibartiFace.ui.editPerson.EditPersonViewModel;
 import com.oesvica.appibartiFace.ui.persons.PersonsViewModel;
 import com.oesvica.appibartiFace.ui.standby.StandByViewModel;
 import com.oesvica.appibartiFace.ui.statuses.StatusesViewModel;
@@ -65,6 +66,11 @@ public abstract class ViewModelModule {
   @IntoMap
   @ViewModelKey(AddPersonViewModel.class)
   abstract ViewModel bindAddPersonViewModel(AddPersonViewModel AddPersonViewModel);
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(EditPersonViewModel.class)
+  abstract ViewModel bindEditPersonViewModel(EditPersonViewModel EditPersonViewModel);
 
   @Binds
   abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelProviderFactory factory);

@@ -6,13 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.oesvica.appibartiFace.R
-import com.oesvica.appibartiFace.data.model.Category
 import com.oesvica.appibartiFace.data.model.Status
 import com.oesvica.appibartiFace.utils.debug
 import kotlinx.android.synthetic.main.fragment_status.view.*
 
 /**
- * [RecyclerView.Adapter] that can display a [Category]
+ * [RecyclerView.Adapter] that can display a [Status]
  */
 class StatusesAdapter(private val onEdit: (status: Status) -> Unit, private val onDelete: (status: Status) -> Unit) :
     RecyclerView.Adapter<StatusesAdapter.CategoryViewHolder>() {

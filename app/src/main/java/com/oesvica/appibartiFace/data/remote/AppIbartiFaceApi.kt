@@ -23,10 +23,10 @@ interface AppIbartiFaceApi {
         const val DELETE_STATUS = "status/{id}/"
 
         const val STAND_BY = "standby/"
-        const val STAND_BY_BY_DATE = "standby/{client}/{date}/"
+        const val STAND_BY_BY_DATE = "standby/{client}/{date}"
         const val DELETE_STAND_BY = "delete-standby/{client}/{date}"
 
-        fun properUrl(client: String, date: String, url: String) = "${AppIbartiFaceApi.END_POINT}${AppIbartiFaceApi.STAND_BY}$client/$date/$url"
+        fun properUrl(client: String, date: String, url: String) = "$END_POINT$STAND_BY$client/$date/$url"
     }
 
     @GET
@@ -92,7 +92,7 @@ interface AppIbartiFaceApi {
     suspend fun findStandBysCurrentDay(): List<StandBy>
 
     @GET(STAND_BY_BY_DATE)
-    suspend fun findStandBysByDate(
+    suspend fun findStandBysByClientAndDate(
         @Path("client") client: String,
         @Path("date") date: String
     ): List<StandBy>

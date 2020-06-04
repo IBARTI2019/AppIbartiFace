@@ -14,8 +14,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.editPerson.EditPersonActivity"
+            android:label="@string/edit_person"/>
+        <activity
             android:name=".ui.addPerson.AddPersonActivity"
-            android:label="@string/add_person"/>
+            android:label="@string/add_person" />
         <activity
             android:name=".ui.addStatus.AddStatusActivity"
             android:label="@string/add_status" />

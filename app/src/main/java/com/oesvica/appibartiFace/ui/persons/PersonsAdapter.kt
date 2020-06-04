@@ -11,9 +11,9 @@ import com.oesvica.appibartiFace.data.model.Person
 import kotlinx.android.synthetic.main.fragment_person.view.*
 
 /**
- * [RecyclerView.Adapter] that can display a [Category]
+ * [RecyclerView.Adapter] that can display a [Person]
  */
-class PersonsAdapter() : RecyclerView.Adapter<PersonsAdapter.PersonViewHolder>() {
+class PersonsAdapter(private val onEditPerson: (person: Person) -> Unit) : RecyclerView.Adapter<PersonsAdapter.PersonViewHolder>() {
 
     var persons: List<Person> = ArrayList()
         set(value) {
@@ -24,18 +24,17 @@ class PersonsAdapter() : RecyclerView.Adapter<PersonsAdapter.PersonViewHolder>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonViewHolder {
         return PersonViewHolder(LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_person, parent, false)).apply {
-
         }
     }
 
     override fun onBindViewHolder(holder: PersonViewHolder, position: Int) {
-       // holder.bind(persons[position])
+       holder.bind(persons[position])
     }
 
     override fun getItemCount(): Int = persons.size
 
     inner class PersonViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        /*private val cedula: TextView by lazy { view.cedula }
+        private val cedula: TextView by lazy { view.cedula }
         private val categoria: TextView by lazy { view.categoria }
         private val cliente: TextView by lazy { view.cliente }
         private val status: TextView by lazy { view.status }
@@ -45,6 +44,9 @@ class PersonsAdapter() : RecyclerView.Adapter<PersonsAdapter.PersonViewHolder>()
             categoria.text = person.category
             cliente.text = person.client
             status.text = person.status
-        }*/
+            view.edit.setOnClickListener {
+                onEditPerson(person)
+            }
+        }
     }
 }

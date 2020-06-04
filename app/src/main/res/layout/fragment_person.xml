@@ -1,43 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
-    android:paddingStart="4dp"
-    android:paddingEnd="4dp">
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
 
     <TextView
         android:id="@+id/cedula"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_column="1"
-        android:textAppearance="@style/item_list"
-        tools:text="27198030" />
+        android:textAppearance="@style/person_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/cliente"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        tools:text="27195451" />
 
     <TextView
         android:id="@+id/cliente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_column="1"
-        android:textAppearance="@style/item_list"
-        tools:text="0001" />
+        android:textAppearance="@style/person_text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cedula"
+        app:layout_constraintEnd_toStartOf="@id/categoria"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="001"/>
 
     <TextView
         android:id="@+id/categoria"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_column="1"
-        android:textAppearance="@style/item_list"
-        tools:text="Categoafhjofhdfhjofhjoria" />
+        android:textAppearance="@style/person_text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/status"
+        app:layout_constraintStart_toEndOf="@id/cliente"
+        tools:text="j4dhfk56k56"/>
 
     <TextView
-        android:id="@+id/estatus"
+        android:id="@+id/status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_column="1"
-        android:textAppearance="@style/item_list"
-        tools:text="nfjdkjghjkdkjh" />
-</TableRow>
+        android:textAppearance="@style/person_text"
+        app:layout_constraintStart_toEndOf="@id/categoria"
+        app:layout_constraintEnd_toStartOf="@id/edit"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="454g56"/>
+
+    <ImageView
+        android:id="@+id/edit"
+        android:layout_width="?listPreferredItemHeight"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_edit_black_24dp"
+        tools:ignore="PrivateResource" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

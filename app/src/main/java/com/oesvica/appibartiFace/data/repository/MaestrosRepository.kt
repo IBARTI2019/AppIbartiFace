@@ -27,7 +27,9 @@ abstract class MaestrosRepository {
 
 
     abstract fun findCurrentDayStandBys(): LiveData<List<StandBy>>
+    abstract fun findStandBysByClientAndDate(client: String, date: String): LiveData<List<StandBy>>
     abstract suspend fun refreshCurrentDayStandBys(): Result<Unit>
+    abstract suspend fun refreshStandBysByClientAndDate(client: String, date: String): Result<Unit>
     abstract suspend fun deleteStandBy(client: String, date: String, url: String): Result<Unit>
 
 }
