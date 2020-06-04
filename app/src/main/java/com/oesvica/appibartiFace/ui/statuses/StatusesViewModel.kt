@@ -8,6 +8,7 @@ import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.schedulers.SchedulerProvider
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class StatusesViewModel
@@ -16,10 +17,15 @@ class StatusesViewModel
     schedulerProvider: SchedulerProvider
 ) : BaseViewModel(schedulerProvider) {
 
-    val statuses: MutableLiveData<List<Status>> by lazy { MutableLiveData<List<Status>>() }
+    val statuses by lazy { maestrosRepository.findStatuses() }
 
     fun loadStatuses(){
+        debug("loadStatuses")
         launch {
+            withContext(IO){
+                maestrosRepository.refreshStatuses()
+            }
+            /*
             val resultQuery = maestrosRepository.findStatuses()
             if(resultQuery.success != null){
                 debug("statuses found $resultQuery")
@@ -28,7 +34,16 @@ class StatusesViewModel
             else{
                 debug("some error here ${resultQuery.error?.message}")
                 resultQuery.error?.printStackTrace()
+            }*/
+        }
+    }
+
+    fun deleteStatus(status: Status){
+        launch {
+            withContext(IO){
+                maestrosRepository.deleteStatus(status.id)
             }
+            loadStatuses()
         }
     }
 

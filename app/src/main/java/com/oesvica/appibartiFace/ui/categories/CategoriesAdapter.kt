@@ -30,9 +30,7 @@ class CategoriesAdapter(val context: Context, private val onEdit: (category: Cat
         return CategoryViewHolder(
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.fragment_category, parent, false)
-        ).apply {
-
-        }
+        )
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {

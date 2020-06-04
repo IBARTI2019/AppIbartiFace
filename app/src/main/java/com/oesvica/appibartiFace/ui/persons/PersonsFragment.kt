@@ -34,7 +34,7 @@ class PersonsFragment : DaggerFragment() {
         setUpTable()
 
         observeCategories()
-        personsViewModel.loadStatuses()
+        personsViewModel.loadPersons()
         super.onActivityCreated(savedInstanceState)
     }
 

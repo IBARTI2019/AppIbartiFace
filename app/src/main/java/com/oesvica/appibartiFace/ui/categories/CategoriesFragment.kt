@@ -76,11 +76,20 @@ class CategoriesFragment : DaggerFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         debug("onActivityResult $requestCode $resultCode ${data?.getStringExtra("DESCRIPTION")}")
         if (resultCode == Activity.RESULT_OK) {
-            val id = data?.getStringExtra(EditTextDialog.ARG_ID) ?: ""
-            val desc = data?.getStringExtra("DESCRIPTION")
-            if (!desc.isNullOrEmpty()) {
-                if (id.isEmpty()) categoriesViewModel.addCategory(desc)
-                else categoriesViewModel.updateCategory(Category(id, desc))
+            when(requestCode){
+                REQUEST_ADD_CATEGORY -> {
+                    val desc = data?.getStringExtra(DESCRIPTION)
+                    if (!desc.isNullOrEmpty()) {
+                        categoriesViewModel.addCategory(desc)
+                    }
+                }
+                REQUEST_UPDATE_CATEGORY -> {
+                    val id = data?.getStringExtra(EditTextDialog.ARG_ID) ?: ""
+                    val desc = data?.getStringExtra(DESCRIPTION)
+                    if (id.isNotEmpty() && !desc.isNullOrEmpty()) {
+                        categoriesViewModel.updateCategory(Category(id, desc))
+                    }
+                }
             }
         }
     }

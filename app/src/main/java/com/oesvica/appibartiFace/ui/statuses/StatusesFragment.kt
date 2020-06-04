@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.oesvica.appibartiFace.R
+import com.oesvica.appibartiFace.ui.addStatus.AddStatusActivity
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
+import com.oesvica.appibartiFace.utils.debug
 import kotlinx.android.synthetic.main.fragment_person_list.*
 import kotlinx.android.synthetic.main.fragment_status_list.*
 
@@ -26,14 +28,25 @@ class StatusesFragment : DaggerFragment() {
     }
 
     private val personsAdapter by lazy {
-        StatusesAdapter()
+        StatusesAdapter(onEdit = {
+            startActivity(AddStatusActivity.starterIntent(requireContext(), it))
+        }, onDelete = {
+            statusesViewModel.deleteStatus(it)
+        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         setUpRecyclerView()
-        observeCategories()
-        statusesViewModel.loadStatuses()
+        addStatusButton.setOnClickListener {
+            startActivity(AddStatusActivity.starterIntent(requireContext()))
+        }
+        observeStatuses()
         super.onActivityCreated(savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        statusesViewModel.loadStatuses()
     }
 
     private fun setUpRecyclerView() {
@@ -43,7 +56,7 @@ class StatusesFragment : DaggerFragment() {
         }
     }
 
-    private fun observeCategories() {
+    private fun observeStatuses() {
         statusesViewModel.statuses.observe(viewLifecycleOwner, Observer { statuses ->
             statuses?.let {
                 personsAdapter.statuses = it

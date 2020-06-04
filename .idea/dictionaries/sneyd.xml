@@ -2,7 +2,13 @@
   <dictionary name="sneyd">
     <words>
       <w>categoria</w>
+      <w>cedula</w>
+      <w>cliente</w>
       <w>descripcion</w>
+      <w>dispositivo</w>
+      <w>eliminar</w>
+      <w>fecha</w>
+      <w>foto</w>
     </words>
   </dictionary>
 </component>

@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_categorias">
+    app:startDestination="@+id/nav_standby">
 
     <fragment
         android:id="@+id/nav_standby"
-        android:name="com.oesvica.appibartiFace.ui.categories.CategoriesFragment"
+        android:name="com.oesvica.appibartiFace.ui.standby.StandByFragment"
+        tools:layout="@layout/fragment_stand_by_list"
         android:label="@string/menu_standby"/>
 
     <fragment

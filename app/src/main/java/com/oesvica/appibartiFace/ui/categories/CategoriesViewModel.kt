@@ -9,6 +9,7 @@ import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.schedulers.SchedulerProvider
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class CategoriesViewModel
@@ -17,7 +18,7 @@ class CategoriesViewModel
     schedulerProvider: SchedulerProvider
 ) : BaseViewModel(schedulerProvider) {
 
-    val categories: MutableLiveData<List<Category>> by lazy { MutableLiveData<List<Category>>() }
+    val categories by lazy { maestrosRepository.findCategories() }
     private val _snackBarMsg = SingleLiveEvent<String>()
     val snackBarMsg: LiveData<String>
         get() = _snackBarMsg
@@ -25,14 +26,15 @@ class CategoriesViewModel
     fun loadCategories() {
         debug("loading categories")
         launch {
-            val resultQuery = maestrosRepository.findCategories()
-            if (resultQuery.success != null) {
-                debug("categories found $resultQuery")
-                categories.value = resultQuery.success
-            } else {
-                debug("some error here ${resultQuery.error?.message}")
-                resultQuery.error?.printStackTrace()
-            }
+            val resultQuery = withContext(IO) { maestrosRepository.refreshCategories() }
+            debug("resultQuery=$resultQuery")
+            /*  if (resultQuery.success != null) {
+                  debug("categories found $resultQuery")
+                  categories.value = resultQuery.success
+              } else {
+                  debug("some error here ${resultQuery.error?.message}")
+                  resultQuery.error?.printStackTrace()
+              }*/
         }
     }
 
@@ -40,12 +42,14 @@ class CategoriesViewModel
         debug("addCategory $description")
         _snackBarMsg.value = "Agregando categoria"
         launch {
-            maestrosRepository.insertCategory(description).let {
-                debug("add result $it")
-                if (it.success != null) {
-                    _snackBarMsg.value = "Categoria agregada exitosamente"
-                } else {
-                    _snackBarMsg.value = "Hubo un error agregando la categoria"
+            withContext(IO){
+                maestrosRepository.insertCategory(description).let {
+                    debug("add result $it")
+                    if (it.success != null) {
+                        _snackBarMsg.value = "Categoria agregada exitosamente"
+                    } else {
+                        _snackBarMsg.value = "Hubo un error agregando la categoria"
+                    }
                 }
             }
         }
@@ -55,27 +59,31 @@ class CategoriesViewModel
         debug("updating category $category")
         _snackBarMsg.value = "Actualizando categoria"
         launch {
-            maestrosRepository.updateCategory(category).let {
-                debug("update result $it")
-                if (it.success != null) {
-                    _snackBarMsg.value = "Categoria actualizada exitosamente"
-                } else {
-                    _snackBarMsg.value = "Hubo un error actualizando la categoria"
+            withContext(IO){
+                maestrosRepository.updateCategory(category).let {
+                    debug("update result $it")
+                    if (it.success != null) {
+                        _snackBarMsg.value = "Categoria actualizada exitosamente"
+                    } else {
+                        _snackBarMsg.value = "Hubo un error actualizando la categoria"
+                    }
                 }
             }
         }
     }
 
-    fun deleteCategory(idCategory: String){
+    fun deleteCategory(idCategory: String) {
         debug("deleteCategory $idCategory")
         _snackBarMsg.value = "Eliminando categoria"
         launch {
-            maestrosRepository.deleteCategory(idCategory).let {
-                debug("delete result $it")
-                if (it.success != null) {
-                    _snackBarMsg.value = "Categoria eliminada exitosamente"
-                } else {
-                    _snackBarMsg.value = "Hubo un error eliminando la categoria"
+            withContext(IO){
+                maestrosRepository.deleteCategory(idCategory).let {
+                    debug("delete result $it")
+                    if (it.success != null) {
+                        _snackBarMsg.value = "Categoria eliminada exitosamente"
+                    } else {
+                        _snackBarMsg.value = "Hubo un error eliminando la categoria"
+                    }
                 }
             }
         }

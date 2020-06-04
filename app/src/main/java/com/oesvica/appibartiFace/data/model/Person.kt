@@ -2,11 +2,14 @@ package com.oesvica.appibartiFace.data.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = Person.TABLE_NAME)
 data class Person(
-    @SerializedName("_id") @Expose var id: String = "",
+    @PrimaryKey @SerializedName("_id") @Expose var id: String = "",
     @SerializedName("category") @Expose var category: String = "",
     @SerializedName("client") @Expose var client: String = "",
     @SerializedName("doc_id") @Expose var doc_id: String = "",
@@ -18,8 +21,7 @@ data class Person(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: ""
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)
@@ -34,6 +36,7 @@ data class Person(
     }
 
     companion object CREATOR : Parcelable.Creator<Person> {
+        const val TABLE_NAME = "Person"
         override fun createFromParcel(parcel: Parcel): Person {
             return Person(parcel)
         }

@@ -16,9 +16,12 @@
 
 package com.oesvica.appibartiFace.di.builder
 
+import com.oesvica.appibartiFace.ui.addPerson.AddPersonActivity
+import com.oesvica.appibartiFace.ui.addStatus.AddStatusActivity
 import com.oesvica.appibartiFace.ui.categories.CategoriesProvider
 import com.oesvica.appibartiFace.ui.main.MainActivity
 import com.oesvica.appibartiFace.ui.persons.PersonsProvider
+import com.oesvica.appibartiFace.ui.standby.StandByProvider
 import com.oesvica.appibartiFace.ui.statuses.StatusesProvider
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -26,7 +29,13 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class ActivityBuilder {
 
-    @ContributesAndroidInjector(modules = [CategoriesProvider::class, PersonsProvider::class, StatusesProvider::class])
+    @ContributesAndroidInjector(modules = [CategoriesProvider::class, PersonsProvider::class, StatusesProvider::class, StandByProvider::class])
     abstract fun bindMainActivity(): MainActivity
+
+    @ContributesAndroidInjector()
+    abstract fun bindAddStatusActivity(): AddStatusActivity
+
+    @ContributesAndroidInjector()
+    abstract fun bindAddPersonActivity(): AddPersonActivity
 
 }

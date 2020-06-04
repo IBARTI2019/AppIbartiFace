@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="8dp"
@@ -14,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_column="1"
         android:textAppearance="@style/item_list"
-        android:text="27198030" />
+        tools:text="27198030" />
 
     <TextView
         android:id="@+id/cliente"
@@ -22,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_column="1"
         android:textAppearance="@style/item_list"
-        android:text="0001" />
+        tools:text="0001" />
 
     <TextView
         android:id="@+id/categoria"
@@ -30,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_column="1"
         android:textAppearance="@style/item_list"
-        android:text="Categoafhjofhdfhjofhjoria" />
+        tools:text="Categoafhjofhdfhjofhjoria" />
 
     <TextView
         android:id="@+id/estatus"
@@ -38,5 +39,5 @@
         android:layout_height="wrap_content"
         android:layout_column="1"
         android:textAppearance="@style/item_list"
-        android:text="nfjdkjghjkdkjh" />
+        tools:text="nfjdkjghjkdkjh" />
 </TableRow>

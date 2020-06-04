@@ -12,10 +12,13 @@ abstract class CategoryDao: BaseDao<Category> {
 
     // Insert
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insertCategories(vararg categories: Category)
+    abstract suspend fun insertCategories(vararg categories: Category)
 
     // Query
     @Query("SELECT * FROM ${Category.TABLE_NAME}")
-    abstract fun findCategories(deck: String): LiveData<List<Category>>
+    abstract fun findCategories(): LiveData<List<Category>>
 
+    // Delete
+    @Query("DELETE FROM ${Category.TABLE_NAME}")
+    abstract suspend fun deleteAllCategories()
 }
