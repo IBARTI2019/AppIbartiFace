@@ -8,7 +8,8 @@
 
     <TextView
         android:id="@+id/cedula"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="3"
         android:layout_height="wrap_content"
         android:textAppearance="@style/person_text"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,7 +21,8 @@
 
     <TextView
         android:id="@+id/cliente"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1.2"
         android:layout_height="wrap_content"
         android:textAppearance="@style/person_text"
         app:layout_constraintTop_toTopOf="parent"
@@ -31,7 +33,8 @@
 
     <TextView
         android:id="@+id/categoria"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="4"
         android:layout_height="wrap_content"
         android:textAppearance="@style/person_text"
         app:layout_constraintTop_toTopOf="parent"
@@ -42,7 +45,8 @@
 
     <TextView
         android:id="@+id/status"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="2"
         android:layout_height="wrap_content"
         android:textAppearance="@style/person_text"
         app:layout_constraintStart_toEndOf="@id/categoria"
@@ -53,9 +57,10 @@
 
     <ImageView
         android:id="@+id/edit"
-        android:layout_width="?listPreferredItemHeight"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:scaleType="center"
+        app:layout_constraintStart_toEndOf="@id/status"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
