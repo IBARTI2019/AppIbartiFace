@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.oesvica.appibartiFace">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -15,16 +16,24 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.editPerson.EditPersonActivity"
-            android:label="@string/edit_person"/>
+            android:screenOrientation="sensorPortrait"
+            android:label="@string/edit_person"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ui.addPerson.AddPersonActivity"
+            android:screenOrientation="sensorPortrait"
+            tools:ignore="LockedOrientationActivity"
             android:label="@string/add_person" />
         <activity
             android:name=".ui.addStatus.AddStatusActivity"
+            android:screenOrientation="sensorPortrait"
+            tools:ignore="LockedOrientationActivity"
             android:label="@string/add_status" />
         <activity
             android:name=".ui.main.MainActivity"
             android:label="@string/app_name"
+            android:screenOrientation="sensorPortrait"
+            tools:ignore="LockedOrientationActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
