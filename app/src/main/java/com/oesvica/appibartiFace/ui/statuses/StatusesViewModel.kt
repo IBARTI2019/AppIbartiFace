@@ -25,16 +25,6 @@ class StatusesViewModel
             withContext(IO){
                 maestrosRepository.refreshStatuses()
             }
-            /*
-            val resultQuery = maestrosRepository.findStatuses()
-            if(resultQuery.success != null){
-                debug("statuses found $resultQuery")
-                statuses.value = resultQuery.success
-            }
-            else{
-                debug("some error here ${resultQuery.error?.message}")
-                resultQuery.error?.printStackTrace()
-            }*/
         }
     }
 

@@ -59,14 +59,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:src="@drawable/ic_search_24dp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/standBysRecyclerView"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/standBysRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="3"
-        tools:context=".ui.standby.StandByFragment"
-        app:layout_constraintTop_toBottomOf="@id/dateTextView"
-        android:padding="8dp"
-        tools:listitem="@layout/fragment_stand_by" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dateTextView">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/standBysRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3"
+            tools:context=".ui.standby.StandByFragment"
+            android:padding="8dp"
+            tools:listitem="@layout/fragment_stand_by" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

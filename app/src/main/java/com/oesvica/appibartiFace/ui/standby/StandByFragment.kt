@@ -93,7 +93,10 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
                 Toast.makeText(context, "Debe ingresar un valor en el campo cliente", Toast.LENGTH_SHORT).show()
                 return@let
             }
-            standByViewModel.searchStandBys(clientEditText.text.toString(), it)
+            standBysRefreshLayout.isRefreshing = true
+            standByViewModel.searchStandBys(clientEditText.text.toString(), it) {
+                standBysRefreshLayout.isRefreshing = false
+            }
         }
     }
 
@@ -141,6 +144,9 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
     private fun setUpRecyclerView() {
         standBysRecyclerView.layoutManager = GridLayoutManager(context, COLUMNS_COUNT)
         standBysRecyclerView.adapter = standByAdapter
+        standBysRefreshLayout.setOnRefreshListener {
+            standBysRefreshLayout.isRefreshing = false
+        }
     }
 
     private fun observeStandBys() {

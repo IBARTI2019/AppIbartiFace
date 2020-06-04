@@ -34,13 +34,14 @@ class StandByViewModel @Inject constructor(
         }
     }
 
-    fun searchStandBys(client: String, date: String) {
+    fun searchStandBys(client: String, date: String, onFinished: () -> Unit) {
         debug("searchStandBys($client: String, $date: String)")
         launch {
             val standsBysResult = withContext(IO) {
                 maestrosRepository.refreshStandBysByClientAndDate(client, date)
             }
             debug("searchStandBys standsBysResult=$standsBysResult")
+            onFinished()
             standBys.removeSource(todayStandBys)
             standBys.addSource(maestrosRepository.findStandBysByClientAndDate(client, date)) {
                 standBys.value = it

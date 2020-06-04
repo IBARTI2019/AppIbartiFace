@@ -46,9 +46,9 @@ class CategoriesViewModel
                 maestrosRepository.insertCategory(description).let {
                     debug("add result $it")
                     if (it.success != null) {
-                        _snackBarMsg.value = "Categoria agregada exitosamente"
+                        _snackBarMsg.postValue("Categoria agregada exitosamente")
                     } else {
-                        _snackBarMsg.value = "Hubo un error agregando la categoria"
+                        _snackBarMsg.postValue("Hubo un error agregando la categoria")
                     }
                 }
             }
@@ -63,9 +63,9 @@ class CategoriesViewModel
                 maestrosRepository.updateCategory(category).let {
                     debug("update result $it")
                     if (it.success != null) {
-                        _snackBarMsg.value = "Categoria actualizada exitosamente"
+                        _snackBarMsg.postValue("Categoria actualizada exitosamente")
                     } else {
-                        _snackBarMsg.value = "Hubo un error actualizando la categoria"
+                        _snackBarMsg.postValue("Hubo un error actualizando la categoria")
                     }
                 }
             }
@@ -80,9 +80,9 @@ class CategoriesViewModel
                 maestrosRepository.deleteCategory(idCategory).let {
                     debug("delete result $it")
                     if (it.success != null) {
-                        _snackBarMsg.value = "Categoria eliminada exitosamente"
+                        _snackBarMsg.postValue("Categoria eliminada exitosamente")
                     } else {
-                        _snackBarMsg.value = "Hubo un error eliminando la categoria"
+                        _snackBarMsg.postValue("Hubo un error eliminando la categoria")
                     }
                 }
             }
