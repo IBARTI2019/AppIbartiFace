@@ -9,8 +9,6 @@ import androidx.lifecycle.Observer
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.ui.addStatus.AddStatusActivity
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
-import com.oesvica.appibartiFace.utils.debug
-import kotlinx.android.synthetic.main.fragment_person_list.*
 import kotlinx.android.synthetic.main.fragment_status_list.*
 
 /**
@@ -46,7 +44,7 @@ class StatusesFragment : DaggerFragment() {
 
     override fun onResume() {
         super.onResume()
-        statusesViewModel.loadStatuses()
+        statusesViewModel.refreshStatuses()
     }
 
     private fun setUpRecyclerView() {
@@ -54,6 +52,7 @@ class StatusesFragment : DaggerFragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = personsAdapter
         }
+        statusesRefreshLayout.setOnRefreshListener { statusesViewModel.refreshStatuses() }
     }
 
     private fun observeStatuses() {
@@ -61,6 +60,9 @@ class StatusesFragment : DaggerFragment() {
             statuses?.let {
                 personsAdapter.statuses = it
             }
+        })
+        statusesViewModel.networkRequestStatuses.observe(viewLifecycleOwner, Observer {
+            statusesRefreshLayout.isRefreshing = it.isOngoing
         })
     }
 }

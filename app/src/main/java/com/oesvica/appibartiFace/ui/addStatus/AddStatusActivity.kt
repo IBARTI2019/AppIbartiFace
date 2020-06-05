@@ -19,6 +19,7 @@ import observeJustOnce
 class AddStatusActivity : DaggerActivity() {
 
     companion object {
+
         private const val EXTRA_STATUS = "EXTRA_STATUS"
 
         fun starterIntent(context: Context, status: Status? = null): Intent {
@@ -39,6 +40,14 @@ class AddStatusActivity : DaggerActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_status)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        observeCategories()
+        if (isInEditMode) {
+            supportActionBar?.setTitle(R.string.edit_status)
+            statusDescriptionEditText.setText(statusToEdit!!.description)
+        }
+    }
+
+    private fun observeCategories() {
         addStatusViewModel.categories.observeJustOnce(this, Observer {
             it?.let { categoriesList ->
                 categories = categoriesList
@@ -46,38 +55,42 @@ class AddStatusActivity : DaggerActivity() {
                     this,
                     android.R.layout.simple_spinner_dropdown_item,
                     categoriesList.map { cat -> cat.description })
-                if (isInEditMode){
+                if (isInEditMode) {
                     val category = statusToEdit!!.category.trim()
-                    statusCategorySpinner.setSelection(categoriesList.map { cat -> cat.description.trim() }.indexOf(category))
+                    statusCategorySpinner.setSelection(categoriesList.map { cat -> cat.description.trim() }
+                        .indexOf(category))
                 }
             }
         })
-        if (isInEditMode){
-            supportActionBar?.setTitle(R.string.edit_status)
-            statusDescriptionEditText.setText(statusToEdit!!.description)
-        }
+        addStatusViewModel.addStatusNetworkRequest.observe(this, Observer {
+            debug("networkRequestCategories.observe $it")
+            if (it.isOngoing) {
+                showLoadingDialog()
+            } else {
+                if (it.error == null) {
+                    hideLoadingDialog()
+                    finish()
+                } else {
+                    hideLoadingDialog()
+                }
+            }
+        })
     }
 
     private fun saveStatus() {
         debug("saveStatus categories=$categories selected=${statusCategorySpinner.selectedItemPosition}")
         if (categories == null) return
-        showLoadingDialog()
         addStatusViewModel.addStatus(
             statusId = statusToEdit?.id,
             categoryId = categories!![statusCategorySpinner.selectedItemPosition].id,
-            description = statusDescriptionEditText.text.toString(),
-            onSuccess = {
-                hideLoadingDialog()
-                finish()
-            },
-            onError = {
-                hideLoadingDialog()
-            })
+            description = statusDescriptionEditText.text.toString()
+        )
     }
 
     private var loadingDialog: ProgressDialog? = null
 
     private fun showLoadingDialog() {
+        debug("showLoadingDialog")
         if (loadingDialog == null) {
             loadingDialog = ProgressDialog.newInstance(
                 getString(R.string.add_status_message_loading),
@@ -89,6 +102,7 @@ class AddStatusActivity : DaggerActivity() {
     }
 
     private fun hideLoadingDialog() {
+        debug("hideLoadingDialog")
         loadingDialog?.dismiss()
         loadingDialog = null
     }

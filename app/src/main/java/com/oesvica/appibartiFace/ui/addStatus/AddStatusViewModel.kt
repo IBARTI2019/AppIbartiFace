@@ -1,5 +1,7 @@
 package com.oesvica.appibartiFace.ui.addStatus
 
+import androidx.lifecycle.MutableLiveData
+import com.oesvica.appibartiFace.data.model.NetworkRequestStatus
 import com.oesvica.appibartiFace.data.model.Status
 import com.oesvica.appibartiFace.data.model.StatusRequest
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
@@ -17,15 +19,15 @@ class AddStatusViewModel
 ) : BaseViewModel(schedulerProvider) {
 
     val categories by lazy { maestrosRepository.findCategories() }
+    val addStatusNetworkRequest = MutableLiveData<NetworkRequestStatus>()
 
     fun addStatus(
         statusId: String? = null,
         categoryId: String,
-        description: String,
-        onSuccess: () -> Unit,
-        onError: () -> Unit
+        description: String
     ) {
         debug("addStatus $statusId  $categoryId  $description")
+        addStatusNetworkRequest.value = NetworkRequestStatus(isOngoing = true)
         launch {
             val response = withContext(IO){
                 if (statusId == null) maestrosRepository.insertStatus(
@@ -43,8 +45,7 @@ class AddStatusViewModel
                 )
             }
             debug("response addStatus=$response")
-            if (response.success != null) onSuccess()
-            else onError()
+            addStatusNetworkRequest.value = NetworkRequestStatus(isOngoing = false, error = response.error)
         }
     }
 

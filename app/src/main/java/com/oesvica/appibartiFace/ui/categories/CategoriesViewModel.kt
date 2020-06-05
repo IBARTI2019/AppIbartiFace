@@ -3,6 +3,7 @@ package com.oesvica.appibartiFace.ui.categories
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.oesvica.appibartiFace.data.model.Category
+import com.oesvica.appibartiFace.data.model.NetworkRequestStatus
 import com.oesvica.appibartiFace.data.model.Result
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.SingleLiveEvent
@@ -13,8 +14,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Error
 import javax.inject.Inject
-
-data class NetworkRequestStatus(var isOngoing: Boolean, var error: Throwable? = null)
 
 class CategoriesViewModel
 @Inject constructor(
