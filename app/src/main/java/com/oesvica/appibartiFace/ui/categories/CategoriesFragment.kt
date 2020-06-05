@@ -110,5 +110,12 @@ class CategoriesFragment : DaggerFragment() {
                 categoriesAdapter.categories = it
             }
         })
+        categoriesViewModel.statusCategories.observe(viewLifecycleOwner, Observer {
+            if(it.isOngoing){
+                categoriesRefreshLayout.isRefreshing = true
+            }else{
+                categoriesRefreshLayout.isRefreshing = false
+            }
+        })
     }
 }
