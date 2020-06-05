@@ -1,6 +1,8 @@
 package com.oesvica.appibartiFace.ui.addPerson
 
+import androidx.lifecycle.MutableLiveData
 import com.oesvica.appibartiFace.data.model.AddPersonRequest
+import com.oesvica.appibartiFace.data.model.NetworkRequestStatus
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug
@@ -18,6 +20,8 @@ class AddPersonViewModel
     val categories by lazy { maestrosRepository.findCategories() }
     val statuses by lazy { maestrosRepository.findStatuses() }
 
+    val addPersonNetworkRequest = MutableLiveData<NetworkRequestStatus>()
+
     fun addPerson(
         cedula: String,
         category: String,
@@ -25,11 +29,8 @@ class AddPersonViewModel
         client: String,
         device: String,
         date: String,
-        photo: String,
-        onSuccess: () -> Unit,
-        onError: () -> Unit
+        photo: String
     ) {
-
         debug(
             "addPerson(\n" +
                     "        $cedula: String,\n" +
@@ -40,10 +41,10 @@ class AddPersonViewModel
                     "        $date: String,\n" +
                     "        $photo: String"
         )
-
+        addPersonNetworkRequest.value = NetworkRequestStatus(isOngoing = true)
         launch {
-            withContext(IO) {
-                val result = maestrosRepository.insertPerson(
+            val result = withContext(IO) {
+                maestrosRepository.insertPerson(
                     AddPersonRequest(
                         cedula = cedula,
                         category = category,
@@ -54,13 +55,10 @@ class AddPersonViewModel
                         foto = photo
                     )
                 )
-                debug("result add person=$result")
-                if (result.success != null) {
-                    onSuccess()
-                } else {
-                    onError()
-                }
             }
+            debug("result add person=$result")
+            addPersonNetworkRequest.value =
+                NetworkRequestStatus(isOngoing = false, error = result.error)
         }
     }
 

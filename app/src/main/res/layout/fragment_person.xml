@@ -46,7 +46,7 @@
     <TextView
         android:id="@+id/status"
         android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintHorizontal_weight="1.8"
         android:layout_height="wrap_content"
         android:textAppearance="@style/person_text"
         app:layout_constraintStart_toEndOf="@id/categoria"

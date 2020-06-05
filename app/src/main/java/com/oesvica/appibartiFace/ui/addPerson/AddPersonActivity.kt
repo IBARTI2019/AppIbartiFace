@@ -63,6 +63,7 @@ class AddPersonActivity : DaggerActivity() {
             .into(urlImageView)
         observeStatuses()
         observeCategories()
+        observeAddPersonNetworkRequest()
     }
 
     private fun observeCategories() {
@@ -85,6 +86,21 @@ class AddPersonActivity : DaggerActivity() {
                 statusSpinner.adapter = ArrayAdapter(this,
                     android.R.layout.simple_spinner_dropdown_item,
                     listOf("Seleccione status:") + list.map { status -> status.description })
+            }
+        })
+    }
+
+    private fun observeAddPersonNetworkRequest() {
+        addPersonViewModel.addPersonNetworkRequest.observe(this, Observer {
+            if (it.isOngoing) {
+                showLoadingDialog()
+            } else {
+                if (it.error == null) {
+                    hideLoadingDialog()
+                    finish()
+                } else {
+                    hideLoadingDialog()
+                }
             }
         })
     }
@@ -116,21 +132,14 @@ class AddPersonActivity : DaggerActivity() {
             ).show()
             return
         }
-        showLoadingDialog()
         addPersonViewModel.addPerson(
             cedula = cedulaEditText.text.toString(),
-            category = categories!![categorySpinner.selectedItemPosition-1].id,
-            status = statuses!![statusSpinner.selectedItemPosition-1].id,
+            category = categories!![categorySpinner.selectedItemPosition - 1].id,
+            status = statuses!![statusSpinner.selectedItemPosition - 1].id,
             client = client,
             device = device,
             date = date,
-            photo = photo,
-            onSuccess = {
-                hideLoadingDialog()
-                finish()
-            }, onError = {
-                hideLoadingDialog()
-            }
+            photo = photo
         )
     }
 
