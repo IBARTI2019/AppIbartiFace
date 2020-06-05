@@ -23,8 +23,8 @@ class CategoriesViewModel
     val snackBarMsg: LiveData<String>
         get() = _snackBarMsg
 
-    fun loadCategories() {
-        debug("loading categories")
+    fun refreshCategories() {
+        debug("refreshCategories")
         launch {
             val resultQuery = withContext(IO) { maestrosRepository.refreshCategories() }
             debug("resultQuery=$resultQuery")

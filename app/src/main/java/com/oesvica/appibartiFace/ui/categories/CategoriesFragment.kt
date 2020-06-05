@@ -57,7 +57,10 @@ class CategoriesFragment : DaggerFragment() {
                 Snackbar.make(categoriesFrameLayout, it, Snackbar.LENGTH_SHORT).show()
             }
         })
-        categoriesViewModel.loadCategories()
+        categoriesRefreshLayout.setOnRefreshListener {
+            categoriesViewModel.refreshCategories()
+        }
+        categoriesViewModel.refreshCategories()
         super.onActivityCreated(savedInstanceState)
     }
 
