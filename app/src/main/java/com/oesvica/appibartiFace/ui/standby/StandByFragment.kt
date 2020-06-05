@@ -1,7 +1,8 @@
 package com.oesvica.appibartiFace.ui.standby
 
-import android.app.AlertDialog
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.oesvica.appibartiFace.data.model.StandBy
 import com.oesvica.appibartiFace.ui.addPerson.AddPersonActivity
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
 import com.oesvica.appibartiFace.utils.debug
+import com.oesvica.appibartiFace.utils.dialogs.StandByDialog
 import com.oesvica.appibartiFace.utils.screenWidth
 import kotlinx.android.synthetic.main.fragment_stand_by_list.*
 import java.util.*
@@ -26,13 +28,12 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
 
     companion object {
         const val COLUMNS_COUNT = 3
+        const val STAND_BY_REQUEST_CODE = 101
     }
 
     private val standByViewModel by lazy { getViewModel<StandByViewModel>() }
 
-    private val items = arrayOf("Registrar persona", "Eliminar standby")
-    private var builder: AlertDialog.Builder? = null
-    private var itemsDialog: AlertDialog? = null
+    private var standByDialog: StandByDialog? = null
     private var datePickerDialog: DatePickerDialog? = null
     private var currentDate: String? = null
 
@@ -43,12 +44,24 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     private fun showOptionsDialog(standBy: StandBy) {
-        builder = AlertDialog.Builder(requireContext())
-        builder?.setTitle("Hora foto: ${standBy.time}")
-        builder?.setItems(items) { _, position ->
-            debug("clicked $position $standBy")
-            when (position) {
-                0 -> startActivity(
+        standByDialog = StandByDialog.newInstance(standBy)
+        standByDialog?.setTargetFragment(this, STAND_BY_REQUEST_CODE)
+        standByDialog?.show(requireFragmentManager(), "")
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        debug(
+            "onActivityResult $requestCode $resultCode ${data?.getParcelableExtra<StandBy>(
+                StandByDialog.ARG_STAND_BY
+            )}"
+        )
+        if (resultCode == Activity.RESULT_OK && requestCode == STAND_BY_REQUEST_CODE) {
+            val standBy = data?.getParcelableExtra<StandBy>(StandByDialog.ARG_STAND_BY) ?: return
+            val isDeleteSelected = data.getBooleanExtra(StandByDialog.ARG_IS_DELETE, false)
+            if (isDeleteSelected) {
+                standByViewModel.deleteStandBy(standBy)
+            } else {
+                startActivity(
                     AddPersonActivity.starterIntent(
                         requireContext(),
                         standBy.client,
@@ -57,17 +70,13 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
                         standBy.url
                     )
                 )
-                1 -> standByViewModel.deleteStandBy(standBy)
             }
         }
-        itemsDialog = builder?.create()
-        itemsDialog?.show()
     }
 
     private fun hideOptionsDialog() {
-        itemsDialog?.dismiss()
-        itemsDialog = null
-        builder = null
+        standByDialog?.dismiss()
+        standByDialog = null
     }
 
     override fun onCreateView(
@@ -90,7 +99,11 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
         debug("searchStandBys")
         currentDate?.let {
             if (clientEditText.text.toString().isEmpty()) {
-                Toast.makeText(context, "Debe ingresar un valor en el campo cliente", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    "Debe ingresar un valor en el campo cliente",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return@let
             }
             standBysRefreshLayout.isRefreshing = true
