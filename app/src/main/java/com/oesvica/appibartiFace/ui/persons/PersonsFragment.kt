@@ -7,11 +7,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.oesvica.appibartiFace.R
-import com.oesvica.appibartiFace.ui.addPerson.AddPersonActivity
 import com.oesvica.appibartiFace.ui.editPerson.EditPersonActivity
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
-import com.oesvica.appibartiFace.utils.debug
-import kotlinx.android.synthetic.main.fragment_person.view.*
 import kotlinx.android.synthetic.main.fragment_person_list.*
 
 
@@ -24,7 +21,7 @@ class PersonsFragment : DaggerFragment() {
 
     private val personsAdapter by lazy {
         PersonsAdapter(onEditPerson = {
-            startActivity(EditPersonActivity.starterIntent(requireContext(), it.doc_id, it.category, it.status))
+            startActivity(EditPersonActivity.starterIntent(requireContext(), it.id, it.doc_id, it.category, it.status))
         })
     }
 
@@ -38,8 +35,12 @@ class PersonsFragment : DaggerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         setUpRecyclerView()
         observeCategories()
-        personsViewModel.loadPersons()
         super.onActivityCreated(savedInstanceState)
+    }
+
+    override fun onResume() {
+        personsViewModel.refreshPersons()
+        super.onResume()
     }
 
     private fun setUpRecyclerView() {
@@ -47,6 +48,7 @@ class PersonsFragment : DaggerFragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = personsAdapter
         }
+        personsRefreshLayout.setOnRefreshListener { personsViewModel.refreshPersons() }
     }
 
     private fun observeCategories() {
@@ -54,6 +56,9 @@ class PersonsFragment : DaggerFragment() {
             persons?.let {
                 personsAdapter.persons = it
             }
+        })
+        personsViewModel.personsNetworkRequest.observe(viewLifecycleOwner, Observer {
+            personsRefreshLayout.isRefreshing = it.isOngoing
         })
     }
 }

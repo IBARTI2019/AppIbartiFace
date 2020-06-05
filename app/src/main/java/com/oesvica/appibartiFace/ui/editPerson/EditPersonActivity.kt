@@ -21,17 +21,20 @@ class EditPersonActivity : DaggerActivity() {
 
     companion object {
 
+        private const val EXTRA_ID = "EXTRA_ID"
         private const val EXTRA_CEDULA = "EXTRA_CEDULA"
         private const val EXTRA_CATEGORY = "EXTRA_CATEGORY"
         private const val EXTRA_STATUS = "EXTRA_STATUS"
 
         fun starterIntent(
             context: Context,
+            id: String,
             cedula: String,
             category: String,
             status: String
         ): Intent {
             val starter = Intent(context, EditPersonActivity::class.java)
+            starter.putExtra(EXTRA_ID, id)
             starter.putExtra(EXTRA_CEDULA, cedula)
             starter.putExtra(EXTRA_CATEGORY, category)
             starter.putExtra(EXTRA_STATUS, status)
@@ -44,6 +47,7 @@ class EditPersonActivity : DaggerActivity() {
     private var categories: List<Category>? = null
     private var statuses: List<Status>? = null
 
+    private val id by lazy { intent.getStringExtra(EXTRA_ID) }
     private val cedula by lazy { intent.getStringExtra(EXTRA_CEDULA) }
     private val category by lazy { intent.getStringExtra(EXTRA_CATEGORY) }
     private val status by lazy { intent.getStringExtra(EXTRA_STATUS) }
@@ -58,6 +62,7 @@ class EditPersonActivity : DaggerActivity() {
         cedulaEditText.isEnabled = false
         observeStatuses()
         observeCategories()
+        observeEditPersonNetworkRequest()
     }
 
     private fun observeCategories() {
@@ -88,6 +93,21 @@ class EditPersonActivity : DaggerActivity() {
         })
     }
 
+    private fun observeEditPersonNetworkRequest() {
+        editPersonViewModel.editPersonNetworkRequest.observe(this, Observer {
+            if (it.isOngoing) {
+                showLoadingDialog()
+            } else {
+                if (it.error == null) {
+                    hideLoadingDialog()
+                    finish()
+                } else {
+                    hideLoadingDialog()
+                }
+            }
+        })
+    }
+
     fun editPerson() {
         debug("editPerson categories=$categories selected=${categorySpinner.selectedItemPosition}")
         debug("editPerson statuses=$statuses selected=${statusSpinner.selectedItemPosition}")
@@ -110,15 +130,9 @@ class EditPersonActivity : DaggerActivity() {
             return
         }
         editPersonViewModel.editPerson(
-            idPerson = cedula,
-            idCategory = categories!![categorySpinner.selectedItemPosition].id,
-            idStatus = statuses!![statusSpinner.selectedItemPosition].id,
-            onSuccess = {
-                hideLoadingDialog()
-                finish()
-            }, onError = {
-                hideLoadingDialog()
-            }
+            idPerson = id,
+            idCategory = categories!![categorySpinner.selectedItemPosition-1].id,
+            idStatus = statuses!![statusSpinner.selectedItemPosition-1].id
         )
     }
 

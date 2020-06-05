@@ -119,8 +119,8 @@ class AddPersonActivity : DaggerActivity() {
         showLoadingDialog()
         addPersonViewModel.addPerson(
             cedula = cedulaEditText.text.toString(),
-            category = categories!![categorySpinner.selectedItemPosition].id,
-            status = statuses!![statusSpinner.selectedItemPosition].id,
+            category = categories!![categorySpinner.selectedItemPosition-1].id,
+            status = statuses!![statusSpinner.selectedItemPosition-1].id,
             client = client,
             device = device,
             date = date,
