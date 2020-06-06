@@ -22,6 +22,7 @@ class RetrofitModule {
             .connectTimeout(2, TimeUnit.MINUTES)
             .writeTimeout(2, TimeUnit.MINUTES)
             .readTimeout(2, TimeUnit.MINUTES)
+            .retryOnConnectionFailure(true)
             .build()
     }
 

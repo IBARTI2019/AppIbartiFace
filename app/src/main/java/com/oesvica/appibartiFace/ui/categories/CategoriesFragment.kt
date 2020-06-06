@@ -14,6 +14,7 @@ import com.oesvica.appibartiFace.data.model.Category
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.dialogs.EditTextDialog
+import distinc
 import kotlinx.android.synthetic.main.fragment_category_list.*
 
 /**
@@ -51,14 +52,18 @@ class CategoriesFragment : DaggerFragment() {
             showCategoryDialog(REQUEST_ADD_CATEGORY, "Agregar categoria")
         }
         observeCategories()
+        observeSnackbarMessages()
+        categoriesRefreshLayout.setOnRefreshListener { categoriesViewModel.refreshCategories() }
+        super.onActivityCreated(savedInstanceState)
+    }
+
+    private fun observeSnackbarMessages() {
         categoriesViewModel.snackBarMsg.observe(viewLifecycleOwner, Observer {
             it?.let {
                 debug("snack $it")
                 Snackbar.make(categoriesFrameLayout, it, Snackbar.LENGTH_SHORT).show()
             }
         })
-        categoriesRefreshLayout.setOnRefreshListener { categoriesViewModel.refreshCategories() }
-        super.onActivityCreated(savedInstanceState)
     }
 
     override fun onResume() {
@@ -107,17 +112,14 @@ class CategoriesFragment : DaggerFragment() {
     }
 
     private fun observeCategories() {
-        categoriesViewModel.categories.observe(viewLifecycleOwner, Observer { categories ->
+        categoriesViewModel.categories.distinc().observe(viewLifecycleOwner, Observer { categories ->
+            debug("observe categories = $categories")
             categories?.let {
                 categoriesAdapter.categories = it
             }
         })
         categoriesViewModel.statusCategories.observe(viewLifecycleOwner, Observer {
-            if(it.isOngoing){
-                categoriesRefreshLayout.isRefreshing = true
-            }else{
-                categoriesRefreshLayout.isRefreshing = false
-            }
+            categoriesRefreshLayout.isRefreshing = it.isOngoing
         })
     }
 }

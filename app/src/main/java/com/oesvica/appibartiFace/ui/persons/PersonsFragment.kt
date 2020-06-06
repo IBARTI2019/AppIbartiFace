@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.ui.editPerson.EditPersonActivity
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
+import distinc
 import kotlinx.android.synthetic.main.fragment_person_list.*
 
 
@@ -52,7 +53,7 @@ class PersonsFragment : DaggerFragment() {
     }
 
     private fun observeCategories() {
-        personsViewModel.persons.observe(viewLifecycleOwner, Observer { persons ->
+        personsViewModel.persons.distinc().observe(viewLifecycleOwner, Observer { persons ->
             persons?.let {
                 personsAdapter.persons = it
             }

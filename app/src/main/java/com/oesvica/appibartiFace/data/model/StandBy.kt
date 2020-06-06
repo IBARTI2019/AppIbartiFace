@@ -16,8 +16,6 @@ data class StandBy(
     @SerializedName("hora") @Expose var time: String = "",
     @PrimaryKey @SerializedName("url") @Expose var url: String = ""
 ) : Parcelable {
-    val properUrl: String
-        get() = "${AppIbartiFaceApi.END_POINT}${AppIbartiFaceApi.STAND_BY}$client/$date/$url"
 
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
@@ -50,3 +48,5 @@ data class StandBy(
         }
     }
 }
+
+fun StandBy.properUrl(): String = "${AppIbartiFaceApi.END_POINT}${AppIbartiFaceApi.STAND_BY}$client/$date/$url"

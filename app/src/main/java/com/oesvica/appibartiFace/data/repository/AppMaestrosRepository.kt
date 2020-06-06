@@ -76,7 +76,6 @@ class AppMaestrosRepository
     override suspend fun refreshPersons(): Result<Unit> {
         return mapToResult {
             val persons = appIbartiFaceApi.findPersons()
-            debug("persons=$persons")
             personDao.deleteAllPersons()
             personDao.insertPersons(*persons.toTypedArray())
         }
@@ -99,16 +98,14 @@ class AppMaestrosRepository
     }
 
     override fun findStandBysByClientAndDate(client: String, date: String): LiveData<List<StandBy>> {
-        debug("changing dao")
         return standByDao.findStandBysByClientAndDate(client, date)
     }
 
     override suspend fun refreshCurrentDayStandBys(): Result<Unit> {
         return mapToResult {
             val todayStandBys = appIbartiFaceApi.findStandBysCurrentDay()
-            debug("todayStandBys=$todayStandBys")
-            standByDao.deleteStandBysByDate(currentDay())
-            standByDao.insertStandBys(*todayStandBys.toTypedArray())
+            debug("todayStandBys=${todayStandBys.take(3)}")
+            standByDao.replaceStandBysByDate(currentDay(), *todayStandBys.toTypedArray())
         }
     }
 
@@ -117,13 +114,15 @@ class AppMaestrosRepository
         return mapToResult {
             val standBys = appIbartiFaceApi.findStandBysByClientAndDate(client, date)
             debug("refreshStandBysByClientAndDate($client, $date)=$standBys")
-            standByDao.deleteStandBysByClientAndDate(client, date)
-            standByDao.insertStandBys(*standBys.toTypedArray())
+            standByDao.replaceStandBysByClientAndDate(client, date, *standBys.toTypedArray())
         }
     }
 
     override suspend fun deleteStandBy(client: String, date: String, url: String): Result<Unit> {
-        return mapToResult { appIbartiFaceApi.deleteStandBy(client = client, date = date, deleteStandBy = DeleteStandBy(foto = url)) }
+        return mapToResult {
+            appIbartiFaceApi.deleteStandBy(client = client, date = date, deleteStandBy = DeleteStandBy(foto = url))
+            standByDao.deleteStandBy(client, date, url)
+        }
     }
 
     private suspend fun <T> mapToResult(sth: suspend() -> T): Result<T> {

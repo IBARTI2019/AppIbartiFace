@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.StandBy
+import com.oesvica.appibartiFace.data.model.properUrl
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_stand_by.view.*
 
@@ -45,7 +46,7 @@ class StandByAdapter(private val screenWidth: Int, private val onStandBySelected
                 dateTextView.text = date
                 timeTextView.text = time
                 Picasso.get()
-                    .load(standBy.properUrl)
+                    .load(standBy.properUrl())
                     .placeholder(R.drawable.photo_placeholder)
                     .resize(screenWidth.div(3), screenWidth.div(3))
                     .centerCrop()

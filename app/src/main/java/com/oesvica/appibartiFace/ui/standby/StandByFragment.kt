@@ -18,6 +18,7 @@ import com.oesvica.appibartiFace.utils.base.DaggerFragment
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.dialogs.StandByDialog
 import com.oesvica.appibartiFace.utils.screenWidth
+import distinc
 import kotlinx.android.synthetic.main.fragment_stand_by_list.*
 import java.util.*
 
@@ -87,30 +88,32 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        searchStandBysIcon.setOnClickListener { searchStandBys() }
+        searchStandBysIcon.setOnClickListener { searchStandBysByClientAndDate() }
         setUpRecyclerView()
         setUpDateTextView()
         observeStandBys()
-        standByViewModel.loadTodayStandBys()
+        refreshTodayStandBys()
         super.onActivityCreated(savedInstanceState)
     }
 
-    private fun searchStandBys() {
+    private fun refreshTodayStandBys() {
+        standByViewModel.loadTodayStandBys()
+    }
+
+    private fun searchStandBysByClientAndDate(showToastMsg: Boolean = true): Boolean {
         debug("searchStandBys")
-        currentDate?.let {
-            if (clientEditText.text.toString().isEmpty()) {
+        if (clientEditText.text.toString().isEmpty()) {
+            if (showToastMsg) {
                 Toast.makeText(
                     context,
                     "Debe ingresar un valor en el campo cliente",
                     Toast.LENGTH_SHORT
                 ).show()
-                return@let
             }
-            standBysRefreshLayout.isRefreshing = true
-            standByViewModel.searchStandBys(clientEditText.text.toString(), it) {
-                standBysRefreshLayout.isRefreshing = false
-            }
+            return false
         }
+        standByViewModel.searchStandBys(clientEditText.text.toString(), currentDate ?: return false)
+        return true
     }
 
     private fun setUpDateTextView() {
@@ -158,16 +161,19 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
         standBysRecyclerView.layoutManager = GridLayoutManager(context, COLUMNS_COUNT)
         standBysRecyclerView.adapter = standByAdapter
         standBysRefreshLayout.setOnRefreshListener {
-            standBysRefreshLayout.isRefreshing = false
+            if (!searchStandBysByClientAndDate(false)) refreshTodayStandBys()
         }
     }
 
     private fun observeStandBys() {
-        standByViewModel.standBys.observe(viewLifecycleOwner, Observer {
-            debug("standBys.observe $it")
+        standByViewModel.standBys.distinc().observe(viewLifecycleOwner, Observer {
+            debug("standBys.observe ${it?.take(10)}")
             it?.let {
                 standByAdapter.standBys = it
             }
+        })
+        standByViewModel.fetchStandBysNetworkRequest.observe(viewLifecycleOwner, Observer {
+            standBysRefreshLayout.isRefreshing = it.isOngoing
         })
     }
 

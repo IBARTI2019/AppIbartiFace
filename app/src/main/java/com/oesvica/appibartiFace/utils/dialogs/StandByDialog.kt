@@ -15,6 +15,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.StandBy
+import com.oesvica.appibartiFace.data.model.properUrl
 import com.oesvica.appibartiFace.utils.debug
 import com.squareup.picasso.Picasso
 
@@ -58,7 +59,7 @@ class StandByDialog: DialogFragment() {
         }
 
         Picasso.get()
-            .load(standBy.properUrl)
+            .load(standBy.properUrl())
             .placeholder(R.drawable.photo_placeholder)
             .into(standByImageView)
         return AlertDialog.Builder(requireContext())
