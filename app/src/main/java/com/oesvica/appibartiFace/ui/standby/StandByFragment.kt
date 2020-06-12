@@ -12,7 +12,9 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.oesvica.appibartiFace.R
+import com.oesvica.appibartiFace.data.model.CustomDate
 import com.oesvica.appibartiFace.data.model.StandBy
+import com.oesvica.appibartiFace.data.model.currentDay
 import com.oesvica.appibartiFace.ui.addPerson.AddPersonActivity
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
 import com.oesvica.appibartiFace.utils.debug
@@ -36,7 +38,11 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
 
     private var standByDialog: StandByDialog? = null
     private var datePickerDialog: DatePickerDialog? = null
-    private var currentDate: String? = null
+    private var selectedDate: CustomDate? = null
+        set(value) {
+            field = value
+            value?.let { dateTextView.text = "Fecha: $it" }
+        }
 
     private val standByAdapter by lazy {
         StandByAdapter(requireActivity().screenWidth(), onStandBySelected = { standBy ->
@@ -112,29 +118,28 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
             }
             return false
         }
-        standByViewModel.searchStandBys(clientEditText.text.toString(), currentDate ?: return false)
+        standByViewModel.searchStandBys(
+            clientEditText.text.toString(),
+            selectedDate?.toString() ?: return false
+        )
         return true
     }
 
     private fun setUpDateTextView() {
         Calendar.getInstance().apply {
-            setDate(
-                get(Calendar.YEAR),
-                get(Calendar.MONTH) + 1,
-                get(Calendar.DAY_OF_MONTH)
-            )
+            setDate(get(Calendar.YEAR), get(Calendar.MONTH), get(Calendar.DAY_OF_MONTH))
         }
         dateTextView.setOnClickListener { showDatePickerDialog() }
     }
 
     private fun showDatePickerDialog() {
-        val calendar = Calendar.getInstance()
+        val date = selectedDate ?: currentDay()
         datePickerDialog = DatePickerDialog(
             requireContext(),
             this,
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
+            date.year,
+            date.month,
+            date.day
         )
         datePickerDialog?.show()
     }
@@ -145,16 +150,12 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        setDate(year, month + 1, dayOfMonth)
+        setDate(year, month, dayOfMonth)
     }
 
     private fun setDate(year: Int, month: Int, dayOfMonth: Int) {
         debug("onDateSet($year: Int, $month: Int, $dayOfMonth: Int)")
-        val monthStr = if (month < 10) "0$month" else month.toString()
-        val dayStr = if (dayOfMonth < 10) "0$dayOfMonth" else dayOfMonth.toString()
-        val dateFormatted = "$year-$monthStr-$dayStr"
-        dateTextView.text = "Fecha: $dateFormatted"
-        currentDate = dateFormatted
+        selectedDate = CustomDate(year, month, dayOfMonth)
     }
 
     private fun setUpRecyclerView() {

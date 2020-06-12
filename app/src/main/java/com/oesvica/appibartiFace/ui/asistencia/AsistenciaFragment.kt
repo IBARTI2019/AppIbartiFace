@@ -11,6 +11,7 @@ import com.oesvica.appibartiFace.data.model.CustomDate
 import com.oesvica.appibartiFace.data.model.currentDay
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
 import com.oesvica.appibartiFace.utils.debug
+import distinc
 import kotlinx.android.synthetic.main.fragment_asistencia.view.*
 import kotlinx.android.synthetic.main.fragment_asistencia_list.*
 import java.util.*
@@ -83,7 +84,7 @@ class AsistenciaFragment : DaggerFragment() {
     }
 
     private fun observeAsistencias() {
-        asistenciasViewModel.asistencias.observe(viewLifecycleOwner, Observer {
+        asistenciasViewModel.asistencias.distinc().observe(viewLifecycleOwner, Observer {
             debug("observe ${it.take(3)} ${this.hashCode()}")
             it?.let {
                 asistenciasTableLayout.removeViews(1, asistenciasTableLayout.childCount-1)

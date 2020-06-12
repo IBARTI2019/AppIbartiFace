@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = Asistencia.TABLE_NAME, primaryKeys = ["docId", "code"])
 data class Asistencia(
-    @SerializedName("apellidos") @Expose var surnames: String = "",
+    @SerializedName("apellidos") @Expose var surnames: String? = "",
     @SerializedName("cedula") @Expose var docId: String = "",
     @SerializedName("cliente") @Expose var client: String = "",
     @SerializedName("cod_cliente") @Expose var codClient: String = "",
@@ -19,7 +19,7 @@ data class Asistencia(
     @SerializedName("fecha") @Expose var date: String = "",
     @SerializedName("fechaserver") @Expose var serverDate: String = "",
     @SerializedName("hora") @Expose var time: String = "",
-    @SerializedName("nombres") @Expose var names: String = "",
+    @SerializedName("nombres") @Expose var names: String? = "",
     @SerializedName("ubicacion") @Expose var location: String = "",
     @SerializedName("vetado") @Expose var vetado: String = ""
 ) : Parcelable {
