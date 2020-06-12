@@ -1,7 +1,9 @@
 package com.oesvica.appibartiFace.ui.standby
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.oesvica.appibartiFace.data.model.NetworkRequestStatus
 import com.oesvica.appibartiFace.data.model.StandBy
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
@@ -17,20 +19,21 @@ class StandByViewModel @Inject constructor(
     schedulerProvider: SchedulerProvider
 ) : BaseViewModel(schedulerProvider) {
 
-    private val todayStandBys by lazy { maestrosRepository.findCurrentDayStandBys() }
 
-    var standBys = MediatorLiveData<List<StandBy>>()
+    private val standBysQuery: MutableLiveData<Pair<String, String>> = MutableLiveData()
+    var standBys: LiveData<List<StandBy>> = Transformations.switchMap(standBysQuery) {
+        if(it.first.trim().isEmpty()) { // if no client is pass search default today standbys
+            maestrosRepository.findCurrentDayStandBys()
+        }
+        else { // otherwise search standbys by client and date
+            maestrosRepository.findStandBysByClientAndDate(client = it.first, date = it.second)
+        }
+    }
     val fetchStandBysNetworkRequest = MutableLiveData<NetworkRequestStatus>()
-    private var todayStandBysLoaded = false
 
     fun loadTodayStandBys() {
         debug("loading today standbys")
-        if(!todayStandBysLoaded){
-            standBys.addSource(todayStandBys) {
-                standBys.value = it
-            }
-        }
-        todayStandBysLoaded = true
+        standBysQuery.value = "" to ""
         fetchStandBysNetworkRequest.value = NetworkRequestStatus(isOngoing = true)
         launch {
             val standbys = withContext(IO) { maestrosRepository.refreshCurrentDayStandBys() }
@@ -42,16 +45,13 @@ class StandByViewModel @Inject constructor(
     fun searchStandBys(client: String, date: String) {
         debug("searchStandBys($client: String, $date: String)")
         fetchStandBysNetworkRequest.value = NetworkRequestStatus(isOngoing = true)
+        standBysQuery.value = client to date
         launch {
             val standsBysResult = withContext(IO) {
                 maestrosRepository.refreshStandBysByClientAndDate(client, date)
             }
             debug("searchStandBys standsBysResult=$standsBysResult")
             fetchStandBysNetworkRequest.value = NetworkRequestStatus(isOngoing = false, error = standsBysResult.error)
-            standBys.removeSource(todayStandBys)
-            standBys.addSource(maestrosRepository.findStandBysByClientAndDate(client, date)) {
-                standBys.value = it
-            }
         }
     }
 

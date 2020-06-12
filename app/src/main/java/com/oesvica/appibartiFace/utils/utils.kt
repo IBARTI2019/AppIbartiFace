@@ -3,8 +3,6 @@ package com.oesvica.appibartiFace.utils
 import android.content.Context
 import android.util.DisplayMetrics
 import android.view.WindowManager
-import java.text.SimpleDateFormat
-import java.util.*
 
 fun Context.screenWidth(): Int {
     val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
