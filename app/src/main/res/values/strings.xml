@@ -26,4 +26,5 @@
     <string name="edit_person">Editar persona</string>
     <string name="standby_client">Cliente</string>
     <string name="standby_date">Fecha</string>
+    <string name="menu_asistencia">Asistencia Ibarti</string>
 </resources>

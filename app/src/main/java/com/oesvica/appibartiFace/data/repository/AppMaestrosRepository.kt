@@ -1,13 +1,9 @@
 package com.oesvica.appibartiFace.data.repository
 
 import androidx.lifecycle.LiveData
-import com.oesvica.appibartiFace.data.database.CategoryDao
-import com.oesvica.appibartiFace.data.database.PersonDao
-import com.oesvica.appibartiFace.data.database.StandByDao
-import com.oesvica.appibartiFace.data.database.StatusDao
+import com.oesvica.appibartiFace.data.database.*
 import com.oesvica.appibartiFace.data.model.*
 import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi
-import com.oesvica.appibartiFace.utils.currentDay
 import com.oesvica.appibartiFace.utils.debug
 import java.lang.Exception
 import javax.inject.Inject
@@ -20,7 +16,8 @@ class AppMaestrosRepository
     private val categoryDao: CategoryDao,
     private val statusDao: StatusDao,
     private val standByDao: StandByDao,
-    private val personDao: PersonDao
+    private val personDao: PersonDao,
+    private val asistenciaDao: AsistenciaDao
 ) : MaestrosRepository() {
 
     override fun findCategories(): LiveData<List<Category>> {
@@ -41,7 +38,12 @@ class AppMaestrosRepository
     }
 
     override suspend fun updateCategory(category: Category): Result<Category> {
-        return mapToResult { appIbartiFaceApi.updateCategory(category.id, CategoryRequest(category.description)) }
+        return mapToResult {
+            appIbartiFaceApi.updateCategory(
+                category.id,
+                CategoryRequest(category.description)
+            )
+        }
     }
 
     override suspend fun deleteCategory(idCategory: String): Result<Unit> {
@@ -66,7 +68,12 @@ class AppMaestrosRepository
     }
 
     override suspend fun updateStatus(status: Status): Result<Status> {
-        return mapToResult { appIbartiFaceApi.updateStatus(status.id, StatusRequest(status.category, status.description)) }
+        return mapToResult {
+            appIbartiFaceApi.updateStatus(
+                status.id,
+                StatusRequest(status.category, status.description)
+            )
+        }
     }
 
     override suspend fun deleteStatus(idStatus: String): Result<Unit> {
@@ -89,7 +96,10 @@ class AppMaestrosRepository
         return mapToResult { appIbartiFaceApi.addPerson(addPersonRequest) }
     }
 
-    override suspend fun updatePerson(personId: String, updatePersonRequest: UpdatePersonRequest): Result<Person> {
+    override suspend fun updatePerson(
+        personId: String,
+        updatePersonRequest: UpdatePersonRequest
+    ): Result<Person> {
         return mapToResult { appIbartiFaceApi.updatePerson(personId, updatePersonRequest) }
     }
 
@@ -97,7 +107,10 @@ class AppMaestrosRepository
         return standByDao.findStandBysByDate()
     }
 
-    override fun findStandBysByClientAndDate(client: String, date: String): LiveData<List<StandBy>> {
+    override fun findStandBysByClientAndDate(
+        client: String,
+        date: String
+    ): LiveData<List<StandBy>> {
         return standByDao.findStandBysByClientAndDate(client, date)
     }
 
@@ -105,11 +118,14 @@ class AppMaestrosRepository
         return mapToResult {
             val todayStandBys = appIbartiFaceApi.findStandBysCurrentDay()
             debug("todayStandBys=${todayStandBys.take(3)}")
-            standByDao.replaceStandBysByDate(currentDay(), *todayStandBys.toTypedArray())
+            standByDao.replaceStandBysByDate(currentDay().toString(), *todayStandBys.toTypedArray())
         }
     }
 
-    override suspend fun refreshStandBysByClientAndDate(client: String, date: String): Result<Unit> {
+    override suspend fun refreshStandBysByClientAndDate(
+        client: String,
+        date: String
+    ): Result<Unit> {
         debug("refreshStandBysByClientAndDate($client: String, $date: String)")
         return mapToResult {
             val standBys = appIbartiFaceApi.findStandBysByClientAndDate(client, date)
@@ -120,12 +136,32 @@ class AppMaestrosRepository
 
     override suspend fun deleteStandBy(client: String, date: String, url: String): Result<Unit> {
         return mapToResult {
-            appIbartiFaceApi.deleteStandBy(client = client, date = date, deleteStandBy = DeleteStandBy(foto = url))
+            appIbartiFaceApi.deleteStandBy(
+                client = client,
+                date = date,
+                deleteStandBy = DeleteStandBy(foto = url)
+            )
             standByDao.deleteStandBy(client, date, url)
         }
     }
 
-    private suspend fun <T> mapToResult(sth: suspend() -> T): Result<T> {
+    override fun findAsistencias(iniDate: CustomDate, endDate: CustomDate): LiveData<List<Asistencia>> {
+        return asistenciaDao.findAsistencias(iniDate.toString(), endDate.toString())
+    }
+
+    override suspend fun refreshAsistencias(iniDate: CustomDate, endDate: CustomDate): Result<Unit> {
+        return mapToResult {
+            val asistencias = appIbartiFaceApi.findAsistencias(iniDate.toString(), endDate.toString()).map { asis ->
+                asis.names = asis.names.trim()
+                asis.surnames = asis.surnames.trim()
+                asis
+            }
+            debug("refreshAsistencias($iniDate: String, $endDate: String)=$asistencias")
+            asistenciaDao.replaceAsistencias(iniDate.toString(), endDate.toString(), *asistencias.toTypedArray())
+        }
+    }
+
+    private suspend fun <T> mapToResult(sth: suspend () -> T): Result<T> {
         return try {
             Result(sth())
         } catch (e: Exception) {

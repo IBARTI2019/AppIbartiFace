@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.ui.editPerson.EditPersonActivity
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
+import com.oesvica.appibartiFace.utils.debug
 import distinc
 import kotlinx.android.synthetic.main.fragment_person_list.*
 
@@ -35,7 +36,7 @@ class PersonsFragment : DaggerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         setUpRecyclerView()
-        observeCategories()
+        observePersons()
         super.onActivityCreated(savedInstanceState)
     }
 
@@ -52,8 +53,9 @@ class PersonsFragment : DaggerFragment() {
         personsRefreshLayout.setOnRefreshListener { personsViewModel.refreshPersons() }
     }
 
-    private fun observeCategories() {
+    private fun observePersons() {
         personsViewModel.persons.distinc().observe(viewLifecycleOwner, Observer { persons ->
+            debug("observe persons =${persons.take(3)}")
             persons?.let {
                 personsAdapter.persons = it
             }

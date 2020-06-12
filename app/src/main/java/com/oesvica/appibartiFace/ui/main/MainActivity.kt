@@ -36,7 +36,8 @@ class MainActivity : DaggerActivity() {
                 R.id.nav_standby,
                 R.id.nav_categorias,
                 R.id.nav_status,
-                R.id.nav_personas
+                R.id.nav_personas,
+                R.id.nav_asistencia_ibarti
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

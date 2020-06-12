@@ -26,7 +26,9 @@ interface AppIbartiFaceApi {
         const val STAND_BY_BY_DATE = "standby/{client}/{date}"
         const val DELETE_STAND_BY = "delete-standby/{client}/{date}"
 
-        fun properUrl(client: String, date: String, url: String) = "$END_POINT$STAND_BY$client/$date/$url"
+        const val ASISTENCIAS = "reporte/asistencia-ibarti/{iniDate}/{endDate}/"
+
+        fun imgUrlForStandBy(client: String, date: String, url: String) = "$END_POINT$STAND_BY$client/$date/$url"
     }
 
     @GET
@@ -103,5 +105,11 @@ interface AppIbartiFaceApi {
         @Path("date") date: String,
         @Body deleteStandBy: DeleteStandBy
     )
+
+    @GET(ASISTENCIAS)
+    suspend fun findAsistencias(
+        @Path("iniDate") iniDate: String,
+        @Path("endDate") endDate: String
+    ): List<Asistencia>
 
 }

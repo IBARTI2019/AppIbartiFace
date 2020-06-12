@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.Category
 import com.oesvica.appibartiFace.data.model.Status
-import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi.Companion.properUrl
+import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi.Companion.imgUrlForStandBy
 import com.oesvica.appibartiFace.utils.base.DaggerActivity
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.dialogs.ProgressDialog
@@ -58,7 +58,7 @@ class AddPersonActivity : DaggerActivity() {
         setContentView(R.layout.activity_add_person)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         Picasso.get()
-            .load(properUrl(client, date, photo))
+            .load(imgUrlForStandBy(client, date, photo))
             .placeholder(R.drawable.photo_placeholder)
             .into(urlImageView)
         observeStatuses()

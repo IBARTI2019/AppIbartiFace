@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="4dp"
+    android:paddingTop="4dp"
+    android:paddingEnd="4dp"
+    android:paddingBottom="4dp">
+
+    <TextView
+        android:id="@+id/cedulaTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_margin="4dp"
+        android:textAppearance="@style/asistencia_text"
+        app:layout_constraintEnd_toStartOf="@id/fichaTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="13795934" />
+
+    <TextView
+        android:id="@+id/fichaTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_margin="4dp"
+        android:textAppearance="@style/asistencia_text"
+        app:layout_constraintEnd_toStartOf="@id/nombresTextView"
+        app:layout_constraintStart_toEndOf="@id/cedulaTextView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="001099" />
+
+    <TextView
+        android:id="@+id/nombresTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_margin="4dp"
+        android:textAppearance="@style/asistencia_text"
+        app:layout_constraintEnd_toStartOf="@id/apellidosTextView"
+        app:layout_constraintStart_toEndOf="@id/fichaTextView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Miguel Antonio" />
+
+    <TextView
+        android:id="@+id/apellidosTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_margin="4dp"
+        android:textAppearance="@style/asistencia_text"
+        app:layout_constraintEnd_toStartOf="@id/fechaTextView"
+        app:layout_constraintStart_toEndOf="@id/nombresTextView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Martinez Eduardo" />
+
+    <TextView
+        android:id="@+id/fechaTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_margin="4dp"
+        android:textAppearance="@style/asistencia_text"
+        app:layout_constraintEnd_toStartOf="@id/horaTextView"
+        app:layout_constraintStart_toEndOf="@id/apellidosTextView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="2020-06-10" />
+
+    <TextView
+        android:id="@+id/horaTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_margin="4dp"
+        android:paddingEnd="2dp"
+        android:textAppearance="@style/asistencia_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fechaTextView"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="09:12:45"
+        tools:ignore="RtlSymmetry" />
+
+</TableRow>

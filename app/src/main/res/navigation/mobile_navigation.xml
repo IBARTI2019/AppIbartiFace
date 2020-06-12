@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/nav_standby"
         android:name="com.oesvica.appibartiFace.ui.standby.StandByFragment"
-        tools:layout="@layout/fragment_stand_by_list"
-        android:label="@string/menu_standby"/>
+        android:label="@string/menu_standby"
+        tools:layout="@layout/fragment_stand_by_list" />
 
     <fragment
         android:id="@+id/nav_categorias"
@@ -21,12 +21,18 @@
         android:id="@+id/nav_status"
         android:name="com.oesvica.appibartiFace.ui.statuses.StatusesFragment"
         android:label="@string/menu_status"
-        tools:layout="@layout/fragment_status_list"/>
+        tools:layout="@layout/fragment_status_list" />
 
     <fragment
         android:id="@+id/nav_personas"
         android:name="com.oesvica.appibartiFace.ui.persons.PersonsFragment"
         android:label="@string/menu_persons"
-        tools:layout="@layout/fragment_person_list"/>
+        tools:layout="@layout/fragment_person_list" />
+
+    <fragment
+        android:id="@+id/nav_asistencia_ibarti"
+        android:name="com.oesvica.appibartiFace.ui.asistencia.AsistenciaFragment"
+        android:label="@string/menu_asistencia"
+        tools:layout="@layout/fragment_person_list" />
 
 </navigation>

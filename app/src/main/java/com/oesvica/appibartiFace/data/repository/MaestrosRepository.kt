@@ -2,7 +2,6 @@ package com.oesvica.appibartiFace.data.repository
 
 import androidx.lifecycle.LiveData
 import com.oesvica.appibartiFace.data.model.*
-import io.reactivex.rxjava3.core.Completable
 
 abstract class MaestrosRepository {
 
@@ -31,5 +30,8 @@ abstract class MaestrosRepository {
     abstract suspend fun refreshCurrentDayStandBys(): Result<Unit>
     abstract suspend fun refreshStandBysByClientAndDate(client: String, date: String): Result<Unit>
     abstract suspend fun deleteStandBy(client: String, date: String, url: String): Result<Unit>
+
+    abstract fun findAsistencias(iniDate: CustomDate, endDate: CustomDate): LiveData<List<Asistencia>>
+    abstract suspend fun refreshAsistencias(iniDate: CustomDate, endDate: CustomDate): Result<Unit>
 
 }

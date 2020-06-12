@@ -6,8 +6,6 @@ import android.view.WindowManager
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun currentDay(): String = SimpleDateFormat("yyyy-MM-dd").format(Date())
-
 fun Context.screenWidth(): Int {
     val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
     val dm = DisplayMetrics()

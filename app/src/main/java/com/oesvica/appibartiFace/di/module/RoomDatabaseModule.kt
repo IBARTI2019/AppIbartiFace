@@ -12,7 +12,7 @@ class RoomDatabaseModule {
 
     @Singleton
     @Provides
-    fun provideAppDatabase(application: Application)= Room.databaseBuilder(application, AppDatabase::class.java, "AppIbartiFace4.db").build()
+    fun provideAppDatabase(application: Application)= Room.databaseBuilder(application, AppDatabase::class.java, "AppIbartiFace5.db").build()
 
     @Singleton
     @Provides
@@ -29,5 +29,9 @@ class RoomDatabaseModule {
     @Singleton
     @Provides
     fun providePersonDao(appDatabase: AppDatabase) = appDatabase.personDao()
+
+    @Singleton
+    @Provides
+    fun provideAsistenciaDao(appDatabase: AppDatabase) = appDatabase.asistenciaDao()
 
 }
