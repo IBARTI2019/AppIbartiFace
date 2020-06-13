@@ -1,5 +1,6 @@
 package com.oesvica.appibartiFace.ui.persons
 
+import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,8 @@ import kotlinx.android.synthetic.main.fragment_person.view.*
 /**
  * [RecyclerView.Adapter] that can display a [Person]
  */
-class PersonsAdapter(private val onEditPerson: (person: Person) -> Unit) : RecyclerView.Adapter<PersonsAdapter.PersonViewHolder>() {
+class PersonsAdapter(private val onEditPerson: (person: Person) -> Unit) :
+    RecyclerView.Adapter<PersonsAdapter.PersonViewHolder>() {
 
     var persons: List<Person> = ArrayList()
         set(value) {
@@ -22,13 +24,15 @@ class PersonsAdapter(private val onEditPerson: (person: Person) -> Unit) : Recyc
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonViewHolder {
-        return PersonViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_person, parent, false)).apply {
+        return PersonViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.fragment_person, parent, false)
+        ).apply {
         }
     }
 
     override fun onBindViewHolder(holder: PersonViewHolder, position: Int) {
-       holder.bind(persons[position])
+        holder.bind(position, persons[position])
     }
 
     override fun getItemCount(): Int = persons.size
@@ -39,7 +43,12 @@ class PersonsAdapter(private val onEditPerson: (person: Person) -> Unit) : Recyc
         private val cliente: TextView by lazy { view.cliente }
         private val status: TextView by lazy { view.status }
 
-        fun bind(person: Person){
+        fun bind(index: Int, person: Person) {
+            if (index % 2 != 0) {
+                view.setBackgroundColor(Color.rgb(223, 251, 255))
+            } else {
+                view.setBackgroundColor(Color.WHITE)
+            }
             cedula.text = person.doc_id
             categoria.text = person.category
             cliente.text = person.client

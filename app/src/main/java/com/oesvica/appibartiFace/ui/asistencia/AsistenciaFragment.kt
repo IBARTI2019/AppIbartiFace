@@ -1,6 +1,7 @@
 package com.oesvica.appibartiFace.ui.asistencia
 
 import android.app.DatePickerDialog
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -44,22 +45,28 @@ class AsistenciaFragment : DaggerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         setUpDateTextViews()
         observeAsistencias()
-        asistenciasViewModel.loadTodayAsistencias()
-        searchAsistenciasIcon.setOnClickListener {
-            asistenciasViewModel.refreshAsistencias(
-                iniDate ?: return@setOnClickListener, endDate ?: return@setOnClickListener
-            )
-        }
+        initializeDatesRangeWithCurrentDay()
+        asistenciasViewModel.refreshAsistencias(iniDate, endDate)
+        searchAsistenciasIcon.setOnClickListener { searchAsistencias() }
         super.onActivityCreated(savedInstanceState)
     }
 
+    private fun searchAsistencias() {
+        asistenciasViewModel.refreshAsistencias(
+            iniDate ?: return, endDate ?: return
+        )
+    }
+
     private fun setUpDateTextViews() {
+        iniDateTextView.setOnClickListener { showDatePickerDialog(true) }
+        endDateTextView.setOnClickListener { showDatePickerDialog(false) }
+    }
+
+    private fun initializeDatesRangeWithCurrentDay() {
         Calendar.getInstance().apply {
             setDate(get(Calendar.YEAR), get(Calendar.MONTH), get(Calendar.DAY_OF_MONTH), true)
             setDate(get(Calendar.YEAR), get(Calendar.MONTH), get(Calendar.DAY_OF_MONTH), false)
         }
-        iniDateTextView.setOnClickListener { showDatePickerDialog(true) }
-        endDateTextView.setOnClickListener { showDatePickerDialog(false) }
     }
 
     private fun showDatePickerDialog(isInitialDate: Boolean) {
@@ -85,12 +92,13 @@ class AsistenciaFragment : DaggerFragment() {
 
     private fun observeAsistencias() {
         asistenciasViewModel.asistencias.distinc().observe(viewLifecycleOwner, Observer {
-            debug("observe ${it.take(3)} ${this.hashCode()}")
+            debug("observe asistencias ${it.take(3)}")
             it?.let {
                 asistenciasTableLayout.removeViews(1, asistenciasTableLayout.childCount-1)
             }
-            it?.forEach { asistencia ->
+            it?.forEachIndexed{ index,asistencia ->
                 val view = layoutInflater.inflate(R.layout.fragment_asistencia, null)
+                if(index %2 != 0) view.setBackgroundColor(Color.rgb(223, 251, 255))
                 with(view) {
                     cedulaTextView.text = asistencia.docId
                     fichaTextView.text = asistencia.codFicha

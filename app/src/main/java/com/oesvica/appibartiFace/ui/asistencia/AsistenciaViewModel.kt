@@ -34,13 +34,8 @@ class AsistenciaViewModel
             list.sortedWith(compareBy({ it.date.toCustomDate() }, { it.time }))
         }
 
-    fun loadTodayAsistencias() {
-        asistenciasQueryRange.value = currentDay() to currentDay()
-        refreshAsistencias(currentDay(), currentDay())
-    }
-
-    fun refreshAsistencias(iniDate: CustomDate, endDate: CustomDate) {
-        asistenciasQueryRange.value = iniDate to endDate
+    fun refreshAsistencias(iniDate: CustomDate?, endDate: CustomDate?) {
+        asistenciasQueryRange.value = (iniDate ?: return) to (endDate ?: return)
         launch {
             val asistenciasResult = withContext(IO) {
                 maestrosRepository.refreshAsistencias(iniDate, endDate)
