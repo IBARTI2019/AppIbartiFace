@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:paddingStart="4dp"
-    android:paddingTop="4dp"
+    android:paddingTop="5dp"
     android:paddingEnd="4dp"
-    android:paddingBottom="4dp">
+    android:paddingBottom="5dp">
 
     <TextView
         android:id="@+id/cedulaTextView"

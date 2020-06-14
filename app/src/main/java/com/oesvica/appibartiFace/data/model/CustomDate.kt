@@ -22,6 +22,15 @@ data class CustomDate(var year: Int, var month: Int, var day: Int): Comparable<C
         if (this.day < other.day) return -1
         return 0
     }
+
+    @SuppressLint("SimpleDateFormat", "DefaultLocale")
+    fun toDisplayFormat(): String {
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.YEAR, year)
+        cal.set(Calendar.MONTH, month)
+        cal.set(Calendar.DAY_OF_MONTH, day)
+        return SimpleDateFormat("MMM d, yyyy").format(cal.time).capitalize()
+    }
 }
 
 

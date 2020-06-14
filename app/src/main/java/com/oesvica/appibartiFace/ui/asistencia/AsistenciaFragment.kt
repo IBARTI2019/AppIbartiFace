@@ -27,12 +27,12 @@ class AsistenciaFragment : DaggerFragment() {
     private var iniDate: CustomDate? = null
         set(value) {
             field = value
-            value?.let { iniDateTextView.text = value.toString() }
+            value?.let { iniDateTextView.text = value.toDisplayFormat() }
         }
     private var endDate: CustomDate? = null
         set(value) {
             field = value
-            value?.let { endDateTextView.text = value.toString() }
+            value?.let { endDateTextView.text = value.toDisplayFormat() }
         }
 
     override fun onCreateView(

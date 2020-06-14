@@ -8,6 +8,12 @@
     <item name="colorAccent">@color/colorAccent</item>
   </style>
 
+  <style name="AppTheme.Button">
+    <item name="android:textSize">17sp</item>
+    <item name="colorButtonNormal">#64B5F6</item>
+    <item name="android:textColor">#fff</item>
+  </style>
+
   <style name="AppTheme.NoActionBar">
     <item name="windowActionBar">false</item>
     <item name="windowNoTitle">true</item>
@@ -27,6 +33,10 @@
   <style name="person_text">
     <item name="android:textColor">@color/lightBlack</item>
     <item name="android:textSize">13sp</item>
+  </style>
+
+  <style name="person_text_header" parent="person_text">
+    <item name="android:textColor">@color/darkBlack</item>
   </style>
 
   <style name="asistencia_text">
