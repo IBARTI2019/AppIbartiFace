@@ -19,6 +19,9 @@ abstract class StatusDao: BaseDao<Status> {
     @Query("SELECT * FROM ${Status.TABLE_NAME}")
     abstract fun findStatuses(): LiveData<List<Status>>
 
+    @Query("SELECT * FROM ${Status.TABLE_NAME}")
+    abstract suspend fun findStatusesBlocking(): List<Status>
+
     // Delete
     @Query("DELETE FROM ${Status.TABLE_NAME}")
     abstract suspend fun deleteAllStatuses()

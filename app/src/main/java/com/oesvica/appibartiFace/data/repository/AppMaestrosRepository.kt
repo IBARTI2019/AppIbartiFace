@@ -24,6 +24,10 @@ class AppMaestrosRepository
         return categoryDao.findCategories()
     }
 
+    override suspend fun findCategoriesBlocking(): List<Category> {
+        return categoryDao.findCategoriesBlocking()
+    }
+
     override suspend fun refreshCategories(): Result<Unit> {
         return mapToResult {
             val categories = appIbartiFaceApi.findCategories()
@@ -61,6 +65,10 @@ class AppMaestrosRepository
 
     override fun findStatuses(): LiveData<List<Status>> {
         return statusDao.findStatuses()
+    }
+
+    override suspend fun findStatusesBlocking(): List<Status> {
+        return statusDao.findStatusesBlocking()
     }
 
     override suspend fun insertStatus(statusRequest: StatusRequest): Result<Status> {

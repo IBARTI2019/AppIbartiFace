@@ -18,6 +18,9 @@ abstract class CategoryDao: BaseDao<Category> {
     @Query("SELECT * FROM ${Category.TABLE_NAME}")
     abstract fun findCategories(): LiveData<List<Category>>
 
+    @Query("SELECT * FROM ${Category.TABLE_NAME}")
+    abstract suspend fun findCategoriesBlocking(): List<Category>
+
     // Delete
     @Query("DELETE FROM ${Category.TABLE_NAME}")
     abstract suspend fun deleteAllCategories()
