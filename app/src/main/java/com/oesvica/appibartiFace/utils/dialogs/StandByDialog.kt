@@ -56,6 +56,7 @@ class StandByDialog: DialogFragment() {
                     putExtra(ARG_IS_DELETE, position == 1) // pass whether Delete was selected or not, delete is on index 1 in ITEMS list
                 }
             )
+            dialog?.dismiss()
         }
 
         Picasso.get()
