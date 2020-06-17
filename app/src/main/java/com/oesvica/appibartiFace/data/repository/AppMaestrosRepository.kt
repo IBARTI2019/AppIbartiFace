@@ -164,7 +164,7 @@ class AppMaestrosRepository
                 asis.surnames = asis.surnames?.trim() ?: ""
                 asis
             }
-            debug("refreshAsistencias($iniDate: String, $endDate: String)=$asistencias")
+            debug("refreshAsistencias($iniDate: String, $endDate: String)=${asistencias.take(2)}")
             asistenciaDao.replaceAsistencias(iniDate.toString(), endDate.toString(), *asistencias.toTypedArray())
         }
     }
