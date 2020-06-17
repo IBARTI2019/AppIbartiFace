@@ -36,7 +36,6 @@ class EditPersonViewModel
             emit(list)
         }
     }
-    //val categories by lazy { maestrosRepository.findCategories() }
 
     val statuses: LiveData<List<Status>> = liveData {
         val list = maestrosRepository.findStatusesBlocking()
@@ -54,7 +53,6 @@ class EditPersonViewModel
         }
     }
 
-    //val statuses by lazy { maestrosRepository.findStatuses() }
     val editPersonNetworkRequest = MutableLiveData<NetworkRequestStatus>()
 
     fun editPerson(

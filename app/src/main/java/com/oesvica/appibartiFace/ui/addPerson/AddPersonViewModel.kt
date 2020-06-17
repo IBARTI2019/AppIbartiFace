@@ -1,8 +1,11 @@
 package com.oesvica.appibartiFace.ui.addPerson
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import com.oesvica.appibartiFace.data.model.AddPersonRequest
+import com.oesvica.appibartiFace.data.model.Category
 import com.oesvica.appibartiFace.data.model.NetworkRequestStatus
+import com.oesvica.appibartiFace.data.model.Status
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug
@@ -17,8 +20,36 @@ class AddPersonViewModel
     schedulerProvider: SchedulerProvider
 ) : BaseViewModel(schedulerProvider) {
 
-    val categories by lazy { maestrosRepository.findCategories() }
-    val statuses by lazy { maestrosRepository.findStatuses() }
+    val categories = liveData {
+        val list = maestrosRepository.findCategoriesBlocking()
+        if (list.isEmpty()) {
+            val result = withContext(IO) {
+                maestrosRepository.refreshCategories()
+            }
+            if (result.success != null) {
+                emit(maestrosRepository.findCategoriesBlocking())
+            } else {
+                emit(emptyList<Category>())
+            }
+        } else {
+            emit(list)
+        }
+    }
+    val statuses = liveData {
+        val list = maestrosRepository.findStatusesBlocking()
+        if (list.isEmpty()) {
+            val result = withContext(IO) {
+                maestrosRepository.refreshStatuses()
+            }
+            if (result.success != null) {
+                emit(maestrosRepository.findStatusesBlocking())
+            } else {
+                emit(emptyList<Status>())
+            }
+        } else {
+            emit(list)
+        }
+    }
 
     val addPersonNetworkRequest = MutableLiveData<NetworkRequestStatus>()
 
