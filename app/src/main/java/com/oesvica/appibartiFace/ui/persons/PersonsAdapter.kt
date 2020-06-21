@@ -21,11 +21,14 @@ class PersonsAdapter(private val onEditPerson: (person: Person) -> Unit) :
         const val ITEM_TYPE_NORMAL = 1002
     }
 
-    var persons: List<Person> = ArrayList()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+    private var allPersons: List<Person> = ArrayList()
+    private var filteredPersons: List<Person> = allPersons
+
+    fun setData(persons: List<Person>? = null, filter: (Person) -> Boolean) {
+        persons?.let { allPersons = it }
+        filteredPersons = allPersons.filter(filter)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == ITEM_TYPE_NORMAL) {
@@ -42,14 +45,14 @@ class PersonsAdapter(private val onEditPerson: (person: Person) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is PersonViewHolder) holder.bind(position-1, persons[position-1])
+        if (holder is PersonViewHolder) holder.bind(position - 1, filteredPersons[position - 1])
     }
 
     override fun getItemViewType(position: Int): Int {
         return if (position == 0) ITEM_TYPE_HEADER else ITEM_TYPE_NORMAL
     }
 
-    override fun getItemCount(): Int = persons.size + 1
+    override fun getItemCount(): Int = filteredPersons.size + 1
 
     inner class PersonViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         private val cedula: TextView by lazy { view.cedula }

@@ -1,43 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:name="com.oesvica.appibartiFace.ui.standby.StandByFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="false"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/searchContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#E0F7FA"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:background="#E0F7FA">
 
         <FrameLayout
             android:id="@+id/clientContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/dateTextView"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
             android:paddingStart="16dp"
             android:paddingEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@id/dateTextView"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:ignore="RtlSymmetry">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/clientEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/standby_client"
                 android:inputType="number"
                 android:minWidth="120dp"
-                android:textSize="17sp"
-                android:hint="@string/standby_client"/>
+                android:textSize="17sp" />
 
         </FrameLayout>
 
@@ -48,12 +45,12 @@
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:text="@string/standby_date"
-            android:textSize="17sp"
             android:textColor="@color/lightBlack"
-            app:layout_constraintStart_toEndOf="@id/clientContainer"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="@id/clientContainer"
             app:layout_constraintEnd_toStartOf="@id/searchStandBysIcon"
+            app:layout_constraintStart_toEndOf="@id/clientContainer"
+            app:layout_constraintTop_toTopOf="parent"
             tools:ignore="RtlSymmetry" />
 
         <ImageView
@@ -62,11 +59,11 @@
             android:layout_height="wrap_content"
             android:paddingStart="8dp"
             android:paddingEnd="16dp"
-            app:layout_constraintStart_toEndOf="@id/dateTextView"
-            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_search_24dp"
             app:layout_constraintBottom_toBottomOf="@id/clientContainer"
             app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/ic_search_24dp"/>
+            app:layout_constraintStart_toEndOf="@id/dateTextView"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -74,10 +71,7 @@
         android:id="@+id/standBysRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchContainer">
+        android:padding="8dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/standBysRecyclerView"
@@ -89,4 +83,5 @@
             tools:listitem="@layout/fragment_stand_by" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
