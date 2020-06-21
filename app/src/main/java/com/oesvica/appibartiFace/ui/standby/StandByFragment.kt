@@ -82,8 +82,8 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     private fun hideOptionsDialog() {
-        standByDialog?.dismiss()
-        standByDialog = null
+        //standByDialog?.dismiss()
+        //standByDialog = null
     }
 
     override fun onCreateView(
