@@ -6,6 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:focusable="false"
+    android:focusableInTouchMode="true"
     tools:context=".ui.categories.CategoriesFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -105,6 +107,13 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/asistenciasRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/fragment_asistencia"/>
+<!--
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -208,5 +217,6 @@
         </LinearLayout>
 
     </HorizontalScrollView>
+    -->
 
 </LinearLayout>

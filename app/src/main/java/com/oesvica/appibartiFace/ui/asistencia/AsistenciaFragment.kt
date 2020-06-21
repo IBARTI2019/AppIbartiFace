@@ -2,28 +2,35 @@ package com.oesvica.appibartiFace.ui.asistencia
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.CustomDate
 import com.oesvica.appibartiFace.data.model.currentDay
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
 import com.oesvica.appibartiFace.utils.debug
 import distinc
-import kotlinx.android.synthetic.main.fragment_asistencia.view.*
 import kotlinx.android.synthetic.main.fragment_asistencia_list.*
+import kotlinx.android.synthetic.main.fragment_asistencia_list.fieldEditText
+import kotlinx.android.synthetic.main.fragment_asistencia_list.fieldSpinner
 import java.util.*
 
 /**
  * A fragment representing a list of Items.
  */
 class AsistenciaFragment : DaggerFragment() {
+
+    companion object {
+        const val INI_DATE = "iniDate"
+        const val END_DATE = "endDate"
+    }
 
     private val asistenciasViewModel by lazy { getViewModel<AsistenciaViewModel>() }
     private var datePickerDialog: DatePickerDialog? = null
@@ -37,6 +44,7 @@ class AsistenciaFragment : DaggerFragment() {
             field = value
             value?.let { endDateTextView.text = value.toDisplayFormat() }
         }
+    private val asistenciasAdapter by lazy { AsistenciaAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,21 +54,40 @@ class AsistenciaFragment : DaggerFragment() {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
+        val tempIniDate = savedInstanceState?.getParcelable<CustomDate?>(INI_DATE)
+        val tempEndDate = savedInstanceState?.getParcelable<CustomDate?>(END_DATE)
+        if (tempIniDate != null && tempEndDate != null) {
+            iniDate = tempIniDate
+            endDate = tempEndDate
+        } else {
+            initializeDatesRangeWithCurrentDay()
+        }
+        setUpRecyclerView()
         setUpDateTextViews()
         setUpFieldSpinner()
         observeAsistencias()
-        initializeDatesRangeWithCurrentDay()
-        searchAsistencias { true }
-        searchAsistenciasIcon.setOnClickListener {
-            searchAsistencias(getAsistenciaFilterForCurrentInputs())
-        }
+        searchAsistencias()
+        searchAsistenciasIcon.setOnClickListener { searchAsistencias() }
         super.onActivityCreated(savedInstanceState)
     }
 
-    private fun searchAsistencias(asistenciasFilter: AsistenciaFieldFilter) {
-        asistenciasViewModel.refreshAsistencias(
-            iniDate ?: return, endDate ?: return, asistenciasFilter
-        )
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(INI_DATE, iniDate)
+        outState.putParcelable(END_DATE, endDate)
+        debug("onSaveInstanceState $iniDate $endDate")
+    }
+
+    private fun searchAsistencias() {
+        asistenciasViewModel.refreshAsistencias(iniDate ?: return, endDate ?: return)
+    }
+
+    private fun setUpRecyclerView() {
+        with(asistenciasRecyclerView) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = asistenciasAdapter
+        }
     }
 
     private fun setUpDateTextViews() {
@@ -90,23 +117,22 @@ class AsistenciaFragment : DaggerFragment() {
                     fieldEditText.setText("")
                     fieldEditText.hint = ""
                 }
+                updateAsistenciasFilter()
             }
         }
+        fieldEditText.addTextChangedListener { updateAsistenciasFilter() }
     }
 
-    private fun getAsistenciaFilterForCurrentInputs(): AsistenciaFieldFilter {
+    private fun updateAsistenciasFilter() {
+        debug("updateAsistenciasFilter")
         val query = fieldEditText.text.toString().trim().toLowerCase(Locale.getDefault())
-        return if (query.isEmpty()) {
-            { true }
-        } else {
-            {
-                when (fieldSpinner.selectedItemPosition) {
-                    1 -> it.docId.indexOf(query) == 0
-                    2 -> it.codFicha.indexOf(query) == 0
-                    3 -> it.names?.toLowerCase(Locale.getDefault())?.contains(query) ?: false
-                    4 -> it.surnames?.toLowerCase(Locale.getDefault())?.contains(query) ?: false
-                    else -> true
-                }
+        asistenciasAdapter.filterAsistencias = { asistencia ->
+            when (fieldSpinner.selectedItemPosition) {
+                1 -> asistencia.docId.indexOf(query) == 0
+                2 -> asistencia.codFicha.indexOf(query) == 0
+                3 -> asistencia.names?.toLowerCase(Locale.getDefault())?.contains(query) ?: false
+                4 -> asistencia.surnames?.toLowerCase(Locale.getDefault())?.contains(query) ?: false
+                else -> true
             }
         }
     }
@@ -144,20 +170,7 @@ class AsistenciaFragment : DaggerFragment() {
         asistenciasViewModel.asistencias.distinc().observe(viewLifecycleOwner, Observer { list ->
             debug("observe asistencias ${list.take(2)}")
             if (list == null) return@Observer
-            asistenciasTableLayout.removeViews(1, asistenciasTableLayout.childCount - 1)
-            list.forEachIndexed { index, asistencia ->
-                val view = layoutInflater.inflate(R.layout.fragment_asistencia, null)
-                if (index % 2 != 0) view.setBackgroundColor(Color.rgb(223, 251, 255))
-                with(view) {
-                    cedulaTextView.text = asistencia.docId
-                    fichaTextView.text = asistencia.codFicha
-                    nombresTextView.text = asistencia.names
-                    apellidosTextView.text = asistencia.surnames
-                    fechaTextView.text = asistencia.date
-                    horaTextView.text = asistencia.time
-                }
-                asistenciasTableLayout.addView(view)
-            }
+            asistenciasAdapter.allAsistencias = list
         })
     }
 

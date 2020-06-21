@@ -47,7 +47,7 @@
 
   <style name="asistencia_text">
     <item name="android:textColor">@color/lightBlack</item>
-    <item name="android:textSize">14sp</item>
+    <item name="android:textSize">@dimen/asistencia_text_size</item>
   </style>
 
 

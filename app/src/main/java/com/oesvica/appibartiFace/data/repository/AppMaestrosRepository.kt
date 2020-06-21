@@ -160,8 +160,8 @@ class AppMaestrosRepository
     override suspend fun refreshAsistencias(iniDate: CustomDate, endDate: CustomDate): Result<Unit> {
         return mapToResult {
             val asistencias = appIbartiFaceApi.findAsistencias(iniDate.toString(), endDate.toString()).map { asis ->
-                asis.names = asis.names?.trim()?.split(" ")?.get(0) ?: "" // the api may return names o surnames as null
-                asis.surnames = asis.surnames?.trim()?.split(" ")?.get(0) ?: ""
+                asis.names = asis.names?.trim()?: "" // the api may return names o surnames as null
+                asis.surnames = asis.surnames?.trim()?: ""
                 asis
             }
             debug("refreshAsistencias($iniDate: String, $endDate: String)=${asistencias.take(2)}")

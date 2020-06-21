@@ -1,66 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:paddingStart="4dp"
-    android:paddingTop="5dp"
-    android:paddingEnd="4dp"
-    android:paddingBottom="5dp">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/cedulaTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
         android:layout_height="wrap_content"
-        android:layout_column="1"
-        android:layout_margin="4dp"
+        android:textAlignment="center"
+        android:padding="2dp"
         android:textAppearance="@style/asistencia_text"
-        tools:text="13795934" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/fichaTextView"
+        tools:text="Cedula"/>
 
     <TextView
         android:id="@+id/fichaTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="0.8"
         android:layout_height="wrap_content"
-        android:layout_column="1"
-        android:layout_margin="4dp"
+        android:textAlignment="center"
+        android:padding="2dp"
         android:textAppearance="@style/asistencia_text"
-        tools:text="001099" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cedulaTextView"
+        app:layout_constraintEnd_toStartOf="@id/nombresTextView"
+        tools:text="Ficha"/>
 
     <TextView
         android:id="@+id/nombresTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
         android:layout_height="wrap_content"
-        android:layout_column="1"
-        android:layout_margin="4dp"
+        android:textAlignment="center"
+        android:padding="2dp"
         android:textAppearance="@style/asistencia_text"
-        tools:text="Miguel Antonio" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fichaTextView"
+        app:layout_constraintEnd_toStartOf="@id/apellidosTextView"
+        tools:text="Nombres"/>
 
     <TextView
         android:id="@+id/apellidosTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
         android:layout_height="wrap_content"
-        android:layout_column="1"
-        android:layout_margin="4dp"
+        android:textAlignment="center"
+        android:padding="2dp"
         android:textAppearance="@style/asistencia_text"
-        tools:text="Martinez Eduardo" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/nombresTextView"
+        app:layout_constraintEnd_toStartOf="@id/fechaTextView"
+        tools:text="Apellidos"/>
 
     <TextView
         android:id="@+id/fechaTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1.05"
         android:layout_height="wrap_content"
-        android:layout_column="1"
-        android:layout_margin="4dp"
+        android:textAlignment="center"
+        android:padding="2dp"
         android:textAppearance="@style/asistencia_text"
-        tools:text="2020-06-10" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/apellidosTextView"
+        app:layout_constraintEnd_toStartOf="@id/horaTextView"
+        tools:text="Fecha"/>
 
     <TextView
         android:id="@+id/horaTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="0.8"
         android:layout_height="wrap_content"
-        android:layout_column="1"
-        android:layout_margin="4dp"
-        android:paddingEnd="2dp"
+        android:textAlignment="center"
+        android:padding="2dp"
         android:textAppearance="@style/asistencia_text"
-        tools:text="09:12:45"
-        tools:ignore="RtlSymmetry" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fechaTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="RtlSymmetry"
+        tools:text="Hora"/>
 
-</TableRow>
+</androidx.constraintlayout.widget.ConstraintLayout>

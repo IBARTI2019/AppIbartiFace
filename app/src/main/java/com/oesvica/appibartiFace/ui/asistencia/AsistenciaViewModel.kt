@@ -12,12 +12,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-typealias AsistenciaFieldFilter = (Asistencia) -> Boolean
-
 data class AsistenciaFilter(
     var iniDate: CustomDate,
-    var endDate: CustomDate,
-    var fieldFilter: AsistenciaFieldFilter
+    var endDate: CustomDate
 )
 
 class AsistenciaViewModel
@@ -34,19 +31,16 @@ class AsistenciaViewModel
             iniDate = filter.iniDate,
             endDate = filter.endDate
         ).map { list ->
-            list.filter(filter.fieldFilter)
-                .sortedWith(compareBy({ it.date.toCustomDate() }, { it.time }))
+            list.sortedWith(compareBy({ it.date.toCustomDate() }, { it.time }))
         }
     }
 
     fun refreshAsistencias(
         iniDate: CustomDate?,
-        endDate: CustomDate?,
-        asistenciasFilter: AsistenciaFieldFilter
+        endDate: CustomDate?
     ) {
         debug("refreshAsistencia")
-        asistenciasQueryRange.value =
-            AsistenciaFilter(iniDate ?: return, endDate ?: return, asistenciasFilter)
+        asistenciasQueryRange.value = AsistenciaFilter(iniDate ?: return, endDate ?: return)
         launch {
             val asistenciasResult = withContext(IO) {
                 maestrosRepository.refreshAsistencias(iniDate, endDate)
