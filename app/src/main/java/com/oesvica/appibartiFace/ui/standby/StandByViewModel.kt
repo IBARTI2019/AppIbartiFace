@@ -1,11 +1,9 @@
 package com.oesvica.appibartiFace.ui.standby
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import com.oesvica.appibartiFace.data.model.NetworkRequestStatus
-import com.oesvica.appibartiFace.data.model.StandBy
+import android.os.Parcel
+import android.os.Parcelable
+import androidx.lifecycle.*
+import com.oesvica.appibartiFace.data.model.*
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug
@@ -14,26 +12,52 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+data class StandByQuery(var client: String, var date: CustomDate) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString()?:"",
+        parcel.readParcelable(CustomDate::class.java.classLoader)!!
+    )
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(client)
+        parcel.writeParcelable(date, flags)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<StandByQuery> {
+        override fun createFromParcel(parcel: Parcel): StandByQuery {
+            return StandByQuery(parcel)
+        }
+
+        override fun newArray(size: Int): Array<StandByQuery?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
+
 class StandByViewModel @Inject constructor(
     private val maestrosRepository: MaestrosRepository,
     schedulerProvider: SchedulerProvider
 ) : BaseViewModel(schedulerProvider) {
 
 
-    private val standBysQuery: MutableLiveData<Pair<String, String>> = MutableLiveData()
-    var standBys: LiveData<List<StandBy>> = Transformations.switchMap(standBysQuery) {
-        if(it.first.trim().isEmpty()) { // if no client is pass search default today standbys
+    private val standBysQuery: MutableLiveData<StandByQuery> = MutableLiveData()
+    var standBys: LiveData<List<StandBy>> = standBysQuery.switchMap {
+        if(it.client.trim().isEmpty()) { // if no client is pass search default today standbys
             maestrosRepository.findCurrentDayStandBys()
         }
         else { // otherwise search standbys by client and date
-            maestrosRepository.findStandBysByClientAndDate(client = it.first, date = it.second)
+            maestrosRepository.findStandBysByClientAndDate(client = it.client, date = it.date.toString())
         }
     }
     val fetchStandBysNetworkRequest = MutableLiveData<NetworkRequestStatus>()
 
     fun loadTodayStandBys() {
         debug("loading today standbys")
-        standBysQuery.value = "" to ""
+        standBysQuery.value = StandByQuery("", currentDay())
         fetchStandBysNetworkRequest.value = NetworkRequestStatus(isOngoing = true)
         launch {
             val standbys = withContext(IO) { maestrosRepository.refreshCurrentDayStandBys() }
@@ -42,13 +66,13 @@ class StandByViewModel @Inject constructor(
         }
     }
 
-    fun searchStandBys(client: String, date: String) {
-        debug("searchStandBys($client: String, $date: String)")
+    fun searchStandBys(query: StandByQuery) {
+        debug("searchStandBys(${query.client}: String, ${query.date}: String)")
         fetchStandBysNetworkRequest.value = NetworkRequestStatus(isOngoing = true)
-        standBysQuery.value = client to date
+        standBysQuery.value = query
         launch {
             val standsBysResult = withContext(IO) {
-                maestrosRepository.refreshStandBysByClientAndDate(client, date)
+                maestrosRepository.refreshStandBysByClientAndDate(query.client, query.date.toString())
             }
             debug("searchStandBys standsBysResult=$standsBysResult")
             fetchStandBysNetworkRequest.value = NetworkRequestStatus(isOngoing = false, error = standsBysResult.error)

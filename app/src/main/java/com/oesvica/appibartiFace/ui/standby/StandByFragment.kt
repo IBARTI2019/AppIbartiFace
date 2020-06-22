@@ -1,9 +1,12 @@
 package com.oesvica.appibartiFace.ui.standby
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Parcelable
 import androidx.recyclerview.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +35,9 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
     companion object {
         const val COLUMNS_COUNT = 3
         const val STAND_BY_REQUEST_CODE = 101
+        const val KEY_SELECTED_DATE = "selectedDate"
+        const val KEY_LAST_QUERY_TRIGGERED = "lastQueryTriggered"
+        const val KEY_RECYCLER_STATE = "StandBysRecyclerViewState"
     }
 
     private val standByViewModel by lazy { getViewModel<StandByViewModel>() }
@@ -39,10 +45,12 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
     private var standByDialog: StandByDialog? = null
     private var datePickerDialog: DatePickerDialog? = null
     private var selectedDate: CustomDate? = null
+        @SuppressLint("SetTextI18n")
         set(value) {
             field = value
             value?.let { dateTextView.text = "Fecha: $it" }
         }
+    private var lastQueryTriggered: StandByQuery? = null
 
     private val standByAdapter by lazy {
         StandByAdapter(requireActivity().screenWidth(), onStandBySelected = { standBy ->
@@ -81,11 +89,6 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
         }
     }
 
-    private fun hideOptionsDialog() {
-        //standByDialog?.dismiss()
-        //standByDialog = null
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -94,42 +97,61 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        searchStandBysIcon.setOnClickListener { searchStandBysByClientAndDate() }
-        setUpRecyclerView()
-        setUpDateTextView()
+        setUpRecyclerView(savedInstanceState)
+        val tempDate = savedInstanceState?.getParcelable<CustomDate?>(KEY_SELECTED_DATE)
+        if (tempDate != null) {
+            selectedDate = tempDate
+        } else {
+            initSelectedDateAsToday()
+        }
+        dateTextView.setOnClickListener { showDatePickerDialog() }
+        searchStandBysIcon.setOnClickListener {
+            val query = getQueryForStandBys(displayErrorMessages = true)
+            if (query != null) {
+                clientEditText.clearFocus()
+                standByViewModel.searchStandBys(query)
+                lastQueryTriggered = query
+            }
+        }
         observeStandBys()
-        refreshTodayStandBys()
+        val tempLastQueryTriggered =
+            savedInstanceState?.getParcelable<StandByQuery?>(KEY_LAST_QUERY_TRIGGERED)
+        if (tempLastQueryTriggered != null) {
+            lastQueryTriggered = tempLastQueryTriggered
+            standByViewModel.searchStandBys(tempLastQueryTriggered)
+        } else {
+            standByViewModel.loadTodayStandBys()
+        }
         super.onActivityCreated(savedInstanceState)
     }
 
-    private fun refreshTodayStandBys() {
-        standByViewModel.loadTodayStandBys()
+    private fun initSelectedDateAsToday() {
+        Calendar.getInstance().apply {
+            setDate(get(Calendar.YEAR), get(Calendar.MONTH), get(Calendar.DAY_OF_MONTH))
+        }
     }
 
-    private fun searchStandBysByClientAndDate(showToastMsg: Boolean = true): Boolean {
-        debug("searchStandBys")
-        if (clientEditText.text.toString().isEmpty()) {
-            if (showToastMsg) {
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        selectedDate?.let { outState.putParcelable(KEY_SELECTED_DATE, it) }
+        standBysRecyclerView?.layoutManager?.onSaveInstanceState()
+            ?.let { outState.putParcelable(KEY_RECYCLER_STATE, it) }
+        lastQueryTriggered?.let { outState.putParcelable(KEY_LAST_QUERY_TRIGGERED, it) }
+    }
+
+    private fun getQueryForStandBys(displayErrorMessages: Boolean = true): StandByQuery? {
+        val client = clientEditText.text.toString()
+        if (client.isEmpty()) {
+            if (displayErrorMessages) {
                 Toast.makeText(
                     context,
                     "Debe ingresar un valor en el campo cliente",
                     Toast.LENGTH_SHORT
                 ).show()
             }
-            return false
+            return null
         }
-        standByViewModel.searchStandBys(
-            clientEditText.text.toString(),
-            selectedDate?.toString() ?: return false
-        )
-        return true
-    }
-
-    private fun setUpDateTextView() {
-        Calendar.getInstance().apply {
-            setDate(get(Calendar.YEAR), get(Calendar.MONTH), get(Calendar.DAY_OF_MONTH))
-        }
-        dateTextView.setOnClickListener { showDatePickerDialog() }
+        return StandByQuery(client, selectedDate ?: return null)
     }
 
     private fun showDatePickerDialog() {
@@ -158,11 +180,19 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
         selectedDate = CustomDate(year, month, dayOfMonth)
     }
 
-    private fun setUpRecyclerView() {
+    private fun setUpRecyclerView(savedInstanceState: Bundle?) {
         standBysRecyclerView.layoutManager = GridLayoutManager(context, COLUMNS_COUNT)
         standBysRecyclerView.adapter = standByAdapter
+        savedInstanceState?.let {
+            Handler().postDelayed({
+                val listState = it.getParcelable<Parcelable>(KEY_RECYCLER_STATE)
+                standBysRecyclerView.layoutManager?.onRestoreInstanceState(listState)
+            }, 50)
+        }
         standBysRefreshLayout.setOnRefreshListener {
-            if (!searchStandBysByClientAndDate(false)) refreshTodayStandBys()
+            val query = getQueryForStandBys(displayErrorMessages = false)
+            if (query == null) standByViewModel.loadTodayStandBys()
+            else standByViewModel.searchStandBys(query)
         }
     }
 
@@ -179,7 +209,6 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     override fun onDestroy() {
-        hideOptionsDialog()
         hideDatePickerDialog()
         super.onDestroy()
     }

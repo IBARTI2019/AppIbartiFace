@@ -1,6 +1,8 @@
 package com.oesvica.appibartiFace.ui.persons
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +18,6 @@ import com.oesvica.appibartiFace.utils.base.DaggerFragment
 import com.oesvica.appibartiFace.utils.debug
 import distinc
 import kotlinx.android.synthetic.main.fragment_person_list.*
-import kotlinx.android.synthetic.main.fragment_person_list.fieldEditText
-import kotlinx.android.synthetic.main.fragment_person_list.fieldSpinner
 import java.util.*
 
 
@@ -25,6 +25,10 @@ import java.util.*
  * A fragment representing a list of ca.
  */
 class PersonsFragment : DaggerFragment() {
+
+    companion object {
+        const val KEY_RECYCLER_STATE = "PersonsRecyclerViewState"
+    }
 
     private val personsViewModel by lazy { getViewModel<PersonsViewModel>() }
 
@@ -52,10 +56,16 @@ class PersonsFragment : DaggerFragment() {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        setUpRecyclerView()
+        setUpRecyclerView(savedInstanceState)
         setUpFieldSpinner()
         observePersons()
         super.onActivityCreated(savedInstanceState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        personsRecyclerView?.layoutManager?.onSaveInstanceState()
+            ?.let { outState.putParcelable(KEY_RECYCLER_STATE, it) }
     }
 
     override fun onResume() {
@@ -63,10 +73,16 @@ class PersonsFragment : DaggerFragment() {
         super.onResume()
     }
 
-    private fun setUpRecyclerView() {
+    private fun setUpRecyclerView(savedInstanceState: Bundle?) {
         with(personsRecyclerView) {
             layoutManager = LinearLayoutManager(context)
             adapter = personsAdapter
+        }
+        savedInstanceState?.let {
+            Handler().postDelayed({
+                val listState = it.getParcelable<Parcelable>(KEY_RECYCLER_STATE)
+                personsRecyclerView.layoutManager?.onRestoreInstanceState(listState)
+            }, 50)
         }
         personsRefreshLayout.setOnRefreshListener { personsViewModel.refreshPersons() }
     }
@@ -93,6 +109,7 @@ class PersonsFragment : DaggerFragment() {
                     fieldEditText.setText("")
                     fieldEditText.hint = ""
                 }
+                fieldEditText.clearFocus()
                 updatePersonsFilter()
             }
         }

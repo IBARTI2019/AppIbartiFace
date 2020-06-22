@@ -91,8 +91,7 @@ class AppMaestrosRepository
     override suspend fun refreshPersons(): Result<Unit> {
         return mapToResult {
             val persons = appIbartiFaceApi.findPersons()
-            personDao.deleteAllPersons()
-            personDao.insertPersons(*persons.toTypedArray())
+            personDao.replacePersons(*persons.toTypedArray())
         }
     }
 

@@ -3,6 +3,8 @@ package com.oesvica.appibartiFace.ui.asistencia
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,8 +30,9 @@ import java.util.*
 class AsistenciaFragment : DaggerFragment() {
 
     companion object {
-        const val INI_DATE = "iniDate"
-        const val END_DATE = "endDate"
+        const val KEY_INI_DATE = "iniDate"
+        const val KEY_END_DATE = "endDate"
+        const val KEY_RECYCLER_STATE = "AsistenciaRecyclerViewState"
     }
 
     private val asistenciasViewModel by lazy { getViewModel<AsistenciaViewModel>() }
@@ -54,15 +57,15 @@ class AsistenciaFragment : DaggerFragment() {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        val tempIniDate = savedInstanceState?.getParcelable<CustomDate?>(INI_DATE)
-        val tempEndDate = savedInstanceState?.getParcelable<CustomDate?>(END_DATE)
+        val tempIniDate = savedInstanceState?.getParcelable<CustomDate?>(KEY_INI_DATE)
+        val tempEndDate = savedInstanceState?.getParcelable<CustomDate?>(KEY_END_DATE)
         if (tempIniDate != null && tempEndDate != null) {
             iniDate = tempIniDate
             endDate = tempEndDate
         } else {
             initializeDatesRangeWithCurrentDay()
         }
-        setUpRecyclerView()
+        setUpRecyclerView(savedInstanceState)
         setUpDateTextViews()
         setUpFieldSpinner()
         observeAsistencias()
@@ -74,8 +77,13 @@ class AsistenciaFragment : DaggerFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(INI_DATE, iniDate)
-        outState.putParcelable(END_DATE, endDate)
+        outState.putParcelable(KEY_INI_DATE, iniDate)
+        outState.putParcelable(KEY_END_DATE, endDate)
+        asistenciasRecyclerView?.layoutManager?.onSaveInstanceState()?.let {
+            outState.putParcelable(
+                KEY_RECYCLER_STATE, it
+            )
+        }
         debug("onSaveInstanceState $iniDate $endDate")
     }
 
@@ -83,10 +91,16 @@ class AsistenciaFragment : DaggerFragment() {
         asistenciasViewModel.refreshAsistencias(iniDate ?: return, endDate ?: return)
     }
 
-    private fun setUpRecyclerView() {
+    private fun setUpRecyclerView(savedInstanceState: Bundle?) {
         with(asistenciasRecyclerView) {
             layoutManager = LinearLayoutManager(context)
             adapter = asistenciasAdapter
+        }
+        savedInstanceState?.let {
+            Handler().postDelayed({
+                val listState = it.getParcelable<Parcelable>(KEY_RECYCLER_STATE)
+                asistenciasRecyclerView.layoutManager?.onRestoreInstanceState(listState)
+            }, 50)
         }
     }
 
@@ -117,6 +131,7 @@ class AsistenciaFragment : DaggerFragment() {
                     fieldEditText.setText("")
                     fieldEditText.hint = ""
                 }
+                fieldEditText.clearFocus()
                 updateAsistenciasFilter()
             }
         }
