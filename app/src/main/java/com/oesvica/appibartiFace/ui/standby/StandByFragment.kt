@@ -183,11 +183,11 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
     private fun setUpRecyclerView(savedInstanceState: Bundle?) {
         standBysRecyclerView.layoutManager = GridLayoutManager(context, COLUMNS_COUNT)
         standBysRecyclerView.adapter = standByAdapter
-        savedInstanceState?.let {
-            Handler().postDelayed({
+        standBysRecyclerView.post {
+            savedInstanceState?.let {
                 val listState = it.getParcelable<Parcelable>(KEY_RECYCLER_STATE)
                 standBysRecyclerView.layoutManager?.onRestoreInstanceState(listState)
-            }, 50)
+            }
         }
         standBysRefreshLayout.setOnRefreshListener {
             val query = getQueryForStandBys(displayErrorMessages = false)

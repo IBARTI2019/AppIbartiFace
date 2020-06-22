@@ -96,11 +96,11 @@ class AsistenciaFragment : DaggerFragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = asistenciasAdapter
         }
-        savedInstanceState?.let {
-            Handler().postDelayed({
+        asistenciasRecyclerView.post {
+            savedInstanceState?.let {
                 val listState = it.getParcelable<Parcelable>(KEY_RECYCLER_STATE)
                 asistenciasRecyclerView.layoutManager?.onRestoreInstanceState(listState)
-            }, 50)
+            }
         }
     }
 
@@ -145,8 +145,8 @@ class AsistenciaFragment : DaggerFragment() {
             when (fieldSpinner.selectedItemPosition) {
                 1 -> asistencia.docId.indexOf(query) == 0
                 2 -> asistencia.codFicha.indexOf(query) == 0
-                3 -> asistencia.names?.toLowerCase(Locale.getDefault())?.contains(query) ?: false
-                4 -> asistencia.surnames?.toLowerCase(Locale.getDefault())?.contains(query) ?: false
+                3 -> asistencia.names?.toLowerCase(Locale.getDefault())?.indexOf(query) == 0
+                4 -> asistencia.surnames?.toLowerCase(Locale.getDefault())?.indexOf(query) == 0
                 else -> true
             }
         }

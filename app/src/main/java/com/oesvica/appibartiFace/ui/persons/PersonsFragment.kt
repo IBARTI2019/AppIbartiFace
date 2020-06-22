@@ -78,11 +78,11 @@ class PersonsFragment : DaggerFragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = personsAdapter
         }
-        savedInstanceState?.let {
-            Handler().postDelayed({
+        personsRecyclerView.post {
+            savedInstanceState?.let {
                 val listState = it.getParcelable<Parcelable>(KEY_RECYCLER_STATE)
                 personsRecyclerView.layoutManager?.onRestoreInstanceState(listState)
-            }, 50)
+            }
         }
         personsRefreshLayout.setOnRefreshListener { personsViewModel.refreshPersons() }
     }
