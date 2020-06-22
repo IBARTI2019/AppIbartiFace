@@ -9,7 +9,7 @@ interface AppIbartiFaceApi {
         const val END_POINT = "http://oesvica.ddns.net:5003/"
 
         const val FIND_PERSONS = "persons"
-        const val ADD_PERSON = "insert-person"
+        const val ADD_PERSON = "insert-person/"
         const val UPDATE_PERSON = "persons/{id}/"
 
         const val FIND_CATEGORIES = "category"
@@ -24,7 +24,7 @@ interface AppIbartiFaceApi {
 
         const val STAND_BY = "standby/"
         const val STAND_BY_BY_DATE = "standby/{client}/{date}"
-        const val DELETE_STAND_BY = "delete-standby/{client}/{date}"
+        const val DELETE_STAND_BY = "delete-standby/{client}/{date}/"
 
         const val ASISTENCIAS = "reporte/asistencia-ibarti/{iniDate}/{endDate}/"
 

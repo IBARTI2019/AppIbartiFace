@@ -22,7 +22,7 @@ abstract class MaestrosRepository {
 
     abstract suspend fun refreshPersons(): Result<Unit>
     abstract fun findPersons(): LiveData<List<Person>>
-    abstract suspend fun insertPerson(addPersonRequest: AddPersonRequest): Result<Person>
+    abstract suspend fun insertPerson(addPersonRequest: AddPersonRequest): Result<Unit>
     abstract suspend fun updatePerson(personId: String, updatePersonRequest: UpdatePersonRequest): Result<Person>
     //abstract suspend fun deletePerson(idStatus: String): Result<Unit>
 

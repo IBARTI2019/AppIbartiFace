@@ -99,8 +99,11 @@ class AppMaestrosRepository
         return personDao.findAllPersons()
     }
 
-    override suspend fun insertPerson(addPersonRequest: AddPersonRequest): Result<Person> {
-        return mapToResult { appIbartiFaceApi.addPerson(addPersonRequest) }
+    override suspend fun insertPerson(addPersonRequest: AddPersonRequest): Result<Unit> {
+        return mapToResult {
+            appIbartiFaceApi.addPerson(addPersonRequest)
+            standByDao.deleteStandBy(addPersonRequest.cliente, addPersonRequest.fecha, addPersonRequest.foto)
+        }
     }
 
     override suspend fun updatePerson(
