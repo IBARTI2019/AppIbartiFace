@@ -9,7 +9,7 @@
   </style>
 
   <style name="AppTheme.Button">
-    <item name="android:textSize">17sp</item>
+    <item name="android:textSize">@dimen/button_text_size</item>
     <item name="colorButtonNormal">#64B5F6</item>
     <item name="android:textColor">#fff</item>
   </style>

@@ -5,7 +5,6 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.os.Parcelable
 import androidx.recyclerview.widget.GridLayoutManager
 import android.view.LayoutInflater
@@ -17,6 +16,7 @@ import androidx.lifecycle.Observer
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.CustomDate
 import com.oesvica.appibartiFace.data.model.StandBy
+import com.oesvica.appibartiFace.data.model.StandByQuery
 import com.oesvica.appibartiFace.data.model.currentDay
 import com.oesvica.appibartiFace.ui.addPerson.AddPersonActivity
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
@@ -109,7 +109,7 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
             val query = getQueryForStandBys(displayErrorMessages = true)
             if (query != null) {
                 clientEditText.clearFocus()
-                standByViewModel.searchStandBys(query)
+                standByViewModel.searchStandBys(query, force = true)
                 lastQueryTriggered = query
             }
         }
@@ -191,8 +191,8 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
         }
         standBysRefreshLayout.setOnRefreshListener {
             val query = getQueryForStandBys(displayErrorMessages = false)
-            if (query == null) standByViewModel.loadTodayStandBys()
-            else standByViewModel.searchStandBys(query)
+            if (query == null) standByViewModel.loadTodayStandBys(force = true)
+            else standByViewModel.searchStandBys(query, force = true)
         }
     }
 

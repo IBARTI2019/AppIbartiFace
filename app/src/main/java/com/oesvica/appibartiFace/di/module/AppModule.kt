@@ -19,6 +19,10 @@ package com.oesvica.appibartiFace.di.module
 import AppCoroutineContextProvider
 import android.app.Application
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
+import com.oesvica.appibartiFace.data.preferences.AppPreferencesHelper
+import com.oesvica.appibartiFace.data.preferences.PreferencesHelper
 import com.oesvica.appibartiFace.utils.schedulers.AppSchedulerProvider
 import com.oesvica.appibartiFace.utils.schedulers.SchedulerProvider
 import com.sneyder.utils.coroutines.CoroutineContextProvider
@@ -34,8 +38,19 @@ abstract class AppModule {
     @Reusable
     abstract fun provideContext(application: Application): Context
 
+
+    @Binds
+    @Reusable
+    abstract fun providePreferencesHelper(appPreferencesHelper: AppPreferencesHelper): PreferencesHelper
+
     @Module
     companion object {
+
+
+        @Provides
+        @Reusable
+        @JvmStatic
+        fun provideSharedPreferences(context: Context): SharedPreferences = context.getSharedPreferences("AppIbarti", MODE_PRIVATE)
 
         @Provides
         @JvmStatic

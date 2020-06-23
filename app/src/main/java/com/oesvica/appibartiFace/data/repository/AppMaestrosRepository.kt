@@ -3,9 +3,11 @@ package com.oesvica.appibartiFace.data.repository
 import androidx.lifecycle.LiveData
 import com.oesvica.appibartiFace.data.database.*
 import com.oesvica.appibartiFace.data.model.*
+import com.oesvica.appibartiFace.data.preferences.PreferencesHelper
 import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi
 import com.oesvica.appibartiFace.utils.debug
 import java.lang.Exception
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,7 +19,8 @@ class AppMaestrosRepository
     private val statusDao: StatusDao,
     private val standByDao: StandByDao,
     private val personDao: PersonDao,
-    private val asistenciaDao: AsistenciaDao
+    private val asistenciaDao: AsistenciaDao,
+    private val prefs: PreferencesHelper
 ) : MaestrosRepository() {
 
     override fun findCategories(): LiveData<List<Category>> {
@@ -124,23 +127,28 @@ class AppMaestrosRepository
         return standByDao.findStandBysByClientAndDate(client, date)
     }
 
-    override suspend fun refreshCurrentDayStandBys(): Result<Unit> {
+    override suspend fun refreshCurrentDayStandBys(force: Boolean): Result<Unit> {
         return mapToResult {
-            val todayStandBys = appIbartiFaceApi.findStandBysCurrentDay()
-            debug("todayStandBys=${todayStandBys.take(3)}")
-            standByDao.replaceStandBysByDate(currentDay().toString(), *todayStandBys.toTypedArray())
+            if(force || prefs.isTimeExpired("${defaultDate()}")){
+                val todayStandBys = appIbartiFaceApi.findStandBysCurrentDay()
+                prefs.saveTime("${defaultDate()}")
+                standByDao.replaceStandBysByDate(currentDay().toString(), *todayStandBys.toTypedArray())
+            }
         }
     }
 
     override suspend fun refreshStandBysByClientAndDate(
         client: String,
-        date: String
+        date: String,
+        force: Boolean
     ): Result<Unit> {
         debug("refreshStandBysByClientAndDate($client: String, $date: String)")
         return mapToResult {
-            val standBys = appIbartiFaceApi.findStandBysByClientAndDate(client, date)
-            debug("refreshStandBysByClientAndDate($client, $date)=$standBys")
-            standByDao.replaceStandBysByClientAndDate(client, date, *standBys.toTypedArray())
+            if(force || prefs.isTimeExpired("$client$date")){
+                val standBys = appIbartiFaceApi.findStandBysByClientAndDate(client, date)
+                prefs.saveTime("$client$date")
+                standByDao.replaceStandBysByClientAndDate(client, date, *standBys.toTypedArray())
+            }
         }
     }
 
