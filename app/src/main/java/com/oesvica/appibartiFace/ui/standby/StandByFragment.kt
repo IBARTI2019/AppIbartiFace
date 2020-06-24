@@ -119,8 +119,6 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
         if (tempLastQueryTriggered != null) {
             lastQueryTriggered = tempLastQueryTriggered
             standByViewModel.searchStandBys(tempLastQueryTriggered)
-        } else {
-            standByViewModel.loadTodayStandBys()
         }
         super.onActivityCreated(savedInstanceState)
     }
@@ -191,14 +189,13 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
         }
         standBysRefreshLayout.setOnRefreshListener {
             val query = getQueryForStandBys(displayErrorMessages = false)
-            if (query == null) standByViewModel.loadTodayStandBys(force = true)
-            else standByViewModel.searchStandBys(query, force = true)
+            if (query != null) standByViewModel.searchStandBys(query, force = true)
         }
     }
 
     private fun observeStandBys() {
         standByViewModel.standBys.distinc().observe(viewLifecycleOwner, Observer {
-            debug("standBys.observe ${it?.take(10)}")
+            debug("standBys.observe ${it?.take(3)}")
             it?.let {
                 standByAdapter.standBys = it
             }

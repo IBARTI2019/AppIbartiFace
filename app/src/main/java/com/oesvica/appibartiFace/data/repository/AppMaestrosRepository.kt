@@ -142,15 +142,16 @@ class AppMaestrosRepository
         date: String,
         force: Boolean
     ): Result<Unit> {
-        debug("refreshStandBysByClientAndDate($client: String, $date: String)")
         return mapToResult {
-            if(force || prefs.isTimeExpired("$client$date")){
+            if(force || prefs.isTimeExpired(keyForStandByFetchRequest(client, date))){
                 val standBys = appIbartiFaceApi.findStandBysByClientAndDate(client, date)
-                prefs.saveTime("$client$date")
+                prefs.saveTime(keyForStandByFetchRequest(client, date))
                 standByDao.replaceStandBysByClientAndDate(client, date, *standBys.toTypedArray())
             }
         }
     }
+
+    private fun keyForStandByFetchRequest(client: String, date: String) = "$client$date"
 
     override suspend fun deleteStandBy(client: String, date: String, url: String): Result<Unit> {
         return mapToResult {
