@@ -2,6 +2,7 @@ package com.oesvica.appibartiFace.data.repository
 
 import androidx.lifecycle.LiveData
 import com.oesvica.appibartiFace.data.model.*
+import com.oesvica.appibartiFace.data.model.standby.Prediction
 
 abstract class MaestrosRepository {
 
@@ -24,7 +25,6 @@ abstract class MaestrosRepository {
     abstract fun findPersons(): LiveData<List<Person>>
     abstract suspend fun insertPerson(addPersonRequest: AddPersonRequest): Result<Unit>
     abstract suspend fun updatePerson(personId: String, updatePersonRequest: UpdatePersonRequest): Result<Person>
-    //abstract suspend fun deletePerson(idStatus: String): Result<Unit>
 
 
     abstract fun findCurrentDayStandBys(): LiveData<List<StandBy>>
@@ -32,6 +32,8 @@ abstract class MaestrosRepository {
     abstract suspend fun refreshCurrentDayStandBys(force: Boolean): Result<Unit>
     abstract suspend fun refreshStandBysByClientAndDate(client: String, date: String, force: Boolean): Result<Unit>
     abstract suspend fun deleteStandBy(client: String, date: String, url: String): Result<Unit>
+    
+    abstract suspend fun findPredictionsByStandBy(standBy: StandBy): Result<List<Prediction>>
 
     abstract fun findAsistencias(iniDate: CustomDate, endDate: CustomDate): LiveData<List<Asistencia>>
     abstract suspend fun refreshAsistencias(iniDate: CustomDate, endDate: CustomDate): Result<Unit>

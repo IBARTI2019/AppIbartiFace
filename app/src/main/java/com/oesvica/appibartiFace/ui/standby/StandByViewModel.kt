@@ -46,6 +46,7 @@ class StandByViewModel @Inject constructor(
     }
 
     fun searchStandBys(query: StandByQuery, force: Boolean = false) {
+        // maybe verify that fetchStandBysNetworkRequest.value.isOngoing == false
         fetchStandBysNetworkRequest.value = NetworkRequestStatus(isOngoing = true)
         standBysQuery.value = query
         launch {

@@ -3,11 +3,11 @@ package com.oesvica.appibartiFace.data.repository
 import androidx.lifecycle.LiveData
 import com.oesvica.appibartiFace.data.database.*
 import com.oesvica.appibartiFace.data.model.*
+import com.oesvica.appibartiFace.data.model.standby.Prediction
 import com.oesvica.appibartiFace.data.preferences.PreferencesHelper
 import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi
 import com.oesvica.appibartiFace.utils.debug
 import java.lang.Exception
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -160,6 +160,12 @@ class AppMaestrosRepository
                 deleteStandBy = DeleteStandBy(foto = url)
             )
             standByDao.deleteStandBy(client, date, url)
+        }
+    }
+
+    override suspend fun findPredictionsByStandBy(standBy: StandBy): Result<List<Prediction>> {
+        return mapToResult {
+            appIbartiFaceApi.findPredictionsByStandBy(client = standBy.client, date = standBy.date, url = standBy.url)
         }
     }
 

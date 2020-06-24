@@ -1,6 +1,7 @@
 package com.oesvica.appibartiFace.data.remote
 
 import com.oesvica.appibartiFace.data.model.*
+import com.oesvica.appibartiFace.data.model.standby.Prediction
 import retrofit2.http.*
 
 interface AppIbartiFaceApi {
@@ -24,6 +25,7 @@ interface AppIbartiFaceApi {
 
         const val STAND_BY = "standby/"
         const val STAND_BY_BY_DATE = "standby/{client}/{date}"
+        const val STAND_BY_PREDICT = "standbyPredict/{client}/{date}/{url}"
         const val DELETE_STAND_BY = "delete-standby/{client}/{date}/"
 
         const val ASISTENCIAS = "reporte/asistencia-ibarti/{iniDate}/{endDate}/"
@@ -98,6 +100,13 @@ interface AppIbartiFaceApi {
         @Path("client") client: String,
         @Path("date") date: String
     ): List<StandBy>
+
+    @GET(STAND_BY_PREDICT)
+    suspend fun findPredictionsByStandBy(
+        @Path("client") client: String,
+        @Path("date") date: String,
+        @Path("url") url: String
+    ): List<Prediction>
 
     @POST(DELETE_STAND_BY)
     suspend fun deleteStandBy(
