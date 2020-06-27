@@ -56,13 +56,14 @@ class AsistenciaFragment : DaggerFragment() {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        val tempIniDate = savedInstanceState?.getParcelable<CustomDate?>(KEY_INI_DATE)
-        val tempEndDate = savedInstanceState?.getParcelable<CustomDate?>(KEY_END_DATE)
-        if (tempIniDate != null && tempEndDate != null) {
-            iniDate = tempIniDate
-            endDate = tempEndDate
+        val savedIniDate = savedInstanceState?.getParcelable<CustomDate?>(KEY_INI_DATE)
+        val savedEndDate = savedInstanceState?.getParcelable<CustomDate?>(KEY_END_DATE)
+        if (savedIniDate != null && savedEndDate != null) {
+            iniDate = savedIniDate
+            endDate = savedEndDate
         } else {
-            initializeDatesRangeWithCurrentDay()
+            iniDate = currentDay()
+            endDate = currentDay()
         }
         setUpRecyclerView(savedInstanceState)
         setUpDateTextViews()
@@ -78,12 +79,9 @@ class AsistenciaFragment : DaggerFragment() {
         super.onSaveInstanceState(outState)
         outState.putParcelable(KEY_INI_DATE, iniDate)
         outState.putParcelable(KEY_END_DATE, endDate)
-        asistenciasRecyclerView?.layoutManager?.onSaveInstanceState()?.let {
-            outState.putParcelable(
-                KEY_RECYCLER_STATE, it
-            )
+        asistenciasRecyclerView?.layoutManager?.onSaveInstanceState()?.let {state->
+            outState.putParcelable(KEY_RECYCLER_STATE, state)
         }
-        debug("onSaveInstanceState $iniDate $endDate")
     }
 
     private fun searchAsistencias() {
@@ -140,7 +138,7 @@ class AsistenciaFragment : DaggerFragment() {
     private fun updateAsistenciasFilter() {
         debug("updateAsistenciasFilter")
         val query = fieldEditText.text.toString().trim().toLowerCase(Locale.getDefault())
-        asistenciasAdapter.filterAsistencias = { asistencia ->
+        asistenciasAdapter.asistenciasFilter = { asistencia ->
             when (fieldSpinner.selectedItemPosition) {
                 1 -> asistencia.docId.indexOf(query) == 0
                 2 -> asistencia.codFicha.indexOf(query) == 0
@@ -148,13 +146,6 @@ class AsistenciaFragment : DaggerFragment() {
                 4 -> asistencia.surnames?.toLowerCase(Locale.getDefault())?.indexOf(query) == 0
                 else -> true
             }
-        }
-    }
-
-    private fun initializeDatesRangeWithCurrentDay() {
-        Calendar.getInstance().apply {
-            setDate(get(Calendar.YEAR), get(Calendar.MONTH), get(Calendar.DAY_OF_MONTH), true)
-            setDate(get(Calendar.YEAR), get(Calendar.MONTH), get(Calendar.DAY_OF_MONTH), false)
         }
     }
 

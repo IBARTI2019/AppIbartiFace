@@ -54,6 +54,7 @@ class CategoriesFragment : DaggerFragment() {
         observeCategories()
         observeSnackbarMessages()
         categoriesRefreshLayout.setOnRefreshListener { categoriesViewModel.refreshCategories() }
+        categoriesViewModel.refreshCategories()
         super.onActivityCreated(savedInstanceState)
     }
 
@@ -64,11 +65,6 @@ class CategoriesFragment : DaggerFragment() {
                 Snackbar.make(categoriesFrameLayout, it, Snackbar.LENGTH_SHORT).show()
             }
         })
-    }
-
-    override fun onResume() {
-        categoriesViewModel.refreshCategories()
-        super.onResume()
     }
 
     private fun showCategoryDialog(

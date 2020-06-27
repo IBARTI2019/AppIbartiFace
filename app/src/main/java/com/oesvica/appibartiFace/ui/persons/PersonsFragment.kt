@@ -1,7 +1,6 @@
 package com.oesvica.appibartiFace.ui.persons
 
 import android.os.Bundle
-import android.os.Handler
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
@@ -46,8 +45,6 @@ class PersonsFragment : DaggerFragment() {
         })
     }
 
-    private var personsFilter: (Person) -> Boolean = { true }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,6 +56,7 @@ class PersonsFragment : DaggerFragment() {
         setUpRecyclerView(savedInstanceState)
         setUpFieldSpinner()
         observePersons()
+        personsViewModel.refreshPersons()
         super.onActivityCreated(savedInstanceState)
     }
 
@@ -66,11 +64,6 @@ class PersonsFragment : DaggerFragment() {
         super.onSaveInstanceState(outState)
         personsRecyclerView?.layoutManager?.onSaveInstanceState()
             ?.let { outState.putParcelable(KEY_RECYCLER_STATE, it) }
-    }
-
-    override fun onResume() {
-        personsViewModel.refreshPersons()
-        super.onResume()
     }
 
     private fun setUpRecyclerView(savedInstanceState: Bundle?) {
@@ -118,7 +111,7 @@ class PersonsFragment : DaggerFragment() {
 
     private fun updatePersonsFilter() {
         val query = fieldEditText.text.toString().trim().toLowerCase(Locale.getDefault())
-        personsFilter = { person ->
+        personsAdapter.personsFilter = { person ->
             when (fieldSpinner.selectedItemPosition) {
                 1 -> person.doc_id.indexOf(query) == 0
                 2 -> person.client.indexOf(query) == 0
@@ -127,13 +120,12 @@ class PersonsFragment : DaggerFragment() {
                 else -> true
             }
         }
-        personsAdapter.setData(filter = personsFilter)
     }
 
     private fun observePersons() {
         personsViewModel.persons.distinc().observe(viewLifecycleOwner, Observer { persons ->
             debug("observe persons = ${persons.take(3)}")
-            persons?.let { personsAdapter.setData(it, personsFilter) }
+            persons?.let { personsAdapter.allPersons = it }
         })
         personsViewModel.personsNetworkRequest.observe(viewLifecycleOwner, Observer {
             personsRefreshLayout.isRefreshing = it.isOngoing

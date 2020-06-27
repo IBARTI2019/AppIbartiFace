@@ -21,12 +21,20 @@ class PersonsAdapter(private val onEditPerson: (person: Person) -> Unit) :
         const val ITEM_TYPE_NORMAL = 1002
     }
 
-    private var allPersons: List<Person> = ArrayList()
+    var allPersons: List<Person> = ArrayList()
+        set(value) {
+            field = value
+            updateFilteredPersons()
+        }
+    var personsFilter: (Person) -> Boolean = { true }
+        set(value) {
+            field = value
+            updateFilteredPersons()
+        }
     private var filteredPersons: List<Person> = allPersons
 
-    fun setData(persons: List<Person>? = null, filter: (Person) -> Boolean) {
-        persons?.let { allPersons = it }
-        filteredPersons = allPersons.filter(filter)
+    private fun updateFilteredPersons() {
+        filteredPersons = allPersons.filter(personsFilter)
         notifyDataSetChanged()
     }
 

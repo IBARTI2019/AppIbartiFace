@@ -64,6 +64,7 @@ class AddPersonActivity : DaggerActivity() {
         observeStatuses()
         observeCategories()
         observeAddPersonNetworkRequest()
+        debug("$client $device $date $photo")
     }
 
     private fun observeCategories() {

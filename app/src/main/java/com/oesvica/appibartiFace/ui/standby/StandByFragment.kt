@@ -25,7 +25,6 @@ import com.oesvica.appibartiFace.utils.dialogs.StandByDialog
 import com.oesvica.appibartiFace.utils.screenWidth
 import distinc
 import kotlinx.android.synthetic.main.fragment_stand_by_list.*
-import java.util.*
 
 /**
  * A fragment representing a list of StandBys.
@@ -98,12 +97,7 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         setUpRecyclerView(savedInstanceState)
-        val tempDate = savedInstanceState?.getParcelable<CustomDate?>(KEY_SELECTED_DATE)
-        if (tempDate != null) {
-            selectedDate = tempDate
-        } else {
-            initSelectedDateAsToday()
-        }
+        selectedDate = savedInstanceState?.getParcelable<CustomDate?>(KEY_SELECTED_DATE) ?: currentDay()
         dateTextView.setOnClickListener { showDatePickerDialog() }
         searchStandBysIcon.setOnClickListener {
             val query = getQueryForStandBys(displayErrorMessages = true)
@@ -121,12 +115,6 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
             standByViewModel.searchStandBys(tempLastQueryTriggered)
         }
         super.onActivityCreated(savedInstanceState)
-    }
-
-    private fun initSelectedDateAsToday() {
-        Calendar.getInstance().apply {
-            setDate(get(Calendar.YEAR), get(Calendar.MONTH), get(Calendar.DAY_OF_MONTH))
-        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

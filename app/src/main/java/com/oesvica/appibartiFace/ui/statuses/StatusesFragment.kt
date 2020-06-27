@@ -40,12 +40,8 @@ class StatusesFragment : DaggerFragment() {
             startActivity(AddStatusActivity.starterIntent(requireContext()))
         }
         observeStatuses()
-        super.onActivityCreated(savedInstanceState)
-    }
-
-    override fun onResume() {
-        super.onResume()
         statusesViewModel.refreshStatuses()
+        super.onActivityCreated(savedInstanceState)
     }
 
     private fun setUpRecyclerView() {

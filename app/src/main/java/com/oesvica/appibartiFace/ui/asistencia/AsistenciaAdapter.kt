@@ -29,7 +29,7 @@ class AsistenciaAdapter() : RecyclerView.Adapter<AsistenciaAdapter.AsistenciaVie
             ) + value
             updateFilteredAsistencias()
         }
-    var filterAsistencias: (Asistencia) -> Boolean = { true }
+    var asistenciasFilter: (Asistencia) -> Boolean = { true }
         set(value) {
             field = value
             updateFilteredAsistencias()
@@ -38,7 +38,7 @@ class AsistenciaAdapter() : RecyclerView.Adapter<AsistenciaAdapter.AsistenciaVie
 
     private fun updateFilteredAsistencias() {
         filteredAsistencias =
-            allAsistencias.filterIndexed { index, asistencia -> filterAsistencias(asistencia) || index == 0 }
+            allAsistencias.filterIndexed { index, asistencia -> asistenciasFilter(asistencia) || index == 0 }
         notifyDataSetChanged()
     }
 
