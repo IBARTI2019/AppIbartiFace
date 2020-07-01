@@ -77,6 +77,11 @@ class AddPersonActivity : DaggerActivity() {
         observeCategories()
         observeAddPersonNetworkRequest()
         observePredictions()
+        loadPredictions()
+        debug("$client $device $date $photo")
+    }
+
+    private fun loadPredictions() {
         addPersonViewModel.loadPredictionsForStandBy(
             StandBy(
                 client = client,
@@ -84,7 +89,7 @@ class AddPersonActivity : DaggerActivity() {
                 url = photo
             )
         )
-        debug("$client $device $date $photo")
+        predictionsRefresh.isRefreshing = true
     }
 
     private fun setUpPredictionsRecyclerView() {
@@ -92,6 +97,7 @@ class AddPersonActivity : DaggerActivity() {
             layoutManager = GridLayoutManager(context, StandByFragment.COLUMNS_COUNT)
             adapter = predictionsAdapter
         }
+        predictionsRefresh.isEnabled = false
     }
 
     private fun observeCategories() {
@@ -139,6 +145,7 @@ class AddPersonActivity : DaggerActivity() {
                 debug("predictions found=$predictions")
                 predictionsAdapter.predictions = predictions
             }
+            predictionsRefresh.isRefreshing = false
         })
     }
 
@@ -148,31 +155,37 @@ class AddPersonActivity : DaggerActivity() {
         if (categories == null) return
         if (statuses == null) return
 
+
+
         if (cedulaEditText.text.isNullOrEmpty()) {
             Toast.makeText(this, "Debe ingresar datos en el campo cedula", Toast.LENGTH_SHORT)
                 .show()
             return
         }
-        if (categorySpinner.selectedItemPosition == 0) {
-            Toast.makeText(
+        val category = if (categorySpinner.selectedItemPosition == 0) {
+            /*Toast.makeText(
                 this,
                 "Debe seleccionar un valor valido en el campo categoria",
                 Toast.LENGTH_SHORT
-            ).show()
-            return
+            ).show()*/
+            ""
+        } else {
+            categories!![categorySpinner.selectedItemPosition - 1].id
         }
-        if (statusSpinner.selectedItemPosition == 0) {
-            Toast.makeText(
+        val status = if (statusSpinner.selectedItemPosition == 0) {
+           /* Toast.makeText(
                 this,
                 "Debe seleccionar un valor valido en el campo status",
                 Toast.LENGTH_SHORT
-            ).show()
-            return
+            ).show()*/
+            ""
+        } else {
+            statuses!![statusSpinner.selectedItemPosition - 1].id
         }
         addPersonViewModel.addPerson(
             cedula = cedulaEditText.text.toString(),
-            category = categories!![categorySpinner.selectedItemPosition - 1].id,
-            status = statuses!![statusSpinner.selectedItemPosition - 1].id,
+            category = category,
+            status = status,
             client = client,
             device = device,
             date = date,

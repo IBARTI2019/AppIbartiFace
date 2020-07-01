@@ -37,7 +37,7 @@ class AddPersonViewModel
             if (result.success != null) {
                 emit(maestrosRepository.findCategoriesBlocking())
             } else {
-                emit(emptyList<Category>())
+                emit(emptyList())
             }
         } else {
             emit(list)
@@ -52,7 +52,7 @@ class AddPersonViewModel
             if (result.success != null) {
                 emit(maestrosRepository.findStatusesBlocking())
             } else {
-                emit(emptyList<Status>())
+                emit(emptyList())
             }
         } else {
             emit(list)
