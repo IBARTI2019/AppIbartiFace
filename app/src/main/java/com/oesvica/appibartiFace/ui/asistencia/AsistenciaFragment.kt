@@ -13,6 +13,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.oesvica.appibartiFace.R
+import com.oesvica.appibartiFace.data.model.Asistencia
 import com.oesvica.appibartiFace.data.model.CustomDate
 import com.oesvica.appibartiFace.data.model.currentDay
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
@@ -68,6 +69,7 @@ class AsistenciaFragment : DaggerFragment() {
         setUpRecyclerView(savedInstanceState)
         setUpDateTextViews()
         setUpFieldSpinner()
+        setUpLocationSpinner()
         observeAsistencias()
         searchAsistencias()
         searchAsistenciasIcon.setOnClickListener { searchAsistencias() }
@@ -79,7 +81,7 @@ class AsistenciaFragment : DaggerFragment() {
         super.onSaveInstanceState(outState)
         outState.putParcelable(KEY_INI_DATE, iniDate)
         outState.putParcelable(KEY_END_DATE, endDate)
-        asistenciasRecyclerView?.layoutManager?.onSaveInstanceState()?.let {state->
+        asistenciasRecyclerView?.layoutManager?.onSaveInstanceState()?.let { state ->
             outState.putParcelable(KEY_RECYCLER_STATE, state)
         }
     }
@@ -135,17 +137,32 @@ class AsistenciaFragment : DaggerFragment() {
         fieldEditText.addTextChangedListener { updateAsistenciasFilter() }
     }
 
+    private fun setUpLocationSpinner() {
+        locationSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                fieldEditText.clearFocus()
+                updateAsistenciasFilter()
+            }
+        }
+    }
+
     private fun updateAsistenciasFilter() {
         debug("updateAsistenciasFilter")
         val query = fieldEditText.text.toString().trim().toLowerCase(Locale.getDefault())
         asistenciasAdapter.asistenciasFilter = { asistencia ->
-            when (fieldSpinner.selectedItemPosition) {
+            (when (fieldSpinner.selectedItemPosition) {
                 1 -> asistencia.docId.indexOf(query) == 0
                 2 -> asistencia.codFicha.indexOf(query) == 0
                 3 -> asistencia.names?.toLowerCase(Locale.getDefault())?.indexOf(query) == 0
                 4 -> asistencia.surnames?.toLowerCase(Locale.getDefault())?.indexOf(query) == 0
                 else -> true
-            }
+            }) && asistencia.location.equals(locationSpinner.selectedItem?.toString() ?: "", true)
         }
     }
 
@@ -175,8 +192,17 @@ class AsistenciaFragment : DaggerFragment() {
         asistenciasViewModel.asistencias.distinc().observe(viewLifecycleOwner, Observer { list ->
             debug("observe asistencias ${list.take(2)}")
             if (list == null) return@Observer
+            updateLocationSpinnerAdapter(list)
             asistenciasAdapter.allAsistencias = list
         })
+    }
+
+    private fun updateLocationSpinnerAdapter(list: List<Asistencia>) {
+        locationSpinner.adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            list.map { it.location.capitalize() }.distinct()
+        )
     }
 
     private fun hideDatePickerDialog() {
