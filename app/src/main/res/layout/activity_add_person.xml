@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.addPerson.AddPersonActivity">
 
     <ImageView
         android:id="@+id/urlImageView"
-        android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.6"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginLeft="60dp"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
         tools:src="@drawable/photo_placeholder"
@@ -21,13 +24,14 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/cedulaInputLayout"
-        android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.6"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginRight="60dp"
+        android:layout_marginLeft="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/urlImageView"
-        android:layout_marginTop="12dp">
+        android:layout_marginTop="8dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/cedulaEditText"
@@ -41,32 +45,37 @@
 
     <Spinner
         android:id="@+id/categorySpinner"
-        android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.6"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="6dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cedulaInputLayout"/>
 
     <Spinner
         android:id="@+id/statusSpinner"
-        android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.6"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="6dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/categorySpinner"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/predictionsRecyclerView"
-        android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.6"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        tools:listitem="@layout/list_prediction_item"
         app:layout_constraintTop_toBottomOf="@id/statusSpinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

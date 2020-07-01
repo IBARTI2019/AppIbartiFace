@@ -8,13 +8,17 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.Category
+import com.oesvica.appibartiFace.data.model.StandBy
 import com.oesvica.appibartiFace.data.model.Status
 import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi.Companion.imgUrlForStandBy
+import com.oesvica.appibartiFace.ui.standby.StandByFragment
 import com.oesvica.appibartiFace.utils.base.DaggerActivity
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.dialogs.ProgressDialog
+import com.oesvica.appibartiFace.utils.screenWidth
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_add_person.*
 import observeJustOnce
@@ -53,10 +57,18 @@ class AddPersonActivity : DaggerActivity() {
     private val date by lazy { intent.getStringExtra(EXTRA_DATE) }
     private val photo by lazy { intent.getStringExtra(EXTRA_PHOTO) }
 
+    private val predictionsAdapter by lazy {
+        PredictionsAdapter(screenWidth = screenWidth(), onImageSelected = { cedula ->
+            cedulaEditText.setText(cedula)
+            debug("cedula $cedula")
+        })
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_person)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setUpPredictionsRecyclerView()
         Picasso.get()
             .load(imgUrlForStandBy(client, date, photo))
             .placeholder(R.drawable.photo_placeholder)
@@ -64,7 +76,22 @@ class AddPersonActivity : DaggerActivity() {
         observeStatuses()
         observeCategories()
         observeAddPersonNetworkRequest()
+        observePredictions()
+        addPersonViewModel.loadPredictionsForStandBy(
+            StandBy(
+                client = client,
+                date = date,
+                url = photo
+            )
+        )
         debug("$client $device $date $photo")
+    }
+
+    private fun setUpPredictionsRecyclerView() {
+        with(predictionsRecyclerView) {
+            layoutManager = GridLayoutManager(context, StandByFragment.COLUMNS_COUNT)
+            adapter = predictionsAdapter
+        }
     }
 
     private fun observeCategories() {
@@ -102,6 +129,15 @@ class AddPersonActivity : DaggerActivity() {
                 } else {
                     hideLoadingDialog()
                 }
+            }
+        })
+    }
+
+    private fun observePredictions() {
+        addPersonViewModel.predictions.observe(this, Observer {
+            it?.success?.let { predictions ->
+                debug("predictions found=$predictions")
+                predictionsAdapter.predictions = predictions
             }
         })
     }

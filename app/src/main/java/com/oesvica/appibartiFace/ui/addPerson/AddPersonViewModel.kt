@@ -2,10 +2,8 @@ package com.oesvica.appibartiFace.ui.addPerson
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
-import com.oesvica.appibartiFace.data.model.AddPersonRequest
-import com.oesvica.appibartiFace.data.model.Category
-import com.oesvica.appibartiFace.data.model.NetworkRequestStatus
-import com.oesvica.appibartiFace.data.model.Status
+import com.oesvica.appibartiFace.data.model.*
+import com.oesvica.appibartiFace.data.model.standby.Prediction
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug
@@ -19,6 +17,16 @@ class AddPersonViewModel
     private val maestrosRepository: MaestrosRepository,
     schedulerProvider: SchedulerProvider
 ) : BaseViewModel(schedulerProvider) {
+
+    val predictions: MutableLiveData<Result<List<Prediction>>> = MutableLiveData()
+
+    fun loadPredictionsForStandBy(standBy: StandBy) {
+        if (predictions.value?.success != null) return
+        launch {
+            val result = withContext(IO) { maestrosRepository.findPredictionsByStandBy(standBy) }
+            predictions.value = result
+        }
+    }
 
     val categories = liveData {
         val list = maestrosRepository.findCategoriesBlocking()
