@@ -2,9 +2,24 @@ package com.oesvica.appibartiFace.data.repository
 
 import androidx.lifecycle.LiveData
 import com.oesvica.appibartiFace.data.model.*
+import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
+import com.oesvica.appibartiFace.data.model.auth.AuthInfo
+import com.oesvica.appibartiFace.data.model.auth.LogInResponse
+import com.oesvica.appibartiFace.data.model.auth.LogOutResponse
+import com.oesvica.appibartiFace.data.model.category.Category
+import com.oesvica.appibartiFace.data.model.person.AddPersonRequest
+import com.oesvica.appibartiFace.data.model.person.Person
+import com.oesvica.appibartiFace.data.model.person.UpdatePersonRequest
 import com.oesvica.appibartiFace.data.model.standby.Prediction
+import com.oesvica.appibartiFace.data.model.standby.StandBy
+import com.oesvica.appibartiFace.data.model.status.Status
+import com.oesvica.appibartiFace.data.model.status.StatusRequest
 
 abstract class MaestrosRepository {
+
+    abstract fun getAuthInfo(): AuthInfo
+    abstract suspend fun logIn(user: String, password: String): Result<LogInResponse>
+    abstract suspend fun logOut(): Result<LogOutResponse>
 
     abstract suspend fun refreshCategories(): Result<Unit>
     abstract fun findCategories(): LiveData<List<Category>>

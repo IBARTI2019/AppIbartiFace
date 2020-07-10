@@ -1,15 +1,13 @@
 package com.oesvica.appibartiFace.ui.categories
 
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.oesvica.appibartiFace.R
-import com.oesvica.appibartiFace.data.model.Category
+import com.oesvica.appibartiFace.data.model.category.Category
 import com.oesvica.appibartiFace.utils.debug
 
 import kotlinx.android.synthetic.main.fragment_category.view.*

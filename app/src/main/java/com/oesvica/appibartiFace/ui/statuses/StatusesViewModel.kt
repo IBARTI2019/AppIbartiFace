@@ -2,10 +2,9 @@ package com.oesvica.appibartiFace.ui.statuses
 
 import androidx.lifecycle.MutableLiveData
 import com.oesvica.appibartiFace.data.model.NetworkRequestStatus
-import com.oesvica.appibartiFace.data.model.Status
+import com.oesvica.appibartiFace.data.model.status.Status
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
-import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.schedulers.SchedulerProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

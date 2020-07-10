@@ -3,10 +3,10 @@ package com.oesvica.appibartiFace.ui.editPerson
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
-import com.oesvica.appibartiFace.data.model.Category
+import com.oesvica.appibartiFace.data.model.category.Category
 import com.oesvica.appibartiFace.data.model.NetworkRequestStatus
-import com.oesvica.appibartiFace.data.model.Status
-import com.oesvica.appibartiFace.data.model.UpdatePersonRequest
+import com.oesvica.appibartiFace.data.model.status.Status
+import com.oesvica.appibartiFace.data.model.person.UpdatePersonRequest
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug
@@ -64,7 +64,10 @@ class EditPersonViewModel
             val result = withContext(IO) {
                 maestrosRepository.updatePerson(
                     idPerson,
-                    UpdatePersonRequest(category = idCategory, status = idStatus)
+                    UpdatePersonRequest(
+                        category = idCategory,
+                        status = idStatus
+                    )
                 )
             }
             debug("result editPerson=$result")

@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.oesvica.appibartiFace.R
-import com.oesvica.appibartiFace.data.model.Person
+import com.oesvica.appibartiFace.data.model.person.Person
 import kotlinx.android.synthetic.main.fragment_person.view.*
 
 /**

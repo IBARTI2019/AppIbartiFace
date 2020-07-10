@@ -15,8 +15,8 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.CustomDate
-import com.oesvica.appibartiFace.data.model.StandBy
-import com.oesvica.appibartiFace.data.model.StandByQuery
+import com.oesvica.appibartiFace.data.model.standby.StandBy
+import com.oesvica.appibartiFace.data.model.standby.StandByQuery
 import com.oesvica.appibartiFace.data.model.currentDay
 import com.oesvica.appibartiFace.ui.addPerson.AddPersonActivity
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
@@ -137,7 +137,10 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
             }
             return null
         }
-        return StandByQuery(client, selectedDate ?: return null)
+        return StandByQuery(
+            client,
+            selectedDate ?: return null
+        )
     }
 
     private fun showDatePickerDialog() {

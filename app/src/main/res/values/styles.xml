@@ -14,6 +14,18 @@
     <item name="android:textColor">#fff</item>
   </style>
 
+  <style name="AppTheme.Button.Green">
+    <item name="android:textSize">@dimen/button_text_size</item>
+    <item name="colorButtonNormal">#4CAF50</item>
+    <item name="android:textColor">#fff</item>
+  </style>
+
+  <style name="AppTheme.Button.Orange">
+    <item name="android:textSize">@dimen/button_text_size</item>
+    <item name="colorButtonNormal">#FF5722</item>
+    <item name="android:textColor">#fff</item>
+  </style>
+
   <style name="AppTheme.Button.Alert">
     <item name="android:textSize">17sp</item>
     <item name="colorButtonNormal">#E57373</item>

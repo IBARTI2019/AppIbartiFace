@@ -11,7 +11,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.oesvica.appibartiFace.R
-import com.oesvica.appibartiFace.data.model.Person
 import com.oesvica.appibartiFace.ui.editPerson.EditPersonActivity
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
 import com.oesvica.appibartiFace.utils.debug

@@ -1,7 +1,7 @@
 package com.oesvica.appibartiFace.ui.asistencia
 
 import androidx.lifecycle.*
-import com.oesvica.appibartiFace.data.model.Asistencia
+import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
 import com.oesvica.appibartiFace.data.model.CustomDate
 import com.oesvica.appibartiFace.data.model.toCustomDate
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository

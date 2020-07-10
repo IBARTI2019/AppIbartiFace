@@ -13,7 +13,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.oesvica.appibartiFace.R
-import com.oesvica.appibartiFace.data.model.Asistencia
+import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
 import com.oesvica.appibartiFace.data.model.CustomDate
 import com.oesvica.appibartiFace.data.model.currentDay
 import com.oesvica.appibartiFace.utils.base.DaggerFragment

@@ -2,7 +2,7 @@ package com.oesvica.appibartiFace.data.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.oesvica.appibartiFace.data.model.StandBy
+import com.oesvica.appibartiFace.data.model.standby.StandBy
 import com.oesvica.appibartiFace.data.model.currentDay
 
 @Dao

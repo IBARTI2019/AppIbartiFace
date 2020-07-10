@@ -2,8 +2,8 @@ package com.oesvica.appibartiFace.ui.addStatus
 
 import androidx.lifecycle.MutableLiveData
 import com.oesvica.appibartiFace.data.model.NetworkRequestStatus
-import com.oesvica.appibartiFace.data.model.Status
-import com.oesvica.appibartiFace.data.model.StatusRequest
+import com.oesvica.appibartiFace.data.model.status.Status
+import com.oesvica.appibartiFace.data.model.status.StatusRequest
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug

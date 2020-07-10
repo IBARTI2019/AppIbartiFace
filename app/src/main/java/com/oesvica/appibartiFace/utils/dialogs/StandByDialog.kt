@@ -13,8 +13,8 @@ import android.widget.ImageView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.oesvica.appibartiFace.R
-import com.oesvica.appibartiFace.data.model.StandBy
-import com.oesvica.appibartiFace.data.model.properUrl
+import com.oesvica.appibartiFace.data.model.standby.StandBy
+import com.oesvica.appibartiFace.data.model.standby.properUrl
 import com.squareup.picasso.Picasso
 
 

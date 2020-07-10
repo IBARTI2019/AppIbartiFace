@@ -3,7 +3,9 @@ package com.oesvica.appibartiFace.ui.addPerson
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.oesvica.appibartiFace.data.model.*
+import com.oesvica.appibartiFace.data.model.person.AddPersonRequest
 import com.oesvica.appibartiFace.data.model.standby.Prediction
+import com.oesvica.appibartiFace.data.model.standby.StandBy
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug

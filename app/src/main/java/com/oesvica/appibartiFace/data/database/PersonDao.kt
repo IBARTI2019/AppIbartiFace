@@ -2,7 +2,7 @@ package com.oesvica.appibartiFace.data.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.oesvica.appibartiFace.data.model.Person
+import com.oesvica.appibartiFace.data.model.person.Person
 
 @Dao
 abstract class PersonDao: BaseDao<Person> {

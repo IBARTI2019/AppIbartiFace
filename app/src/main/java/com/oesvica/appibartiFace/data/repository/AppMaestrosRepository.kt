@@ -3,7 +3,18 @@ package com.oesvica.appibartiFace.data.repository
 import androidx.lifecycle.LiveData
 import com.oesvica.appibartiFace.data.database.*
 import com.oesvica.appibartiFace.data.model.*
+import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
+import com.oesvica.appibartiFace.data.model.auth.*
+import com.oesvica.appibartiFace.data.model.category.Category
+import com.oesvica.appibartiFace.data.model.category.CategoryRequest
+import com.oesvica.appibartiFace.data.model.person.AddPersonRequest
+import com.oesvica.appibartiFace.data.model.person.Person
+import com.oesvica.appibartiFace.data.model.person.UpdatePersonRequest
+import com.oesvica.appibartiFace.data.model.standby.DeleteStandBy
 import com.oesvica.appibartiFace.data.model.standby.Prediction
+import com.oesvica.appibartiFace.data.model.standby.StandBy
+import com.oesvica.appibartiFace.data.model.status.Status
+import com.oesvica.appibartiFace.data.model.status.StatusRequest
 import com.oesvica.appibartiFace.data.preferences.PreferencesHelper
 import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi
 import com.oesvica.appibartiFace.utils.debug
@@ -23,6 +34,36 @@ class AppMaestrosRepository
     private val prefs: PreferencesHelper
 ) : MaestrosRepository() {
 
+    override fun getAuthInfo(): AuthInfo {
+        return AuthInfo(logIn = prefs["logIn"], token = prefs["token"])
+    }
+
+    override suspend fun logIn(user: String, password: String): Result<LogInResponse> {
+        return mapToResult {
+            //logOut()
+            appIbartiFaceApi.logIn(
+                LogInRequest(
+                    usuario = user,
+                    clave = password
+                )
+            ).apply {
+                prefs["logIn"] = logIn
+                prefs["user"] = user
+                prefs["token"] = token
+            }
+        }
+    }
+
+    override suspend fun logOut(): Result<LogOutResponse> {
+        return mapToResult {
+            appIbartiFaceApi.logOut(LogOutRequest(usuario = prefs["user"]))
+                .apply {
+                    prefs["logIn"] = logIn
+                    prefs["token"] = ""
+                }
+        }
+    }
+
     override fun findCategories(): LiveData<List<Category>> {
         return categoryDao.findCategories()
     }
@@ -41,14 +82,22 @@ class AppMaestrosRepository
     }
 
     override suspend fun insertCategory(description: String): Result<Category> {
-        return mapToResult { appIbartiFaceApi.addCategory(CategoryRequest(description)) }
+        return mapToResult {
+            appIbartiFaceApi.addCategory(
+                CategoryRequest(
+                    description
+                )
+            )
+        }
     }
 
     override suspend fun updateCategory(category: Category): Result<Category> {
         return mapToResult {
             appIbartiFaceApi.updateCategory(
                 category.id,
-                CategoryRequest(category.description)
+                CategoryRequest(
+                    category.description
+                )
             )
         }
     }
@@ -82,7 +131,10 @@ class AppMaestrosRepository
         return mapToResult {
             appIbartiFaceApi.updateStatus(
                 status.id,
-                StatusRequest(status.category, status.description)
+                StatusRequest(
+                    status.category,
+                    status.description
+                )
             )
         }
     }
@@ -105,7 +157,11 @@ class AppMaestrosRepository
     override suspend fun insertPerson(addPersonRequest: AddPersonRequest): Result<Unit> {
         return mapToResult {
             appIbartiFaceApi.addPerson(addPersonRequest)
-            standByDao.deleteStandBy(addPersonRequest.cliente, addPersonRequest.fecha, addPersonRequest.foto)
+            standByDao.deleteStandBy(
+                addPersonRequest.cliente,
+                addPersonRequest.fecha,
+                addPersonRequest.foto
+            )
         }
     }
 
@@ -129,10 +185,13 @@ class AppMaestrosRepository
 
     override suspend fun refreshCurrentDayStandBys(force: Boolean): Result<Unit> {
         return mapToResult {
-            if(force || prefs.isTimeExpired("${defaultDate()}")){
+            if (force || prefs.isTimeExpired("${defaultDate()}")) {
                 val todayStandBys = appIbartiFaceApi.findStandBysCurrentDay()
                 prefs.saveTime("${defaultDate()}")
-                standByDao.replaceStandBysByDate(currentDay().toString(), *todayStandBys.toTypedArray())
+                standByDao.replaceStandBysByDate(
+                    currentDay().toString(),
+                    *todayStandBys.toTypedArray()
+                )
             }
         }
     }
@@ -143,7 +202,7 @@ class AppMaestrosRepository
         force: Boolean
     ): Result<Unit> {
         return mapToResult {
-            if(force || prefs.isTimeExpired(keyForStandByFetchRequest(client, date))){
+            if (force || prefs.isTimeExpired(keyForStandByFetchRequest(client, date))) {
                 val standBys = appIbartiFaceApi.findStandBysByClientAndDate(client, date)
                 prefs.saveTime(keyForStandByFetchRequest(client, date))
                 standByDao.replaceStandBysByClientAndDate(client, date, *standBys.toTypedArray())
@@ -158,7 +217,9 @@ class AppMaestrosRepository
             appIbartiFaceApi.deleteStandBy(
                 client = client,
                 date = date,
-                deleteStandBy = DeleteStandBy(foto = url)
+                deleteStandBy = DeleteStandBy(
+                    foto = url
+                )
             )
             standByDao.deleteStandBy(client, date, url)
         }
@@ -166,23 +227,40 @@ class AppMaestrosRepository
 
     override suspend fun findPredictionsByStandBy(standBy: StandBy): Result<List<Prediction>> {
         return mapToResult {
-            appIbartiFaceApi.findPredictionsByStandBy(client = standBy.client, date = standBy.date, url = standBy.url)
+            appIbartiFaceApi.findPredictionsByStandBy(
+                client = standBy.client,
+                date = standBy.date,
+                url = standBy.url
+            )
         }
     }
 
-    override fun findAsistencias(iniDate: CustomDate, endDate: CustomDate): LiveData<List<Asistencia>> {
+    override fun findAsistencias(
+        iniDate: CustomDate,
+        endDate: CustomDate
+    ): LiveData<List<Asistencia>> {
         return asistenciaDao.findAsistencias(iniDate.toString(), endDate.toString())
     }
 
-    override suspend fun refreshAsistencias(iniDate: CustomDate, endDate: CustomDate): Result<Unit> {
+    override suspend fun refreshAsistencias(
+        iniDate: CustomDate,
+        endDate: CustomDate
+    ): Result<Unit> {
         return mapToResult {
-            val asistencias = appIbartiFaceApi.findAsistencias(iniDate.toString(), endDate.toString()).map { asis ->
-                asis.names = asis.names?.trim()?: "" // the api may return names o surnames as null
-                asis.surnames = asis.surnames?.trim()?: ""
-                asis
-            }
+            val asistencias =
+                appIbartiFaceApi.findAsistencias(iniDate.toString(), endDate.toString())
+                    .map { asis ->
+                        asis.names =
+                            asis.names?.trim() ?: "" // the api may return names o surnames as null
+                        asis.surnames = asis.surnames?.trim() ?: ""
+                        asis
+                    }
             debug("refreshAsistencias($iniDate: String, $endDate: String)=${asistencias.take(2)}")
-            asistenciaDao.replaceAsistencias(iniDate.toString(), endDate.toString(), *asistencias.toTypedArray())
+            asistenciaDao.replaceAsistencias(
+                iniDate.toString(),
+                endDate.toString(),
+                *asistencias.toTypedArray()
+            )
         }
     }
 

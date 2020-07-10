@@ -10,9 +10,9 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.oesvica.appibartiFace.R
-import com.oesvica.appibartiFace.data.model.Category
-import com.oesvica.appibartiFace.data.model.StandBy
-import com.oesvica.appibartiFace.data.model.Status
+import com.oesvica.appibartiFace.data.model.category.Category
+import com.oesvica.appibartiFace.data.model.standby.StandBy
+import com.oesvica.appibartiFace.data.model.status.Status
 import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi.Companion.imgUrlForStandBy
 import com.oesvica.appibartiFace.ui.standby.StandByFragment
 import com.oesvica.appibartiFace.utils.base.DaggerActivity

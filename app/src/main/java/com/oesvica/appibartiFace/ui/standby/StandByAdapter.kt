@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.oesvica.appibartiFace.R
-import com.oesvica.appibartiFace.data.model.StandBy
-import com.oesvica.appibartiFace.data.model.properUrl
+import com.oesvica.appibartiFace.data.model.standby.StandBy
+import com.oesvica.appibartiFace.data.model.standby.properUrl
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_stand_by.view.*
 

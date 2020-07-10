@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.oesvica.appibartiFace.R
-import com.oesvica.appibartiFace.data.model.Category
+import com.oesvica.appibartiFace.data.model.category.Category
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.dialogs.EditTextDialog
@@ -93,7 +93,12 @@ class CategoriesFragment : DaggerFragment() {
                     val id = data?.getStringExtra(EditTextDialog.ARG_ID) ?: ""
                     val desc = data?.getStringExtra(DESCRIPTION)
                     if (id.isNotEmpty() && !desc.isNullOrEmpty()) {
-                        categoriesViewModel.updateCategory(Category(id, desc))
+                        categoriesViewModel.updateCategory(
+                            Category(
+                                id,
+                                desc
+                            )
+                        )
                     }
                 }
             }

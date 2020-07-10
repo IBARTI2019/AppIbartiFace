@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.oesvica.appibartiFace.R
-import com.oesvica.appibartiFace.data.model.Asistencia
+import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
 
 /**
  * [RecyclerView.Adapter] that can display a [Asistencia].

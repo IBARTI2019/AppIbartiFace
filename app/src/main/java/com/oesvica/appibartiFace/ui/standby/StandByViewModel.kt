@@ -2,6 +2,8 @@ package com.oesvica.appibartiFace.ui.standby
 
 import androidx.lifecycle.*
 import com.oesvica.appibartiFace.data.model.*
+import com.oesvica.appibartiFace.data.model.standby.StandBy
+import com.oesvica.appibartiFace.data.model.standby.StandByQuery
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug

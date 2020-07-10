@@ -1,13 +1,26 @@
 package com.oesvica.appibartiFace.data.remote
 
-import com.oesvica.appibartiFace.data.model.*
+import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
+import com.oesvica.appibartiFace.data.model.auth.LogInRequest
+import com.oesvica.appibartiFace.data.model.auth.LogInResponse
+import com.oesvica.appibartiFace.data.model.auth.LogOutRequest
+import com.oesvica.appibartiFace.data.model.auth.LogOutResponse
+import com.oesvica.appibartiFace.data.model.category.Category
+import com.oesvica.appibartiFace.data.model.category.CategoryRequest
+import com.oesvica.appibartiFace.data.model.person.AddPersonRequest
+import com.oesvica.appibartiFace.data.model.person.Person
+import com.oesvica.appibartiFace.data.model.person.UpdatePersonRequest
+import com.oesvica.appibartiFace.data.model.standby.DeleteStandBy
 import com.oesvica.appibartiFace.data.model.standby.Prediction
+import com.oesvica.appibartiFace.data.model.standby.StandBy
+import com.oesvica.appibartiFace.data.model.status.Status
+import com.oesvica.appibartiFace.data.model.status.StatusRequest
 import retrofit2.http.*
 
 interface AppIbartiFaceApi {
 
     companion object {
-        const val END_POINT = "http://oesvica.ddns.net:5003/"
+        const val END_POINT = "http://oesvica.ddns.net:5005/"
 
         const val FIND_PERSONS = "persons"
         const val ADD_PERSON = "insert-person/"
@@ -30,8 +43,21 @@ interface AppIbartiFaceApi {
 
         const val ASISTENCIAS = "reporte/asistencia-ibarti/{iniDate}/{endDate}/"
 
+        const val LOG_IN = "usuario/login/"
+        const val LOG_OUT = "usuario/logout/"
+
         fun imgUrlForStandBy(client: String, date: String, url: String) = "$END_POINT$STAND_BY$client/$date/$url"
     }
+
+    @POST(LOG_IN)
+    suspend fun logIn(
+        @Body logInRequest: LogInRequest
+    ): LogInResponse
+
+    @POST(LOG_OUT)
+    suspend fun logOut(
+        @Body logOutRequest: LogOutRequest
+    ): LogOutResponse
 
     @GET
     suspend fun findPersons(

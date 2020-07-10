@@ -9,8 +9,8 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.oesvica.appibartiFace.R
-import com.oesvica.appibartiFace.data.model.Category
-import com.oesvica.appibartiFace.data.model.Status
+import com.oesvica.appibartiFace.data.model.category.Category
+import com.oesvica.appibartiFace.data.model.status.Status
 import com.oesvica.appibartiFace.utils.base.DaggerActivity
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.dialogs.ProgressDialog

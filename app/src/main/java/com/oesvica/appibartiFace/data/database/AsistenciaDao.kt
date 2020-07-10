@@ -2,7 +2,7 @@ package com.oesvica.appibartiFace.data.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.oesvica.appibartiFace.data.model.Asistencia
+import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
 
 @Dao
 abstract class AsistenciaDao {
