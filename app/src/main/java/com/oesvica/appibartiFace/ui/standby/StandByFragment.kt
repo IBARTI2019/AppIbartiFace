@@ -6,18 +6,20 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.recyclerview.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.CustomDate
+import com.oesvica.appibartiFace.data.model.currentDay
 import com.oesvica.appibartiFace.data.model.standby.StandBy
 import com.oesvica.appibartiFace.data.model.standby.StandByQuery
-import com.oesvica.appibartiFace.data.model.currentDay
 import com.oesvica.appibartiFace.ui.addPerson.AddPersonActivity
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
 import com.oesvica.appibartiFace.utils.debug
@@ -25,6 +27,7 @@ import com.oesvica.appibartiFace.utils.dialogs.StandByDialog
 import com.oesvica.appibartiFace.utils.screenWidth
 import distinc
 import kotlinx.android.synthetic.main.fragment_stand_by_list.*
+
 
 /**
  * A fragment representing a list of StandBys.
@@ -97,7 +100,8 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         setUpRecyclerView(savedInstanceState)
-        selectedDate = savedInstanceState?.getParcelable<CustomDate?>(KEY_SELECTED_DATE) ?: currentDay()
+        selectedDate =
+            savedInstanceState?.getParcelable<CustomDate?>(KEY_SELECTED_DATE) ?: currentDay()
         dateTextView.setOnClickListener { showDatePickerDialog() }
         searchStandBysIcon.setOnClickListener {
             val query = getQueryForStandBys(displayErrorMessages = true)
@@ -108,6 +112,12 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
             }
         }
         observeStandBys()
+        val adapter: ArrayAdapter<String> = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_dropdown_item_1line,
+            standByViewModel.getClients()
+        )
+        clientEditText.setAdapter(adapter)
         val tempLastQueryTriggered =
             savedInstanceState?.getParcelable<StandByQuery?>(KEY_LAST_QUERY_TRIGGERED)
         if (tempLastQueryTriggered != null) {

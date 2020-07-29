@@ -9,6 +9,13 @@ import javax.inject.Singleton
 
 @Singleton
 class AppPreferencesHelper @Inject constructor(sharedPreferences: SharedPreferences): PreferencesHelper(sharedPreferences){
+    companion object {
+        const val LOGIN = "logIn"
+        const val USER = "user"
+        const val TOKEN = "token"
+        const val TOKEN_UPLOADED = "tokenUploaded"
+        const val CLIENTS = "clients"
+    }
     override fun saveTime(key: String) {
         set(key, currentTime())
     }

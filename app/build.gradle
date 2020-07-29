@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'  // Google Services plugin
 
 android {
     compileSdkVersion 29
@@ -11,8 +12,8 @@ android {
         applicationId "com.oesvica.appibartiFace"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -89,6 +90,9 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
 
     implementation "com.google.code.gson:gson:2.8.5"
+
+
+    implementation 'com.google.firebase:firebase-messaging:20.2.3'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

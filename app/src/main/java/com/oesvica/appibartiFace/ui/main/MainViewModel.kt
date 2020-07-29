@@ -1,12 +1,17 @@
 package com.oesvica.appibartiFace.ui.main
 
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.gson.Gson
+import com.oesvica.appibartiFace.data.model.FirebaseTokenId
 import com.oesvica.appibartiFace.data.model.Result
 import com.oesvica.appibartiFace.data.model.auth.AuthInfo
-import com.oesvica.appibartiFace.data.model.auth.LogInResponse
-import com.oesvica.appibartiFace.data.model.auth.LogOutResponse
+import com.oesvica.appibartiFace.data.model.auth.UserData
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
+import com.oesvica.appibartiFace.utils.debug
+import com.oesvica.appibartiFace.utils.decoded
 import com.oesvica.appibartiFace.utils.schedulers.SchedulerProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,7 +33,21 @@ class MainViewModel
         authInfo.value = Result()
         launch {
             withContext(IO) { maestrosRepository.logIn(user, password) }
-            authInfo.value = Result(success = maestrosRepository.getAuthInfo())
+            val loggedUserAuthInfo = maestrosRepository.getAuthInfo()
+            authInfo.value = Result(success = loggedUserAuthInfo)
+            if(loggedUserAuthInfo.logIn && !loggedUserAuthInfo.token.isNullOrEmpty()){
+                uploadFirebaseTokenId()
+            }
+        }
+    }
+
+    private fun uploadFirebaseTokenId(){
+        launch {
+            val fbToken = withContext(IO){ maestrosRepository.getFirebaseTokenId() } ?: return@launch
+            val result = withContext(IO){
+                maestrosRepository.sendFirebaseTokenId(FirebaseTokenId(fbToken))
+            }
+            debug("uploadFirebaseTokenId result=$result")
         }
     }
 

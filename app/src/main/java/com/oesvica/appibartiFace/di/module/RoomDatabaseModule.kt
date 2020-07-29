@@ -12,7 +12,7 @@ class RoomDatabaseModule {
 
     @Singleton
     @Provides
-    fun provideAppDatabase(application: Application)= Room.databaseBuilder(application, AppDatabase::class.java, "AppIbartiFaceVer1.0.db").build()
+    fun provideAppDatabase(application: Application)= Room.databaseBuilder(application, AppDatabase::class.java, "AppIbartiFaceVer2.0.db").build()
 
     @Singleton
     @Provides

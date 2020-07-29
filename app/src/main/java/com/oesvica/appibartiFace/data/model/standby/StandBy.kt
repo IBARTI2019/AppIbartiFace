@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi
+import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi.Companion.imgUrlForStandBy
 
 @Entity(tableName = StandBy.TABLE_NAME)
 data class StandBy(
@@ -49,4 +50,4 @@ data class StandBy(
     }
 }
 
-fun StandBy.properUrl(): String = "${AppIbartiFaceApi.END_POINT}${AppIbartiFaceApi.STAND_BY}$client/$date/$url"
+fun StandBy.properUrl(): String = imgUrlForStandBy(client, date, url)

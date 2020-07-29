@@ -27,11 +27,12 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="RtlSymmetry">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <AutoCompleteTextView
                 android:id="@+id/clientEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/standby_client"
+                android:completionThreshold="0"
                 android:inputType="number"
                 android:minWidth="120dp"
                 android:textSize="17sp" />

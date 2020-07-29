@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "368871950454",
+    "firebase_url": "https://ib-notify.firebaseio.com",
+    "project_id": "ib-notify",
+    "storage_bucket": "ib-notify.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368871950454:android:c4c1723a5e876a4e50f757",
+        "android_client_info": {
+          "package_name": "com.oesvica.appibartiFace"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "368871950454-ugusmvvbc6p750fnovnkh4kg73cvviev.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.oesvica.appibartiFace",
+            "certificate_hash": "585eb7e13043f31f1b71a28886611f538c677be8"
+          }
+        },
+        {
+          "client_id": "368871950454-qsh31m03sj7vl7l32fm6mrla41vqj9u3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBadl_Vn5-oU_vPBJNn3tOc9UHWG5HHcqs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "368871950454-qsh31m03sj7vl7l32fm6mrla41vqj9u3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

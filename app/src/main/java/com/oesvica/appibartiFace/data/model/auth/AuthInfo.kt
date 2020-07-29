@@ -1,3 +1,3 @@
 package com.oesvica.appibartiFace.data.model.auth
 
-data class AuthInfo(var logIn: Boolean, var token: String? = null)
+data class AuthInfo(val logIn: Boolean, val token: String? = null)

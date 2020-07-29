@@ -17,7 +17,6 @@ class StandByViewModel @Inject constructor(
     schedulerProvider: SchedulerProvider
 ) : BaseViewModel(schedulerProvider) {
 
-
     private val standBysQuery: MutableLiveData<StandByQuery> = MutableLiveData()
     var standBys: LiveData<List<StandBy>> = standBysQuery.switchMap { filter ->
         maestrosRepository.findStandBysByClientAndDate(
@@ -30,21 +29,10 @@ class StandByViewModel @Inject constructor(
     }
     val fetchStandBysNetworkRequest = MutableLiveData<NetworkRequestStatus>()
 
-    /*
-    fun loadTodayStandBys(force: Boolean = false) {
-        standBysQuery.value = StandByQuery("", currentDay())
-        fetchStandBysNetworkRequest.value = NetworkRequestStatus(isOngoing = true)
-        launch {
-            val standbys = withContext(IO) {
-                maestrosRepository.refreshCurrentDayStandBys(force)
-            }
-            debug("loadTodayStandBys result standBys=$standbys")
-            fetchStandBysNetworkRequest.value =
-                NetworkRequestStatus(isOngoing = false, error = standbys.error)
-        }
-    }*/
+    fun getClients() = maestrosRepository.getClients()
 
     fun searchStandBys(query: StandByQuery, force: Boolean = false) {
+        maestrosRepository.addClient(query.client)
         // Verify that there is not an ongoing fetchStandBy request as not to make double api calls on device rotation
         if (fetchStandBysNetworkRequest.value?.isOngoing == false || force) {
             fetchStandBysNetworkRequest.value = NetworkRequestStatus(isOngoing = true)

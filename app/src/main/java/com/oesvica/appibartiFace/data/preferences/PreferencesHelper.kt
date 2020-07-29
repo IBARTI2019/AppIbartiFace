@@ -20,6 +20,7 @@ abstract class PreferencesHelper(val sharedPreferences: SharedPreferences) {
     /**
      * puts a key value pair in shared prefs if doesn't exists, otherwise updates value on given [key]
      */
+    @Suppress("UNCHECKED_CAST")
     open operator fun set(key: String, value: Any?) {
         sharedPreferences.apply {
             when (value) {
@@ -28,6 +29,7 @@ abstract class PreferencesHelper(val sharedPreferences: SharedPreferences) {
                 is Boolean -> edit { putBoolean(key, value) }
                 is Float -> edit { putFloat(key, value) }
                 is Long -> edit { putLong(key, value) }
+                is Set<*> -> edit { putStringSet(key, value as? Set<String>) }
                 else -> throw UnsupportedOperationException("Not yet implemented")
             }
         }
@@ -73,6 +75,7 @@ abstract class PreferencesHelper(val sharedPreferences: SharedPreferences) {
             ) as T
             Float::class -> sharedPreferences.getFloat(key, defaultValue as? Float ?: -1f) as T
             Long::class -> sharedPreferences.getLong(key, defaultValue as? Long ?: -1) as T
+            Set::class -> sharedPreferences.getStringSet(key, defaultValue as? Set<String> ?: emptySet()) as T
             else -> throw UnsupportedOperationException("Not yet implemented")
         }
     }

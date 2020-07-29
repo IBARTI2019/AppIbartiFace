@@ -10,7 +10,8 @@ import com.google.gson.annotations.SerializedName
 @Entity(tableName = Category.TABLE_NAME)
 data class Category(
     @PrimaryKey @SerializedName("_id") @Expose var id: String = "",
-    @SerializedName("descripcion") @Expose var description: String = ""
+    @SerializedName("descripcion") @Expose var description: String = "",
+    @SerializedName("alerta") @Expose var alert: Boolean = false
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()?:"",
