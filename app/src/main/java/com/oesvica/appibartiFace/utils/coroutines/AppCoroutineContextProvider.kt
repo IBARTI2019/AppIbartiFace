@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.oesvica.appibartiFace.utils.coroutines
 
-import com.sneyder.utils.coroutines.CoroutineContextProvider
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
 

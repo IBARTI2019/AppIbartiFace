@@ -14,8 +14,8 @@ class ProgressDialog : DialogFragment() {
         private const val ARG_TITLE = "title"
         private const val ARG_MESSAGE = "message"
 
-        fun newInstance(title: String, message: String): com.oesvica.appibartiFace.utils.dialogs.ProgressDialog {
-            return com.oesvica.appibartiFace.utils.dialogs.ProgressDialog().apply {
+        fun newInstance(title: String, message: String): ProgressDialog {
+            return ProgressDialog().apply {
                 arguments = bundleOf(ARG_TITLE to title, ARG_MESSAGE to message)
             }
         }

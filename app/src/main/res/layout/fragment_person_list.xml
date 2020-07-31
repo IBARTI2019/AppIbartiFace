@@ -25,7 +25,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:hint="Cedula" />
+            tools:hint="Cedula"
+            android:inputType="text"
+            tools:ignore="Autofill,LabelFor" />
 
         <Spinner
             android:id="@+id/fieldSpinner"

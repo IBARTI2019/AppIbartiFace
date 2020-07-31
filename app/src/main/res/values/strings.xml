@@ -27,5 +27,18 @@
     <string name="standby_client">Cliente</string>
     <string name="standby_date">Fecha</string>
     <string name="menu_asistencia">Asistencia Ibarti</string>
-    <string name="button_log_in">Iniciar sesion</string>
+    <string name="login_button_login">Iniciar sesion</string>
+    <string name="login_hint_user">Usuario</string>
+    <string name="login_hint_password">Clave</string>
+    <string name="standby_button_add_person">Registrar persona</string>
+    <string name="standby_button_delete">Eliminar standby</string>
+    <string name="person_cedula">Cedula</string>
+    <string name="person_cliente">Cliente</string>
+    <string name="person_categoria">Categoria</string>
+    <string name="person_estatus">Estatus</string>
+    <string name="standby_search">search</string>
+    <string name="status_edit">Edit status</string>
+    <string name="status_delete">Delete status</string>
+    <string name="menu_maestros">Maestros</string>
+    <string name="menu_reportes">Reportes</string>
 </resources>

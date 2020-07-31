@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/cliente"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
-        android:text="Cedula" />
+        android:text="@string/person_cedula" />
 
     <TextView
         android:id="@+id/cliente"
@@ -32,7 +32,7 @@
         app:layout_constraintStart_toEndOf="@id/cedula"
         app:layout_constraintEnd_toStartOf="@id/categoria"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="Cliente"/>
+        android:text="@string/person_cliente"/>
 
     <TextView
         android:id="@+id/categoria"
@@ -44,7 +44,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/status"
         app:layout_constraintStart_toEndOf="@id/cliente"
-        android:text="Categoria"/>
+        android:text="@string/person_categoria"/>
 
     <TextView
         android:id="@+id/status"
@@ -56,6 +56,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="Estatus"/>
+        android:text="@string/person_estatus"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

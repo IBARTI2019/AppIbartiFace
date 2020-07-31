@@ -27,7 +27,7 @@ fun <T> LiveData<T>.observeJustOnce(owner: LifecycleOwner, observer: Observer<T>
         removeObservers(owner)
     })
 }
-fun <T> LiveData<T>.distinc(): LiveData<T> {
+fun <T> LiveData<T>.distinct(): LiveData<T> {
     val distinctLiveData = MediatorLiveData<T>()
     distinctLiveData.addSource(this, object : Observer<T>{
         private var initialized = false
@@ -36,26 +36,14 @@ fun <T> LiveData<T>.distinc(): LiveData<T> {
             if(!initialized){
                 initialized = true
                 lastObj = obj
-                distinctLiveData.postValue(lastObj)
+                distinctLiveData.postValue(lastObj?:return)
             } else{
                 if((obj == null && lastObj != null) || obj != lastObj){
                     lastObj = obj
-                    distinctLiveData.postValue(lastObj)
+                    distinctLiveData.postValue(lastObj?:return)
                 }
             }
         }
     })
     return distinctLiveData
-}
-
-
-/**
- * Utility function intended to subscribe LiveData objects from Fragments
- * It's important to avoid certain memory leaks due to Fragments' lifecycle
- * More info about this issue in the link below at section 3. Resetting an existing observer
- * https://medium.com/@BladeCoder/architecture-components-pitfalls-part-1-9300dd969808
- */
-fun <T> LiveData<T>.reObserve(owner: LifecycleOwner, observer: Observer<T>) {
-    removeObserver(observer)
-    observe(owner, observer)
 }

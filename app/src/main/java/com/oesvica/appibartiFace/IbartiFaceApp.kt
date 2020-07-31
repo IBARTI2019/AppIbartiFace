@@ -2,7 +2,7 @@ package com.oesvica.appibartiFace
 
 import timber.log.Timber
 
-class IbartiFaceApp() : BaseApp() {
+class IbartiFaceApp : BaseApp() {
 
     override fun onCreate() {
         super.onCreate()

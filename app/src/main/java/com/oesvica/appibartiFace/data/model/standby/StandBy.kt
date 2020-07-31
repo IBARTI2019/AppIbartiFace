@@ -6,7 +6,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi
 import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi.Companion.imgUrlForStandBy
 
 @Entity(tableName = StandBy.TABLE_NAME)

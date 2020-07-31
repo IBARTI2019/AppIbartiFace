@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.ui.addStatus.AddStatusActivity
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
-import distinc
+import distinct
 import kotlinx.android.synthetic.main.fragment_status_list.*
 
 /**
@@ -53,7 +53,7 @@ class StatusesFragment : DaggerFragment() {
     }
 
     private fun observeStatuses() {
-        statusesViewModel.statuses.distinc().observe(viewLifecycleOwner, Observer { statuses ->
+        statusesViewModel.statuses.distinct().observe(viewLifecycleOwner, Observer { statuses ->
             statuses?.let {
                 personsAdapter.statuses = it
             }

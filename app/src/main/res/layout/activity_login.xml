@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,6 +11,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_marginTop="16dp">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -19,13 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:hint="Usuario"
+            android:hint="@string/login_hint_user"
             android:textSize="17sp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_marginTop="16dp">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -33,17 +34,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:hint="Clave"
+            android:hint="@string/login_hint_password"
             android:textSize="17sp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/logInButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_log_in"
-        android:theme="@style/AppTheme.Button"
+        android:text="@string/login_button_login"
         android:textSize="17sp"
+        android:padding="10dp"
         android:layout_marginTop="16dp"/>
 
 </LinearLayout>

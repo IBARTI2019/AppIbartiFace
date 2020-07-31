@@ -22,7 +22,7 @@ import com.oesvica.appibartiFace.di.builder.ActivityBuilder
 import com.oesvica.appibartiFace.di.module.AppModule
 import dagger.BindsInstance
 import dagger.Component
-import dagger.android.support.DaggerApplication;
+import dagger.android.support.DaggerApplication
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton

@@ -7,17 +7,25 @@
     tools:context=".ui.addPerson.AddPersonActivity">
 
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/cedulaEditText"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/cedulaInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:hint="@string/cedula"
-        android:inputType="number"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.6" />
+        app:layout_constraintWidth_percent="0.6" >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/cedulaEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/cedula"
+            android:inputType="number"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Spinner
         android:id="@+id/categorySpinner"
@@ -26,7 +34,7 @@
         android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cedulaEditText"
+        app:layout_constraintTop_toBottomOf="@id/cedulaInputLayout"
         app:layout_constraintWidth_percent="0.6" />
 
     <Spinner

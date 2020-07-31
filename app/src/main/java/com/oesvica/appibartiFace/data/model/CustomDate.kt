@@ -12,8 +12,7 @@ data class CustomDate(var year: Int, var month: Int, var day: Int): Comparable<C
         parcel.readInt(),
         parcel.readInt(),
         parcel.readInt()
-    ) {
-    }
+    )
 
     override fun toString(): String {
         val cal = Calendar.getInstance()

@@ -18,7 +18,7 @@ package com.oesvica.appibartiFace.utils.base
 
 import androidx.lifecycle.ViewModel
 import com.oesvica.appibartiFace.utils.schedulers.SchedulerProvider
-import com.sneyder.utils.coroutines.CoroutineContextProvider
+import com.oesvica.appibartiFace.utils.coroutines.CoroutineContextProvider
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable

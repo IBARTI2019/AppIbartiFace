@@ -1,40 +1,33 @@
 <resources>
 
   <!-- Base application theme. -->
-  <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+  <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
     <!-- Customize your theme here. -->
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
+    <item name="colorSecondary">@color/colorAccent</item>
+    <item name="colorOnSecondary">#fff</item>
+    <item name="colorSecondaryVariant">#F57C00</item>
+    <item name="colorError">#D32F2F</item>
+    <item name="colorOnError">#FFFFFF</item>
+    <item name="materialButtonStyle">@style/AppButton</item>
   </style>
 
-  <style name="AppTheme.Button">
+  <style name="AppButton" parent="Widget.MaterialComponents.Button">
     <item name="android:textSize">@dimen/button_text_size</item>
-    <item name="colorButtonNormal">#64B5F6</item>
+    <item name="backgroundTint">#64B5F6</item>
     <item name="android:textColor">#fff</item>
   </style>
 
-  <style name="AppTheme.Button.Green">
-    <item name="android:textSize">@dimen/button_text_size</item>
-    <item name="colorButtonNormal">#4CAF50</item>
-    <item name="android:textColor">#fff</item>
-  </style>
+  <style name="SS" parent="Widget.MaterialComponents.Button.TextButton">
 
-  <style name="AppTheme.Button.Orange">
-    <item name="android:textSize">@dimen/button_text_size</item>
-    <item name="colorButtonNormal">#FF5722</item>
-    <item name="android:textColor">#fff</item>
-  </style>
-
-  <style name="AppTheme.Button.Alert">
-    <item name="android:textSize">17sp</item>
-    <item name="colorButtonNormal">#E57373</item>
-    <item name="android:textColor">#fff</item>
   </style>
 
   <style name="AppTheme.NoActionBar">
     <item name="windowActionBar">false</item>
     <item name="windowNoTitle">true</item>
+    <item name="android:statusBarColor">@android:color/transparent</item>
   </style>
 
   <style name="item_list">

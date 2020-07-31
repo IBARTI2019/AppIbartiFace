@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.Observer
@@ -27,7 +26,7 @@ import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.dialogs.StandByDialog
 import com.oesvica.appibartiFace.utils.hideSoftInput
 import com.oesvica.appibartiFace.utils.screenWidth
-import distinc
+import distinct
 import kotlinx.android.synthetic.main.fragment_stand_by_list.*
 
 
@@ -218,7 +217,7 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     private fun observeStandBys() {
-        standByViewModel.standBys.distinc().observe(viewLifecycleOwner, Observer {
+        standByViewModel.standBys.distinct().observe(viewLifecycleOwner, Observer {
             debug("standBys.observe ${it?.take(3)}")
             it?.let {
                 standByAdapter.standBys = it

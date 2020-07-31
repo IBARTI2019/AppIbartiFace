@@ -2,7 +2,6 @@ package com.oesvica.appibartiFace.utils.dialogs
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +10,7 @@ import android.view.View
 import android.widget.EditText
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.oesvica.appibartiFace.R
 
 class EditTextDialog : DialogFragment() {
@@ -52,7 +52,7 @@ class EditTextDialog : DialogFragment() {
         if (value.isNotEmpty()) inputEditText.setSelection(value.length)
         inputEditText.hint = hint
 
-        return AlertDialog.Builder(requireContext())
+        return MaterialAlertDialogBuilder(requireContext())
             .setView(view)
             .setTitle(title)
             .setPositiveButton(android.R.string.ok) { _, _ ->

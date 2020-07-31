@@ -1,6 +1,5 @@
 package com.oesvica.appibartiFace.ui.categories
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.oesvica.appibartiFace.data.model.category.Category
 import com.oesvica.appibartiFace.data.model.NetworkRequestStatus

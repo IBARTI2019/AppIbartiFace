@@ -4,37 +4,37 @@
     tools:showIn="navigation_view">
     <item
         android:id="@+id/nav_standby"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/ic_home_24dp"
         android:visible="false"
-        android:title="StandBy" />
+        android:title="@string/menu_standby" />
 
-    <item android:title="Maestros">
+    <item android:title="@string/menu_maestros">
         <menu>
             <item
                 android:id="@+id/nav_categorias"
-                android:icon="@drawable/ic_home_black_24dp"
+                android:icon="@drawable/ic_home_24dp"
                 android:visible="false"
-                android:title="Categorias" />
+                android:title="@string/menu_category" />
             <item
                 android:id="@+id/nav_status"
-                android:icon="@drawable/ic_home_black_24dp"
+                android:icon="@drawable/ic_home_24dp"
                 android:visible="false"
-                android:title="Status" />
+                android:title="@string/menu_status" />
             <item
                 android:id="@+id/nav_personas"
-                android:icon="@drawable/ic_home_black_24dp"
+                android:icon="@drawable/ic_home_24dp"
                 android:visible="false"
-                android:title="Personas" />
+                android:title="@string/menu_persons" />
         </menu>
     </item>
 
-    <item android:title="Reportes">
+    <item android:title="@string/menu_reportes">
         <menu>
             <item
                 android:id="@+id/nav_asistencia_ibarti"
-                android:icon="@drawable/ic_home_black_24dp"
+                android:icon="@drawable/ic_home_24dp"
                 android:visible="false"
-                android:title="Asistencia Ibarti" />
+                android:title="@string/menu_asistencia" />
         </menu>
     </item>
 </menu>

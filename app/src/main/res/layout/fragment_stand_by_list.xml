@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="RtlSymmetry">
 
-            <AutoCompleteTextView
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                 android:id="@+id/clientEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -64,7 +64,8 @@
             app:layout_constraintBottom_toBottomOf="@id/clientContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/dateTextView"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/standby_search" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

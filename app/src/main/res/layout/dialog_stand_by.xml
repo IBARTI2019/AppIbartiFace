@@ -24,24 +24,27 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/addPersonButton"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
                 android:textAllCaps="false"
-                android:theme="@style/AppTheme.Button"
-                android:text="Registrar persona"/>
+                android:text="@string/standby_button_add_person" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/deleteStandByButton"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:textAllCaps="false"
-                android:theme="@style/AppTheme.Button.Alert"
-                android:text="Eliminar standby"/>
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:backgroundTint="#E57373"
+                android:text="@string/standby_button_delete"/>
 
         </LinearLayout>
 

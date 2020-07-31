@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sneyder.utils.coroutines
+package com.oesvica.appibartiFace.utils.coroutines
 
 import kotlin.coroutines.CoroutineContext
 

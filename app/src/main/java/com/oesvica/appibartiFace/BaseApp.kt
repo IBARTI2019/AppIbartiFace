@@ -17,10 +17,6 @@ abstract class BaseApp : DaggerApplication() {
         return appComponent
     }
 
-    override fun onCreate() {
-        super.onCreate()
-    }
-
     /**
      * Overriding this functions as a workaround to implement MultiDex, since this class cannot inherent from MultiDexApplication
      */

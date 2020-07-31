@@ -30,7 +30,7 @@ class DatePickerDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val calendar = Calendar.getInstance()
-        return android.app.DatePickerDialog(
+        return DatePickerDialog(
                 requireContext(),
                 getRegisteredListener(),
                 calendar.get(Calendar.YEAR),

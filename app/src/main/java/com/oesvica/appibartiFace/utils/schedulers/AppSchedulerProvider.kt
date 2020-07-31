@@ -21,7 +21,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 
 class AppSchedulerProvider: SchedulerProvider {
 
-    override fun ui() = AndroidSchedulers.mainThread()
+    override fun ui(): Scheduler = AndroidSchedulers.mainThread()
 
     override fun computation() : Scheduler = Schedulers.computation()
 

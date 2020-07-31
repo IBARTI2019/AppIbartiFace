@@ -14,7 +14,7 @@ import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.ui.editPerson.EditPersonActivity
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
 import com.oesvica.appibartiFace.utils.debug
-import distinc
+import distinct
 import kotlinx.android.synthetic.main.fragment_person_list.*
 import java.util.*
 
@@ -122,7 +122,7 @@ class PersonsFragment : DaggerFragment() {
     }
 
     private fun observePersons() {
-        personsViewModel.persons.distinc().observe(viewLifecycleOwner, Observer { persons ->
+        personsViewModel.persons.distinct().observe(viewLifecycleOwner, Observer { persons ->
             debug("observe persons = ${persons.take(3)}")
             persons?.let { personsAdapter.allPersons = it }
         })

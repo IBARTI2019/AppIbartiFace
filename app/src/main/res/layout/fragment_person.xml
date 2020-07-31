@@ -41,7 +41,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/status"
         app:layout_constraintStart_toEndOf="@id/cliente"
-        tools:text="j4dhfk56k56"/>
+        tools:text="Empleado Oesvica"/>
 
     <TextView
         android:id="@+id/status"
@@ -64,7 +64,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_edit_black_24dp"
-        tools:ignore="PrivateResource" />
+        app:srcCompat="@drawable/ic_edit_24dp"
+        tools:ignore="PrivateResource"
+        android:contentDescription="@string/edit_person" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

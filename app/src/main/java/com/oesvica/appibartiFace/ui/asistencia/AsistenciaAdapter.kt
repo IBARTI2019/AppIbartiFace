@@ -13,7 +13,7 @@ import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
 /**
  * [RecyclerView.Adapter] that can display a [Asistencia].
  */
-class AsistenciaAdapter() : RecyclerView.Adapter<AsistenciaAdapter.AsistenciaViewHolder>() {
+class AsistenciaAdapter : RecyclerView.Adapter<AsistenciaAdapter.AsistenciaViewHolder>() {
 
     var allAsistencias: List<Asistencia> = ArrayList()
         set(value) {

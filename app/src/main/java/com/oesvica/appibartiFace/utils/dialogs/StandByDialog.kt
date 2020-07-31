@@ -1,7 +1,6 @@
 package com.oesvica.appibartiFace.utils.dialogs
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +10,7 @@ import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.standby.StandBy
 import com.oesvica.appibartiFace.data.model.standby.properUrl
@@ -31,7 +31,6 @@ class StandByDialog : DialogFragment() {
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val standBy = args.standby
-            ?: throw Exception("No value passed to argument ARG_STAND_BY in StandByDialog")
 
         val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_stand_by, null)
 
@@ -47,7 +46,7 @@ class StandByDialog : DialogFragment() {
             .load(standBy.properUrl())
             .placeholder(R.drawable.photo_placeholder)
             .into(standByImageView)
-        return AlertDialog.Builder(requireContext())
+        return MaterialAlertDialogBuilder(requireContext())
             .setView(view)
             .create()
     }

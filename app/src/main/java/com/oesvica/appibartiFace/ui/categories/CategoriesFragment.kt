@@ -14,7 +14,7 @@ import com.oesvica.appibartiFace.data.model.category.Category
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.dialogs.EditTextDialog
-import distinc
+import distinct
 import kotlinx.android.synthetic.main.fragment_category_list.*
 
 /**
@@ -113,7 +113,7 @@ class CategoriesFragment : DaggerFragment() {
     }
 
     private fun observeCategories() {
-        categoriesViewModel.categories.distinc().observe(viewLifecycleOwner, Observer { categories ->
+        categoriesViewModel.categories.distinct().observe(viewLifecycleOwner, Observer { categories ->
             debug("observe categories = $categories")
             categories?.let {
                 categoriesAdapter.categories = it

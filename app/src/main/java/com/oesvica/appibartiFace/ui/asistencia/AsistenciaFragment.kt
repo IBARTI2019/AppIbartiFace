@@ -18,7 +18,7 @@ import com.oesvica.appibartiFace.data.model.CustomDate
 import com.oesvica.appibartiFace.data.model.currentDay
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
 import com.oesvica.appibartiFace.utils.debug
-import distinc
+import distinct
 import kotlinx.android.synthetic.main.fragment_asistencia_list.*
 import kotlinx.android.synthetic.main.fragment_asistencia_list.fieldEditText
 import kotlinx.android.synthetic.main.fragment_asistencia_list.fieldSpinner
@@ -56,7 +56,8 @@ class AsistenciaFragment : DaggerFragment() {
         return inflater.inflate(R.layout.fragment_asistencia_list, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val savedIniDate = savedInstanceState?.getParcelable<CustomDate?>(KEY_INI_DATE)
         val savedEndDate = savedInstanceState?.getParcelable<CustomDate?>(KEY_END_DATE)
         if (savedIniDate != null && savedEndDate != null) {
@@ -73,7 +74,6 @@ class AsistenciaFragment : DaggerFragment() {
         observeAsistencias()
         searchAsistencias()
         searchAsistenciasIcon.setOnClickListener { searchAsistencias() }
-        super.onActivityCreated(savedInstanceState)
     }
 
 
@@ -189,7 +189,7 @@ class AsistenciaFragment : DaggerFragment() {
 
     @SuppressLint("InflateParams")
     private fun observeAsistencias() {
-        asistenciasViewModel.asistencias.distinc().observe(viewLifecycleOwner, Observer { list ->
+        asistenciasViewModel.asistencias.distinct().observe(viewLifecycleOwner, Observer { list ->
             debug("observe asistencias ${list.take(2)}")
             if (list == null) return@Observer
             updateLocationSpinnerAdapter(list)
