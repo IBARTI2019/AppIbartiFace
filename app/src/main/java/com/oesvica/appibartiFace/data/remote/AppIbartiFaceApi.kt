@@ -49,7 +49,7 @@ interface AppIbartiFaceApi {
         const val LOG_IN = "usuario/login/"
         const val LOG_OUT = "usuario/logout/"
 
-        fun imgUrlForStandBy(client: String, date: String, url: String) = "${END_POINT}/view/standby/$client/$date/$url"
+        fun imgUrlForStandBy(client: String, date: String, url: String) = "$END_POINT/view/standby/$client/$date/$url"
     }
 
     @PUT(SEND_FIREBASE_TOKEN_ID)
@@ -155,7 +155,7 @@ interface AppIbartiFaceApi {
         @Path("url") url: String
     ): List<Prediction>
 
-    @POST(DELETE_STAND_BY)
+    @HTTP(method = "DELETE", path = DELETE_STAND_BY, hasBody = true)
     suspend fun deleteStandBy(
         @Header("Authorization") authorization: String?,
         @Path("client") client: String,

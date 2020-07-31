@@ -1,42 +1,36 @@
 package com.oesvica.appibartiFace.utils.dialogs
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
-import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.standby.StandBy
 import com.oesvica.appibartiFace.data.model.standby.properUrl
 import com.squareup.picasso.Picasso
 
 
-class StandByDialog: DialogFragment() {
+class StandByDialog : DialogFragment() {
 
     companion object {
 
         const val ARG_STAND_BY = "ARG_STAND_BY"
         const val ARG_IS_DELETE = "ARG_IS_DELETE"
 
-        fun newInstance(standBy: StandBy): StandByDialog {
-            return StandByDialog().apply {
-                arguments = bundleOf(
-                    ARG_STAND_BY to standBy
-                )
-            }
-        }
     }
+
+    private val args by navArgs<StandByDialogArgs>()
 
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val standBy = arguments?.getParcelable<StandBy>(ARG_STAND_BY)
+        val standBy = args.standby
             ?: throw Exception("No value passed to argument ARG_STAND_BY in StandByDialog")
 
         val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_stand_by, null)
@@ -59,14 +53,10 @@ class StandByDialog: DialogFragment() {
     }
 
     private fun exitDialogWithResponse(standBy: StandBy, isDelete: Boolean) {
-        targetFragment?.onActivityResult(
-            targetRequestCode,
-            Activity.RESULT_OK,
-            Intent().apply {
-                putExtra(ARG_STAND_BY, standBy)
-                putExtra(ARG_IS_DELETE, isDelete)
-            }
-        )
+        with(findNavController().previousBackStackEntry?.savedStateHandle) {
+            this?.set(ARG_STAND_BY, standBy)
+            this?.set(ARG_IS_DELETE, isDelete)
+        }
         dialog?.dismiss()
     }
 

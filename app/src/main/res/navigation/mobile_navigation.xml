@@ -9,7 +9,11 @@
         android:id="@+id/nav_standby"
         android:name="com.oesvica.appibartiFace.ui.standby.StandByFragment"
         android:label="@string/menu_standby"
-        tools:layout="@layout/fragment_stand_by_list" />
+        tools:layout="@layout/fragment_stand_by_list" >
+        <action
+            android:id="@+id/action_nav_standby_to_dialog_standby"
+            app:destination="@id/dialog_standby" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_categorias"
@@ -34,5 +38,14 @@
         android:name="com.oesvica.appibartiFace.ui.asistencia.AsistenciaFragment"
         android:label="@string/menu_asistencia"
         tools:layout="@layout/fragment_person_list" />
+
+    <dialog
+        android:id="@+id/dialog_standby"
+        android:name="com.oesvica.appibartiFace.utils.dialogs.StandByDialog">
+        <argument
+            android:name="standby"
+            app:argType="com.oesvica.appibartiFace.data.model.standby.StandBy"
+            app:nullable="false" />
+    </dialog>
 
 </navigation>

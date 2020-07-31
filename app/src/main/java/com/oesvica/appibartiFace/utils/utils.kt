@@ -1,11 +1,15 @@
 package com.oesvica.appibartiFace.utils
 
+import android.app.Activity
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build.VERSION
 import android.util.Base64
 import android.util.DisplayMetrics
+import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import com.oesvica.appibartiFace.data.model.JWTDecoded
 import java.io.UnsupportedEncodingException
 
@@ -50,4 +54,33 @@ fun String.decoded(): JWTDecoded {
 private fun getJson(strEncoded: String): String {
     val decodedBytes: ByteArray = Base64.decode(strEncoded, Base64.URL_SAFE)
     return String(decodedBytes, Charsets.UTF_8)
+}
+
+// Keyboard utils
+fun Activity.hideSoftInput() {
+    var view = currentFocus
+    if (view == null) view = View(this)
+    hideSoftInput(view)
+}
+
+fun Context.hideSoftInput(view: View) {
+    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+fun Context.showSoftInput(editText: EditText? = null) {
+    if (editText != null) {
+        editText.isFocusable = true
+        editText.isFocusableInTouchMode = true
+        editText.requestFocus()
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.showSoftInput(editText, 0)
+    } else {
+        toggleSoftInput()
+    }
+}
+
+fun Context.toggleSoftInput() {
+    val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 }

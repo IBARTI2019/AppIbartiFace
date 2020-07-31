@@ -21,9 +21,7 @@ class CategoriesViewModel
 
     val categories by lazy { maestrosRepository.findCategories() }
     val statusCategories = MutableLiveData<NetworkRequestStatus>()
-    private val _snackBarMsg = SingleLiveEvent<String>()
-    val snackBarMsg: LiveData<String>
-        get() = _snackBarMsg
+    val snackBarMsg = SingleLiveEvent<String>()
 
     fun refreshCategories() {
         debug("refreshCategories")
@@ -38,14 +36,14 @@ class CategoriesViewModel
 
     fun addCategory(description: String) {
         debug("addCategory $description")
-        _snackBarMsg.value = "Agregando categoria"
+        snackBarMsg.value = "Agregando categoria"
         launch {
             val result = withContext(IO) { maestrosRepository.insertCategory(description) }
             debug("addCategory result $result")
             if (result.success != null) {
-                _snackBarMsg.postValue("Categoria agregada exitosamente")
+                snackBarMsg.postValue("Categoria agregada exitosamente")
             } else {
-                _snackBarMsg.postValue("Hubo un error agregando la categoria")
+                snackBarMsg.postValue("Hubo un error agregando la categoria")
             }
             refreshCategories()
         }
@@ -53,14 +51,14 @@ class CategoriesViewModel
 
     fun updateCategory(category: Category) {
         debug("updating category $category")
-        _snackBarMsg.value = "Actualizando categoria"
+        snackBarMsg.value = "Actualizando categoria"
         launch {
             val result = withContext(IO) { maestrosRepository.updateCategory(category) }
             debug("updateCategory result $result")
             if (result.success != null) {
-                _snackBarMsg.postValue("Categoria actualizada exitosamente")
+                snackBarMsg.postValue("Categoria actualizada exitosamente")
             } else {
-                _snackBarMsg.postValue("Hubo un error actualizando la categoria")
+                snackBarMsg.postValue("Hubo un error actualizando la categoria")
             }
             refreshCategories()
         }
@@ -68,14 +66,14 @@ class CategoriesViewModel
 
     fun deleteCategory(idCategory: String) {
         debug("deleteCategory $idCategory")
-        _snackBarMsg.value = "Eliminando categoria"
+        snackBarMsg.value = "Eliminando categoria"
         launch {
             val result = withContext(IO) { maestrosRepository.deleteCategory(idCategory) }
             debug("deleteCategory result $result")
             if (result.success != null) {
-                _snackBarMsg.postValue("Categoria eliminada exitosamente")
+                snackBarMsg.postValue("Categoria eliminada exitosamente")
             } else {
-                _snackBarMsg.postValue("Hubo un error eliminando la categoria")
+                snackBarMsg.postValue("Hubo un error eliminando la categoria")
             }
             refreshCategories()
         }

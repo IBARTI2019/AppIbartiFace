@@ -56,4 +56,7 @@ abstract class StandByDao : BaseDao<StandBy> {
     @Query("DELETE FROM ${StandBy.TABLE_NAME} WHERE client=:client AND date=:date AND url=:url")
     abstract suspend fun deleteStandBy(client: String, date: String, url: String)
 
+    @Query("DELETE FROM ${StandBy.TABLE_NAME}")
+    abstract suspend fun clearTable()
+
 }

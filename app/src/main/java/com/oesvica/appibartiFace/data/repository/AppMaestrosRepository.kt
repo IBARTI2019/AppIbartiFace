@@ -42,15 +42,17 @@ class AppMaestrosRepository
     private val standByDao: StandByDao,
     private val personDao: PersonDao,
     private val asistenciaDao: AsistenciaDao,
+    private val appDatabase: AppDatabase,
     private val prefs: PreferencesHelper
 ) : MaestrosRepository() {
 
     override fun getAuthInfo(): AuthInfo {
-        return AuthInfo(logIn = prefs["logIn"], token = prefs["token"])
+        return AuthInfo(logIn = prefs[LOGIN], token = prefs[TOKEN])
     }
 
     override fun getUserData(): UserData? {
-        val token: String = getAuthInfo().token ?: return null
+        val token = getAuthInfo().token
+        if(token.isNullOrEmpty()) return null
         return Gson().fromJson<UserData>(token.decoded().payload, UserData::class.java)
     }
 
@@ -115,7 +117,7 @@ class AppMaestrosRepository
                     prefs[LOGIN] = logIn
                     prefs[TOKEN] = ""
                     prefs[TOKEN_UPLOADED] = false
-                }
+                }.also { appDatabase.clearAllTables() }
         }
     }
 
@@ -359,6 +361,7 @@ class AppMaestrosRepository
         return try {
             Result(sth())
         } catch (e: Exception) {
+            e.printStackTrace()
             Result(error = e)
         }
     }

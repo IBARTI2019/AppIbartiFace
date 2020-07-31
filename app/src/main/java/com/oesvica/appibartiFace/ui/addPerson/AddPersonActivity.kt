@@ -89,7 +89,7 @@ class AddPersonActivity : DaggerActivity() {
                 url = photo
             )
         )
-        predictionsRefresh.isRefreshing = true
+        //predictionsRefresh.isRefreshing = true
     }
 
     private fun setUpPredictionsRecyclerView() {
@@ -97,7 +97,7 @@ class AddPersonActivity : DaggerActivity() {
             layoutManager = GridLayoutManager(context, StandByFragment.COLUMNS_COUNT)
             adapter = predictionsAdapter
         }
-        predictionsRefresh.isEnabled = false
+        //predictionsRefresh.isEnabled = false
     }
 
     private fun observeCategories() {
@@ -145,17 +145,13 @@ class AddPersonActivity : DaggerActivity() {
                 debug("predictions found=$predictions")
                 predictionsAdapter.predictions = predictions
             }
-            predictionsRefresh.isRefreshing = false
+            //predictionsRefresh.isRefreshing = false
         })
     }
 
     private fun savePerson() {
-        debug("savePerson categories=$categories selected=${categorySpinner.selectedItemPosition}")
-        debug("savePerson statuses=$statuses selected=${statusSpinner.selectedItemPosition}")
         if (categories == null) return
         if (statuses == null) return
-
-
 
         if (cedulaEditText.text.isNullOrEmpty()) {
             Toast.makeText(this, "Debe ingresar datos en el campo cedula", Toast.LENGTH_SHORT)
@@ -163,21 +159,11 @@ class AddPersonActivity : DaggerActivity() {
             return
         }
         val category = if (categorySpinner.selectedItemPosition == 0) {
-            /*Toast.makeText(
-                this,
-                "Debe seleccionar un valor valido en el campo categoria",
-                Toast.LENGTH_SHORT
-            ).show()*/
             ""
         } else {
             categories!![categorySpinner.selectedItemPosition - 1].id
         }
         val status = if (statusSpinner.selectedItemPosition == 0) {
-           /* Toast.makeText(
-                this,
-                "Debe seleccionar un valor valido en el campo status",
-                Toast.LENGTH_SHORT
-            ).show()*/
             ""
         } else {
             statuses!![statusSpinner.selectedItemPosition - 1].id

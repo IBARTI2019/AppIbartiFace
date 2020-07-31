@@ -1,19 +1,20 @@
 package com.oesvica.appibartiFace.ui.standby
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.DatePicker
 import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.CustomDate
@@ -24,6 +25,7 @@ import com.oesvica.appibartiFace.ui.addPerson.AddPersonActivity
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.dialogs.StandByDialog
+import com.oesvica.appibartiFace.utils.hideSoftInput
 import com.oesvica.appibartiFace.utils.screenWidth
 import distinc
 import kotlinx.android.synthetic.main.fragment_stand_by_list.*
@@ -36,7 +38,6 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
 
     companion object {
         const val COLUMNS_COUNT = 3
-        const val STAND_BY_REQUEST_CODE = 101
         const val KEY_SELECTED_DATE = "selectedDate"
         const val KEY_LAST_QUERY_TRIGGERED = "lastQueryTriggered"
         const val KEY_RECYCLER_STATE = "StandBysRecyclerViewState"
@@ -44,7 +45,6 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
 
     private val standByViewModel by lazy { getViewModel<StandByViewModel>() }
 
-    private var standByDialog: StandByDialog? = null
     private var datePickerDialog: DatePickerDialog? = null
     private var selectedDate: CustomDate? = null
         @SuppressLint("SetTextI18n")
@@ -61,34 +61,8 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     private fun showOptionsDialog(standBy: StandBy) {
-        standByDialog = StandByDialog.newInstance(standBy)
-        standByDialog?.setTargetFragment(this, STAND_BY_REQUEST_CODE)
-        standByDialog?.show(requireFragmentManager(), "")
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        debug(
-            "onActivityResult $requestCode $resultCode ${data?.getParcelableExtra<StandBy>(
-                StandByDialog.ARG_STAND_BY
-            )}"
-        )
-        if (resultCode == Activity.RESULT_OK && requestCode == STAND_BY_REQUEST_CODE) {
-            val standBy = data?.getParcelableExtra<StandBy>(StandByDialog.ARG_STAND_BY) ?: return
-            val isDeleteSelected = data.getBooleanExtra(StandByDialog.ARG_IS_DELETE, false)
-            if (isDeleteSelected) {
-                standByViewModel.deleteStandBy(standBy)
-            } else {
-                startActivity(
-                    AddPersonActivity.starterIntent(
-                        requireContext(),
-                        standBy.client,
-                        standBy.device,
-                        standBy.date,
-                        standBy.url
-                    )
-                )
-            }
-        }
+        val action = StandByFragmentDirections.actionNavStandbyToDialogStandby(standBy)
+        findNavController().navigate(action)
     }
 
     override fun onCreateView(
@@ -98,33 +72,82 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
         return inflater.inflate(R.layout.fragment_stand_by_list, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView(savedInstanceState)
-        selectedDate =
-            savedInstanceState?.getParcelable<CustomDate?>(KEY_SELECTED_DATE) ?: currentDay()
+        selectedDate = savedInstanceState?.getParcelable<CustomDate?>(KEY_SELECTED_DATE) ?: currentDay()
         dateTextView.setOnClickListener { showDatePickerDialog() }
-        searchStandBysIcon.setOnClickListener {
-            val query = getQueryForStandBys(displayErrorMessages = true)
-            if (query != null) {
-                clientEditText.clearFocus()
-                standByViewModel.searchStandBys(query, force = true)
-                lastQueryTriggered = query
-            }
-        }
+        searchStandBysIcon.setOnClickListener { queryStandBys() }
         observeStandBys()
-        val adapter: ArrayAdapter<String> = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_dropdown_item_1line,
-            standByViewModel.getClients()
-        )
-        clientEditText.setAdapter(adapter)
+        setUpClientAutocomplete()
         val tempLastQueryTriggered =
             savedInstanceState?.getParcelable<StandByQuery?>(KEY_LAST_QUERY_TRIGGERED)
         if (tempLastQueryTriggered != null) {
             lastQueryTriggered = tempLastQueryTriggered
             standByViewModel.searchStandBys(tempLastQueryTriggered)
         }
-        super.onActivityCreated(savedInstanceState)
+
+
+        val navController = findNavController()
+        // After a configuration change or process death, the currentBackStackEntry
+        // points to the dialog destination, so you must use getBackStackEntry()
+        // with the specific ID of your destination to ensure we always
+        // get the right NavBackStackEntry
+        val navBackStackEntry = navController.getBackStackEntry(R.id.nav_standby)
+
+        // Create our observer and add it to the NavBackStackEntry's lifecycle
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                if(navBackStackEntry.savedStateHandle.contains(StandByDialog.ARG_STAND_BY) && navBackStackEntry.savedStateHandle.contains(StandByDialog.ARG_IS_DELETE)){
+                    val standBy = navBackStackEntry.savedStateHandle.get<StandBy>(StandByDialog.ARG_STAND_BY) ?: return@LifecycleEventObserver
+                    val isDelete = navBackStackEntry.savedStateHandle.get<Boolean>(StandByDialog.ARG_IS_DELETE) ?: return@LifecycleEventObserver
+                    navBackStackEntry.savedStateHandle.remove<StandBy>(StandByDialog.ARG_STAND_BY)
+                    navBackStackEntry.savedStateHandle.remove<Boolean>(StandByDialog.ARG_IS_DELETE)
+                    debug("standBy $standBy $isDelete")
+                    if (isDelete) {
+                        standByViewModel.deleteStandBy(standBy)
+                    } else {
+                        startActivity(
+                            AddPersonActivity.starterIntent(
+                                requireContext(),
+                                standBy.client,
+                                standBy.device,
+                                standBy.date,
+                                standBy.url
+                            )
+                        )
+                    }
+                }
+            }
+        }
+        navBackStackEntry.lifecycle.addObserver(observer)
+
+        // As addObserver() does not automatically remove the observer, we
+        // call removeObserver() manually when the view lifecycle is destroyed
+        viewLifecycleOwner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                navBackStackEntry.lifecycle.removeObserver(observer)
+            }
+        })
+    }
+
+    private fun setUpClientAutocomplete() {
+        val adapter: ArrayAdapter<String> = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_dropdown_item_1line,
+            standByViewModel.getClients()
+        )
+        clientEditText.setAdapter(adapter)
+    }
+
+    private fun queryStandBys() {
+        val query = getQueryForStandBys(displayErrorMessages = true)
+        if (query != null) {
+            clientEditText.clearFocus()
+            context?.hideSoftInput(searchContainer)
+            standByViewModel.searchStandBys(query, force = true)
+            lastQueryTriggered = query
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

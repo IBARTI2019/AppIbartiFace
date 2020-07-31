@@ -3,6 +3,7 @@ package com.oesvica.appibartiFace.di.module
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi
+import com.oesvica.appibartiFace.utils.ibartiConverterFactory.IbartiConverterFactory
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -19,9 +20,9 @@ class RetrofitModule {
     @Singleton
     fun provideHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
-            .connectTimeout(2, TimeUnit.MINUTES)
-            .writeTimeout(2, TimeUnit.MINUTES)
-            .readTimeout(2, TimeUnit.MINUTES)
+            .connectTimeout(1, TimeUnit.MINUTES)
+            .writeTimeout(1, TimeUnit.MINUTES)
+            .readTimeout(1, TimeUnit.MINUTES)
             .retryOnConnectionFailure(true)
             .build()
     }
@@ -37,6 +38,7 @@ class RetrofitModule {
     fun provideRetrofit(okHttpClient: OkHttpClient, gson: Gson): Retrofit = Retrofit.Builder()
         .baseUrl(AppIbartiFaceApi.END_POINT)
         .client(okHttpClient)
+        .addConverterFactory(IbartiConverterFactory.create())
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
