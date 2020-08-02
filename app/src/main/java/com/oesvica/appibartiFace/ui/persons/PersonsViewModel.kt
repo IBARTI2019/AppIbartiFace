@@ -11,9 +11,8 @@ import javax.inject.Inject
 
 class PersonsViewModel
 @Inject constructor(
-    private val maestrosRepository: MaestrosRepository,
-    schedulerProvider: SchedulerProvider
-) : BaseViewModel(schedulerProvider) {
+    private val maestrosRepository: MaestrosRepository
+) : BaseViewModel() {
 
     val persons by lazy { maestrosRepository.findPersons() }
     val personsNetworkRequest = MutableLiveData<NetworkRequestStatus>()

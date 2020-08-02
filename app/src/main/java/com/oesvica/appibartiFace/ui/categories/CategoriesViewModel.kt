@@ -7,16 +7,14 @@ import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.SingleLiveEvent
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug
-import com.oesvica.appibartiFace.utils.schedulers.SchedulerProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class CategoriesViewModel
 @Inject constructor(
-    private val maestrosRepository: MaestrosRepository,
-    schedulerProvider: SchedulerProvider
-) : BaseViewModel(schedulerProvider) {
+    private val maestrosRepository: MaestrosRepository
+) : BaseViewModel() {
 
     val categories by lazy { maestrosRepository.findCategories() }
     val statusCategories = MutableLiveData<NetworkRequestStatus>()
@@ -25,6 +23,9 @@ class CategoriesViewModel
     fun refreshCategories() {
         debug("refreshCategories")
         statusCategories.value = NetworkRequestStatus(isOngoing = true)
+//        viewModelScope.launch {
+//
+//        }
         launch {
             val resultQuery = withContext(IO) { maestrosRepository.refreshCategories() }
             debug("resultQuery=$resultQuery")
@@ -40,9 +41,9 @@ class CategoriesViewModel
             val result = withContext(IO) { maestrosRepository.insertCategory(description) }
             debug("addCategory result $result")
             if (result.success != null) {
-                snackBarMsg.postValue("Categoria agregada exitosamente")
+                snackBarMsg.value = "Categoria agregada exitosamente"
             } else {
-                snackBarMsg.postValue("Hubo un error agregando la categoria")
+                snackBarMsg.value = "Hubo un error agregando la categoria"
             }
             refreshCategories()
         }

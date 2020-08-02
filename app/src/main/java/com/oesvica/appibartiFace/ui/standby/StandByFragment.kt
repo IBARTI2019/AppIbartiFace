@@ -75,12 +75,14 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView(savedInstanceState)
         selectedDate = savedInstanceState?.getParcelable<CustomDate?>(KEY_SELECTED_DATE) ?: currentDay()
+        debug("onViewCreated ${savedInstanceState?.getParcelable<CustomDate?>(KEY_SELECTED_DATE)}")
         dateTextView.setOnClickListener { showDatePickerDialog() }
         searchStandBysIcon.setOnClickListener { queryStandBys() }
         observeStandBys()
         setUpClientAutocomplete()
         val tempLastQueryTriggered =
             savedInstanceState?.getParcelable<StandByQuery?>(KEY_LAST_QUERY_TRIGGERED)
+        debug("onViewCreated tempLastQueryTriggered $tempLastQueryTriggered")
         if (tempLastQueryTriggered != null) {
             lastQueryTriggered = tempLastQueryTriggered
             standByViewModel.searchStandBys(tempLastQueryTriggered)
@@ -151,6 +153,7 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        debug("onSaveInstanceState")
         selectedDate?.let { outState.putParcelable(KEY_SELECTED_DATE, it) }
         standBysRecyclerView?.layoutManager?.onSaveInstanceState()
             ?.let { outState.putParcelable(KEY_RECYCLER_STATE, it) }

@@ -19,9 +19,8 @@ data class AsistenciaFilter(
 
 class AsistenciaViewModel
 @Inject constructor(
-    private val maestrosRepository: MaestrosRepository,
-    schedulerProvider: SchedulerProvider
-) : BaseViewModel(schedulerProvider) {
+    private val maestrosRepository: MaestrosRepository
+) : BaseViewModel() {
 
     private val asistenciasQueryRange: MutableLiveData<AsistenciaFilter> =
         MutableLiveData()

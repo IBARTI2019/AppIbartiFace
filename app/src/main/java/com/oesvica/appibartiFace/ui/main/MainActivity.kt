@@ -28,7 +28,8 @@ import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : DaggerActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
+    private val navController by lazy { findNavController(R.id.nav_host_fragment) }
+    private var appBarConfiguration: AppBarConfiguration? = null
     private val headerView by lazy { navView.getHeaderView(0) }
     private val logInButton by lazy { headerView.findViewById<Button>(R.id.logInButton) }
     private val progressBar by lazy { headerView.findViewById<ProgressBar>(R.id.progressBar) }
@@ -44,7 +45,6 @@ class MainActivity : DaggerActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        //setUpNavView()
         if (isOreoOrLater()) createNotificationChannel()
         observeAuth()
         observeSnackbarMessages()
@@ -65,6 +65,7 @@ class MainActivity : DaggerActivity() {
                 logInButton.visibility = View.VISIBLE
                 username.visibility = View.VISIBLE
                 logInButton.setOnClickListener {
+                    navController.navigateUp()
                     mainViewModel.logOut()
                 }
                 nav_host_fragment.view?.visibility = View.VISIBLE
@@ -108,22 +109,20 @@ class MainActivity : DaggerActivity() {
     }
 
     private fun setUpNavView() {
-        val navController = findNavController(R.id.nav_host_fragment)
-
-        val graph = navController.navInflater.inflate(R.navigation.mobile_navigation)
         val menusToDisplayForUser = mainViewModel.getMenusToDisplayForUser() ?: return
-        if (!menusToDisplayForUser.contains(R.id.nav_standby) && graph.startDestination == R.id.nav_standby) {
+        if (!menusToDisplayForUser.contains(R.id.nav_standby) && navController.graph.startDestination == R.id.nav_standby) {
             debug("getting rid of standby")
+            val graph = navController.navInflater.inflate(R.navigation.mobile_navigation)
             graph.startDestination = menusToDisplayForUser.first()
+            navController.graph = graph
         }
-        navController.graph = graph
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             menusToDisplayForUser.toSet(),
             drawerLayout
         )
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        appBarConfiguration?.let { setupActionBarWithNavController(navController, it) }
         navView.setupWithNavController(navController)
 
         ActionBarDrawerToggle(
@@ -137,8 +136,7 @@ class MainActivity : DaggerActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+        return appBarConfiguration?.let { navController.navigateUp(it) } == true || super.onSupportNavigateUp()
     }
 
     @TargetApi(Build.VERSION_CODES.O)

@@ -16,9 +16,8 @@ import javax.inject.Inject
 
 class AddPersonViewModel
 @Inject constructor(
-    private val maestrosRepository: MaestrosRepository,
-    schedulerProvider: SchedulerProvider
-) : BaseViewModel(schedulerProvider) {
+    private val maestrosRepository: MaestrosRepository
+) : BaseViewModel() {
 
     val predictions: MutableLiveData<Result<List<Prediction>>> = MutableLiveData()
 

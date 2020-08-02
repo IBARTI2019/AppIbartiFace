@@ -12,9 +12,8 @@ import javax.inject.Inject
 
 class StatusesViewModel
 @Inject constructor(
-    private val maestrosRepository: MaestrosRepository,
-    schedulerProvider: SchedulerProvider
-) : BaseViewModel(schedulerProvider) {
+    private val maestrosRepository: MaestrosRepository
+) : BaseViewModel() {
 
     val statuses by lazy { maestrosRepository.findStatuses() }
     val networkRequestStatuses = MutableLiveData<NetworkRequestStatus>()

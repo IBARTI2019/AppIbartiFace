@@ -15,4 +15,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun standByDao(): StandByDao
     abstract fun personDao(): PersonDao
     abstract fun asistenciaDao(): AsistenciaDao
+
+    suspend fun clearTable(){
+        categoryDao().deleteAllCategories()
+    }
 }

@@ -89,7 +89,7 @@ class AppMaestrosRepository
             appIbartiFaceApi.sendFirebaseTokenId(
                 userId = getUserData()?.id ?: throw Exception("getUserData.id is null"),
                 firebaseTokenId = firebaseTokenId
-            ).also { prefs["tokenUploaded"] = true }
+            ).also { prefs[TOKEN_UPLOADED] = true }
         }
     }
 

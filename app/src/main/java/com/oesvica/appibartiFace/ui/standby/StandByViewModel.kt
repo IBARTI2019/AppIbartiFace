@@ -13,9 +13,8 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class StandByViewModel @Inject constructor(
-    private val maestrosRepository: MaestrosRepository,
-    schedulerProvider: SchedulerProvider
-) : BaseViewModel(schedulerProvider) {
+    private val maestrosRepository: MaestrosRepository
+) : BaseViewModel() {
 
     private val standBysQuery: MutableLiveData<StandByQuery> = MutableLiveData()
     var standBys: LiveData<List<StandBy>> = standBysQuery.switchMap { filter ->

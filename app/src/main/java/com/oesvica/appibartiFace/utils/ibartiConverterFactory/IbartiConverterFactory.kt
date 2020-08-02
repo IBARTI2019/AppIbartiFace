@@ -41,7 +41,7 @@ class BodyConverter : Converter<ResponseBody, LogInResponse> {
         val response = value.string()
         value.use {
             debug("converting $response")
-            if (response == "Ya se Encuentra Logeado" || response == "Usuario Invalido") {
+            if (response == "Ya se Encuentra Logeado" || response == "Usuario Invalido" || response == "Clave Invalida") { // TODO use RegEx
                 it.close()
                 throw LogInException(response)
             }

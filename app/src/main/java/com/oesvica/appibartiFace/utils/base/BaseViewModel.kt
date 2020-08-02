@@ -32,13 +32,12 @@ import kotlinx.coroutines.SupervisorJob
 import kotlin.coroutines.CoroutineContext
 
 abstract class BaseViewModel(
-    val schedulerProvider: SchedulerProvider? = null,
-    val coroutineContextProvider: CoroutineContextProvider? = null
+    private val coroutineContextProvider: CoroutineContextProvider? = null
 ) : ViewModel(), CoroutineScope {
 
     val compositeDisposable by lazy { CompositeDisposable() }
 
-    private val job = SupervisorJob()
+    private val job by lazy { SupervisorJob() }
 
     override val coroutineContext: CoroutineContext
         get() = Main
@@ -46,18 +45,6 @@ abstract class BaseViewModel(
     val IO by lazy { coroutineContextProvider?.IO ?: Dispatchers.IO + job }
     val Main by lazy { coroutineContextProvider?.Main ?: Dispatchers.Main + job }
     val Unconfined by lazy { coroutineContextProvider?.Unconfined ?: Dispatchers.Unconfined + job }
-
-    fun <T> Flowable<T>.applySchedulers(): Flowable<T> = this
-        .subscribeOn(schedulerProvider?.io() ?: Schedulers.io())
-        .observeOn(schedulerProvider?.ui() ?: AndroidSchedulers.mainThread())
-
-    fun <T> Single<T>.applySchedulers(): Single<T> = this
-        .subscribeOn(schedulerProvider?.io() ?: Schedulers.io())
-        .observeOn(schedulerProvider?.ui() ?: AndroidSchedulers.mainThread())
-
-    fun Completable.applySchedulers(): Completable = this
-        .subscribeOn(schedulerProvider?.io() ?: Schedulers.io())
-        .observeOn(schedulerProvider?.ui() ?: AndroidSchedulers.mainThread())
 
     /**
      * Adds a disposable to compositeDisposable

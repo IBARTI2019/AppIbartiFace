@@ -17,9 +17,8 @@ import javax.inject.Inject
 
 class EditPersonViewModel
 @Inject constructor(
-    private val maestrosRepository: MaestrosRepository,
-    schedulerProvider: SchedulerProvider
-) : BaseViewModel(schedulerProvider) {
+    private val maestrosRepository: MaestrosRepository
+) : BaseViewModel() {
 
     val categories: LiveData<List<Category>> = liveData {
         val list = maestrosRepository.findCategoriesBlocking()
