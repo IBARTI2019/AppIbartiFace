@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.oesvica.appibartiFace.R
@@ -48,7 +49,7 @@ class AddPersonActivity : DaggerActivity() {
 
     }
 
-    private val addPersonViewModel by lazy { getViewModel<AddPersonViewModel>() }
+    private val addPersonViewModel: AddPersonViewModel by viewModels { viewModelFactory }
     private var categories: List<Category>? = null
     private var statuses: List<Status>? = null
 

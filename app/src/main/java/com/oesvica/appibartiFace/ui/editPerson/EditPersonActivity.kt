@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.category.Category
@@ -43,7 +44,7 @@ class EditPersonActivity : DaggerActivity() {
 
     }
 
-    private val editPersonViewModel by lazy { getViewModel<EditPersonViewModel>() }
+    private val editPersonViewModel: EditPersonViewModel by viewModels { viewModelFactory }
     private var categories: List<Category>? = null
     private var statuses: List<Status>? = null
 
@@ -131,8 +132,8 @@ class EditPersonActivity : DaggerActivity() {
         }
         editPersonViewModel.editPerson(
             idPerson = id,
-            idCategory = categories!![categorySpinner.selectedItemPosition-1].id,
-            idStatus = statuses!![statusSpinner.selectedItemPosition-1].id
+            idCategory = categories!![categorySpinner.selectedItemPosition - 1].id,
+            idStatus = statuses!![statusSpinner.selectedItemPosition - 1].id
         )
     }
 

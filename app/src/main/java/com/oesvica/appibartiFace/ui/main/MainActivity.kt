@@ -10,10 +10,11 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.result.launch
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEach
-import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.ui.*
 import com.google.android.material.snackbar.Snackbar
@@ -34,7 +35,7 @@ class MainActivity : DaggerActivity() {
     private val logInButton by lazy { headerView.findViewById<Button>(R.id.logInButton) }
     private val progressBar by lazy { headerView.findViewById<ProgressBar>(R.id.progressBar) }
     private val username by lazy { headerView.findViewById<TextView>(R.id.username) }
-    private val mainViewModel by lazy { getViewModel<MainViewModel>() }
+    private val mainViewModel: MainViewModel by viewModels { viewModelFactory }
     private val openLoginActivity = registerForActivityResult(LogInActivityContract()) { result ->
         result?.let {
             mainViewModel.logIn(it.usuario, it.clave)
@@ -52,7 +53,7 @@ class MainActivity : DaggerActivity() {
     }
 
     private fun observeAuth() {
-        mainViewModel.authInfo.observe(this, Observer {
+        mainViewModel.authInfo.observe(this) {
             debug("authInfo = $it")
             if (it.isLoading) {
                 progressBar.visibility = View.VISIBLE
@@ -83,16 +84,16 @@ class MainActivity : DaggerActivity() {
             }
             setUpNavView()
             setUpNavMenuVisibility()
-        })
+        }
     }
 
     private fun observeSnackbarMessages() {
-        mainViewModel.snackBarMsg.observe(this, Observer {
+        mainViewModel.snackBarMsg.observe(this) {
             it?.let {
                 debug("snack $it")
                 Snackbar.make(drawerLayout, it, Snackbar.LENGTH_SHORT).show()
             }
-        })
+        }
     }
 
     private fun setUpNavMenuVisibility() {

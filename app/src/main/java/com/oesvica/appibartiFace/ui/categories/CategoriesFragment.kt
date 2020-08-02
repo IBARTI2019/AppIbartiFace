@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.oesvica.appibartiFace.R
@@ -26,10 +27,9 @@ class CategoriesFragment : DaggerFragment() {
         const val REQUEST_ADD_CATEGORY = 1001
         const val REQUEST_UPDATE_CATEGORY = 1002
         const val DESCRIPTION = "DESCRIPTION"
-        const val ID = "ID"
     }
 
-    private val categoriesViewModel by lazy { getViewModel<CategoriesViewModel>() }
+    private val categoriesViewModel: CategoriesViewModel by viewModels { viewModelFactory }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +46,8 @@ class CategoriesFragment : DaggerFragment() {
         })
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
         addCategoryButton.setOnClickListener {
             showCategoryDialog(REQUEST_ADD_CATEGORY, "Agregar categoria")
@@ -55,7 +56,6 @@ class CategoriesFragment : DaggerFragment() {
         observeSnackbarMessages()
         categoriesRefreshLayout.setOnRefreshListener { categoriesViewModel.refreshCategories() }
         categoriesViewModel.refreshCategories()
-        super.onActivityCreated(savedInstanceState)
     }
 
     private fun observeSnackbarMessages() {
@@ -82,7 +82,7 @@ class CategoriesFragment : DaggerFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         debug("onActivityResult $requestCode $resultCode ${data?.getStringExtra("DESCRIPTION")}")
         if (resultCode == Activity.RESULT_OK) {
-            when(requestCode){
+            when (requestCode) {
                 REQUEST_ADD_CATEGORY -> {
                     val desc = data?.getStringExtra(DESCRIPTION)
                     if (!desc.isNullOrEmpty()) {
@@ -113,12 +113,13 @@ class CategoriesFragment : DaggerFragment() {
     }
 
     private fun observeCategories() {
-        categoriesViewModel.categories.distinct().observe(viewLifecycleOwner, Observer { categories ->
-            debug("observe categories = $categories")
-            categories?.let {
-                categoriesAdapter.categories = it
-            }
-        })
+        categoriesViewModel.categories.distinct()
+            .observe(viewLifecycleOwner, Observer { categories ->
+                debug("observe categories = $categories")
+                categories?.let {
+                    categoriesAdapter.categories = it
+                }
+            })
         categoriesViewModel.statusCategories.observe(viewLifecycleOwner, Observer {
             categoriesRefreshLayout.isRefreshing = it.isOngoing
         })

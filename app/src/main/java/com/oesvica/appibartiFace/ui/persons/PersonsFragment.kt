@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.oesvica.appibartiFace.R
@@ -28,7 +29,7 @@ class PersonsFragment : DaggerFragment() {
         const val KEY_RECYCLER_STATE = "PersonsRecyclerViewState"
     }
 
-    private val personsViewModel by lazy { getViewModel<PersonsViewModel>() }
+    private val personsViewModel: PersonsViewModel by viewModels { viewModelFactory }
 
     private val personsAdapter by lazy {
         PersonsAdapter(onEditPerson = {
@@ -51,12 +52,12 @@ class PersonsFragment : DaggerFragment() {
         return inflater.inflate(R.layout.fragment_person_list, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView(savedInstanceState)
         setUpFieldSpinner()
         observePersons()
         personsViewModel.refreshPersons()
-        super.onActivityCreated(savedInstanceState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

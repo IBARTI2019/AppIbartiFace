@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.oesvica.appibartiFace.R
@@ -35,7 +36,7 @@ class AsistenciaFragment : DaggerFragment() {
         const val KEY_RECYCLER_STATE = "AsistenciaRecyclerViewState"
     }
 
-    private val asistenciasViewModel by lazy { getViewModel<AsistenciaViewModel>() }
+    private val asistenciasViewModel: AsistenciaViewModel by viewModels { viewModelFactory }
     private var datePickerDialog: DatePickerDialog? = null
     private var iniDate: CustomDate? = null
         set(value) {

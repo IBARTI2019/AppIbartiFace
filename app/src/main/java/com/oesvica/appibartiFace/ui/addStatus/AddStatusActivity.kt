@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.category.Category
@@ -33,7 +34,7 @@ class AddStatusActivity : DaggerActivity() {
     private val statusToEdit: Status? by lazy { intent.getParcelableExtra<Status>(EXTRA_STATUS) }
     private val isInEditMode: Boolean
         get() = statusToEdit != null
-    private val addStatusViewModel by lazy { getViewModel<AddStatusViewModel>() }
+    private val addStatusViewModel: AddStatusViewModel by viewModels { viewModelFactory }
     private var categories: List<Category>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

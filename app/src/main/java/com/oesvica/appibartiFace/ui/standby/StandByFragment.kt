@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.Observer
@@ -42,7 +43,7 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
         const val KEY_RECYCLER_STATE = "StandBysRecyclerViewState"
     }
 
-    private val standByViewModel by lazy { getViewModel<StandByViewModel>() }
+    private val standByViewModel: StandByViewModel by viewModels { viewModelFactory }
 
     private var datePickerDialog: DatePickerDialog? = null
     private var selectedDate: CustomDate? = null
@@ -74,7 +75,8 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView(savedInstanceState)
-        selectedDate = savedInstanceState?.getParcelable<CustomDate?>(KEY_SELECTED_DATE) ?: currentDay()
+        selectedDate =
+            savedInstanceState?.getParcelable<CustomDate?>(KEY_SELECTED_DATE) ?: currentDay()
         debug("onViewCreated ${savedInstanceState?.getParcelable<CustomDate?>(KEY_SELECTED_DATE)}")
         dateTextView.setOnClickListener { showDatePickerDialog() }
         searchStandBysIcon.setOnClickListener { queryStandBys() }
@@ -99,9 +101,16 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
         // Create our observer and add it to the NavBackStackEntry's lifecycle
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                if(navBackStackEntry.savedStateHandle.contains(StandByDialog.ARG_STAND_BY) && navBackStackEntry.savedStateHandle.contains(StandByDialog.ARG_IS_DELETE)){
-                    val standBy = navBackStackEntry.savedStateHandle.get<StandBy>(StandByDialog.ARG_STAND_BY) ?: return@LifecycleEventObserver
-                    val isDelete = navBackStackEntry.savedStateHandle.get<Boolean>(StandByDialog.ARG_IS_DELETE) ?: return@LifecycleEventObserver
+                if (navBackStackEntry.savedStateHandle.contains(StandByDialog.ARG_STAND_BY) && navBackStackEntry.savedStateHandle.contains(
+                        StandByDialog.ARG_IS_DELETE
+                    )
+                ) {
+                    val standBy =
+                        navBackStackEntry.savedStateHandle.get<StandBy>(StandByDialog.ARG_STAND_BY)
+                            ?: return@LifecycleEventObserver
+                    val isDelete =
+                        navBackStackEntry.savedStateHandle.get<Boolean>(StandByDialog.ARG_IS_DELETE)
+                            ?: return@LifecycleEventObserver
                     navBackStackEntry.savedStateHandle.remove<StandBy>(StandByDialog.ARG_STAND_BY)
                     navBackStackEntry.savedStateHandle.remove<Boolean>(StandByDialog.ARG_IS_DELETE)
                     debug("standBy $standBy $isDelete")
