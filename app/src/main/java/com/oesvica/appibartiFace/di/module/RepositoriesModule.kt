@@ -16,8 +16,8 @@
 
 package com.oesvica.appibartiFace.di.module
 
-import com.oesvica.appibartiFace.data.repository.AppMaestrosRepository
-import com.oesvica.appibartiFace.data.repository.MaestrosRepository
+import com.oesvica.appibartiFace.data.remote.UserRepository
+import com.oesvica.appibartiFace.data.repository.*
 import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton
@@ -28,6 +28,14 @@ abstract class RepositoriesModule {
     @Binds
     @Singleton
     abstract fun provideCategoriesRepository(appAccountRepository: AppMaestrosRepository): MaestrosRepository
+
+    @Binds
+    @Singleton
+    abstract fun provideReportsRepository(appReportsRepository: AppReportsRepository): ReportsRepository
+
+    @Binds
+    @Singleton
+    abstract fun provideUserRepository(appUserRepository: AppUserRepository): UserRepository
 
 
 }

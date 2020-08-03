@@ -11,7 +11,9 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import com.oesvica.appibartiFace.data.model.JWTDecoded
+import com.oesvica.appibartiFace.data.model.Result
 import java.io.UnsupportedEncodingException
+import java.lang.Exception
 
 fun Context.screenWidth(): Int {
     val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -83,4 +85,14 @@ fun Context.showSoftInput(editText: EditText? = null) {
 fun Context.toggleSoftInput() {
     val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+}
+
+
+suspend fun <T> mapToResult(sth: suspend () -> T): Result<T> {
+    return try {
+        Result(sth())
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Result(error = e)
+    }
 }

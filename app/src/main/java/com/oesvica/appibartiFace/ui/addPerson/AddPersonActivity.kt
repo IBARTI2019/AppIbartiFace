@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.category.Category
 import com.oesvica.appibartiFace.data.model.standby.StandBy
@@ -19,8 +20,6 @@ import com.oesvica.appibartiFace.ui.standby.StandByFragment
 import com.oesvica.appibartiFace.utils.base.DaggerActivity
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.dialogs.ProgressDialog
-import com.oesvica.appibartiFace.utils.screenWidth
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_add_person.*
 import observeJustOnce
 
@@ -59,7 +58,7 @@ class AddPersonActivity : DaggerActivity() {
     private val photo by lazy { intent.getStringExtra(EXTRA_PHOTO) }
 
     private val predictionsAdapter by lazy {
-        PredictionsAdapter(screenWidth = screenWidth(), onImageSelected = { cedula ->
+        PredictionsAdapter(context = this, onImageSelected = { cedula ->
             cedulaEditText.setText(cedula)
             debug("cedula $cedula")
         })
@@ -70,9 +69,10 @@ class AddPersonActivity : DaggerActivity() {
         setContentView(R.layout.activity_add_person)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setUpPredictionsRecyclerView()
-        Picasso.get()
+        Glide.with(this)
             .load(imgUrlForStandBy(client, date, photo))
             .placeholder(R.drawable.photo_placeholder)
+            .centerCrop()
             .into(urlImageView)
         observeStatuses()
         observeCategories()

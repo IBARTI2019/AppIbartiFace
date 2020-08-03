@@ -18,17 +18,8 @@ import com.oesvica.appibartiFace.data.model.status.StatusRequest
 
 abstract class MaestrosRepository {
 
-    abstract fun getAuthInfo(): AuthInfo
-    abstract fun getUserData(): UserData?
-    abstract suspend fun getFirebaseTokenId(): String?
-
     abstract fun addClient(client: String)
     abstract fun getClients(): List<String>
-
-    abstract suspend fun sendFirebaseTokenId(firebaseTokenId: FirebaseTokenId): Result<FirebaseTokenId>
-
-    abstract suspend fun logIn(user: String, password: String): Result<LogInResponse>
-    abstract suspend fun logOut(): Result<LogOutResponse>
 
     abstract suspend fun refreshCategories(): Result<Unit>
     abstract fun findCategories(): LiveData<List<Category>>
@@ -58,8 +49,5 @@ abstract class MaestrosRepository {
     abstract suspend fun deleteStandBy(client: String, date: String, url: String): Result<Unit>
     
     abstract suspend fun findPredictionsByStandBy(standBy: StandBy): Result<List<Prediction>>
-
-    abstract fun findAsistencias(iniDate: CustomDate, endDate: CustomDate): LiveData<List<Asistencia>>
-    abstract suspend fun refreshAsistencias(iniDate: CustomDate, endDate: CustomDate): Result<Unit>
 
 }

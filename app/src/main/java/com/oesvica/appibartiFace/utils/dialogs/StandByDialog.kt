@@ -10,6 +10,7 @@ import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.standby.StandBy
@@ -42,9 +43,14 @@ class StandByDialog : DialogFragment() {
         }
 
         val standByImageView = view.findViewById<ImageView>(R.id.standByImageView)
-        Picasso.get()
+//        Picasso.get()
+//            .load(standBy.properUrl())
+//            .placeholder(R.drawable.photo_placeholder)
+//            .into(standByImageView)
+        Glide.with(this)
             .load(standBy.properUrl())
             .placeholder(R.drawable.photo_placeholder)
+            .centerCrop()
             .into(standByImageView)
         return MaterialAlertDialogBuilder(requireContext())
             .setView(view)

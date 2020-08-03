@@ -55,7 +55,7 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
     private var lastQueryTriggered: StandByQuery? = null
 
     private val standByAdapter by lazy {
-        StandByAdapter(requireActivity().screenWidth(), onStandBySelected = { standBy ->
+        StandByAdapter(requireContext(), onStandBySelected = { standBy ->
             showOptionsDialog(standBy)
         })
     }

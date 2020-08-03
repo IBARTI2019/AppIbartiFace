@@ -1,13 +1,8 @@
 package com.oesvica.appibartiFace.data.repository
 
 import androidx.lifecycle.LiveData
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.iid.FirebaseInstanceId
-import com.google.gson.Gson
 import com.oesvica.appibartiFace.data.database.*
 import com.oesvica.appibartiFace.data.model.*
-import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
-import com.oesvica.appibartiFace.data.model.auth.*
 import com.oesvica.appibartiFace.data.model.category.Category
 import com.oesvica.appibartiFace.data.model.category.CategoryRequest
 import com.oesvica.appibartiFace.data.model.person.AddPersonRequest
@@ -19,19 +14,13 @@ import com.oesvica.appibartiFace.data.model.standby.StandBy
 import com.oesvica.appibartiFace.data.model.status.Status
 import com.oesvica.appibartiFace.data.model.status.StatusRequest
 import com.oesvica.appibartiFace.data.preferences.AppPreferencesHelper.Companion.CLIENTS
-import com.oesvica.appibartiFace.data.preferences.AppPreferencesHelper.Companion.LOGIN
 import com.oesvica.appibartiFace.data.preferences.AppPreferencesHelper.Companion.TOKEN
-import com.oesvica.appibartiFace.data.preferences.AppPreferencesHelper.Companion.TOKEN_UPLOADED
-import com.oesvica.appibartiFace.data.preferences.AppPreferencesHelper.Companion.USER
 import com.oesvica.appibartiFace.data.preferences.PreferencesHelper
 import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi
 import com.oesvica.appibartiFace.utils.debug
-import com.oesvica.appibartiFace.utils.decoded
-import java.lang.Exception
+import com.oesvica.appibartiFace.utils.mapToResult
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 @Singleton
 class AppMaestrosRepository
@@ -41,20 +30,8 @@ class AppMaestrosRepository
     private val statusDao: StatusDao,
     private val standByDao: StandByDao,
     private val personDao: PersonDao,
-    private val asistenciaDao: AsistenciaDao,
-    private val appDatabase: AppDatabase,
     private val prefs: PreferencesHelper
 ) : MaestrosRepository() {
-
-    override fun getAuthInfo(): AuthInfo {
-        return AuthInfo(logIn = prefs[LOGIN], token = prefs[TOKEN])
-    }
-
-    override fun getUserData(): UserData? {
-        val token = getAuthInfo().token
-        if(token.isNullOrEmpty()) return null
-        return Gson().fromJson<UserData>(token.decoded().payload, UserData::class.java)
-    }
 
     override fun addClient(client: String) {
         val clients = prefs.get<Set<String>>(CLIENTS)
@@ -68,59 +45,6 @@ class AppMaestrosRepository
         return clients.toList()
     }
 
-    override suspend fun getFirebaseTokenId(): String? {
-        return suspendCoroutine { cont ->
-            FirebaseInstanceId.getInstance().instanceId
-                .addOnCompleteListener(OnCompleteListener { task ->
-                    if (!task.isSuccessful) {
-                        debug("FirebaseInstanceId getInstance failed ${task.exception}")
-                        cont.resume(null)
-                        return@OnCompleteListener
-                    }
-                    val token = task.result?.token
-                    debug("FirebaseInstanceId getInstance token=$token")
-                    cont.resume(token)
-                })
-        }
-    }
-
-    override suspend fun sendFirebaseTokenId(firebaseTokenId: FirebaseTokenId): Result<FirebaseTokenId> {
-        return mapToResult {
-            appIbartiFaceApi.sendFirebaseTokenId(
-                userId = getUserData()?.id ?: throw Exception("getUserData.id is null"),
-                firebaseTokenId = firebaseTokenId
-            ).also { prefs[TOKEN_UPLOADED] = true }
-        }
-    }
-
-    override suspend fun logIn(user: String, password: String): Result<LogInResponse> {
-        return mapToResult {
-            //logOut() didnt work :u
-            appIbartiFaceApi.logIn(
-                LogInRequest(
-                    usuario = user,
-                    clave = password
-                )
-            ).apply {
-                prefs[LOGIN] = logIn
-                prefs[USER] = user
-                prefs[TOKEN] = token
-                prefs[TOKEN_UPLOADED] = false
-            }
-        }
-    }
-
-    override suspend fun logOut(): Result<LogOutResponse> {
-        return mapToResult {
-            appIbartiFaceApi.logOut(LogOutRequest(usuario = prefs[USER]))
-                .apply {
-                    prefs[LOGIN] = logIn
-                    prefs[TOKEN] = ""
-                    prefs[TOKEN_UPLOADED] = false
-                }.also { appDatabase.clearAllTables() }
-        }
-    }
-
     override fun findCategories(): LiveData<List<Category>> {
         return categoryDao.findCategories()
     }
@@ -132,7 +56,7 @@ class AppMaestrosRepository
     override suspend fun refreshCategories(): Result<Unit> {
         return mapToResult {
             val categories = appIbartiFaceApi.findCategories(
-                authorization = getAuthInfo().token
+                authorization = prefs[TOKEN]
             )
             debug("categories=$categories")
             categoryDao.deleteAllCategories()
@@ -143,7 +67,7 @@ class AppMaestrosRepository
     override suspend fun insertCategory(description: String): Result<Category> {
         return mapToResult {
             appIbartiFaceApi.addCategory(
-                authorization = getAuthInfo().token,
+                authorization = prefs[TOKEN],
                 categoryRequest = CategoryRequest(
                     description
                 )
@@ -154,7 +78,7 @@ class AppMaestrosRepository
     override suspend fun updateCategory(category: Category): Result<Category> {
         return mapToResult {
             appIbartiFaceApi.updateCategory(
-                authorization = getAuthInfo().token,
+                authorization = prefs[TOKEN],
                 id = category.id,
                 categoryRequest = CategoryRequest(
                     category.description
@@ -166,7 +90,7 @@ class AppMaestrosRepository
     override suspend fun deleteCategory(idCategory: String): Result<Unit> {
         return mapToResult {
             appIbartiFaceApi.deleteCategory(
-                authorization = getAuthInfo().token, id = idCategory
+                authorization = prefs[TOKEN], id = idCategory
             )
         }
     }
@@ -174,7 +98,7 @@ class AppMaestrosRepository
     override suspend fun refreshStatuses(): Result<Unit> {
         return mapToResult {
             val statuses = appIbartiFaceApi.findStatuses(
-                authorization = getAuthInfo().token
+                authorization = prefs[TOKEN]
             )
             debug("statuses=$statuses")
             statusDao.deleteAllStatuses()
@@ -193,7 +117,7 @@ class AppMaestrosRepository
     override suspend fun insertStatus(statusRequest: StatusRequest): Result<Status> {
         return mapToResult {
             appIbartiFaceApi.addStatus(
-                authorization = getAuthInfo().token, statusRequest = statusRequest
+                authorization = prefs[TOKEN], statusRequest = statusRequest
             )
         }
     }
@@ -201,7 +125,7 @@ class AppMaestrosRepository
     override suspend fun updateStatus(status: Status): Result<Status> {
         return mapToResult {
             appIbartiFaceApi.updateStatus(
-                authorization = getAuthInfo().token,
+                authorization = prefs[TOKEN],
                 id = status.id,
                 statusRequest = StatusRequest(
                     status.category,
@@ -214,7 +138,7 @@ class AppMaestrosRepository
     override suspend fun deleteStatus(idStatus: String): Result<Unit> {
         return mapToResult {
             appIbartiFaceApi.deleteStatus(
-                authorization = getAuthInfo().token, id = idStatus
+                authorization = prefs[TOKEN], id = idStatus
             )
         }
     }
@@ -222,7 +146,7 @@ class AppMaestrosRepository
     override suspend fun refreshPersons(): Result<Unit> {
         return mapToResult {
             val persons = appIbartiFaceApi.findPersons(
-                authorization = getAuthInfo().token
+                authorization = prefs[TOKEN]
             )
             personDao.replacePersons(*persons.toTypedArray())
         }
@@ -235,7 +159,7 @@ class AppMaestrosRepository
     override suspend fun insertPerson(addPersonRequest: AddPersonRequest): Result<Unit> {
         return mapToResult {
             appIbartiFaceApi.addPerson(
-                authorization = getAuthInfo().token, addPersonRequest = addPersonRequest
+                authorization = prefs[TOKEN], addPersonRequest = addPersonRequest
             )
             standByDao.deleteStandBy(
                 addPersonRequest.cliente,
@@ -251,7 +175,7 @@ class AppMaestrosRepository
     ): Result<Person> {
         return mapToResult {
             appIbartiFaceApi.updatePerson(
-                authorization = getAuthInfo().token,
+                authorization = prefs[TOKEN],
                 id = personId,
                 updatePersonRequest = updatePersonRequest
             )
@@ -290,7 +214,7 @@ class AppMaestrosRepository
         return mapToResult {
             if (force || prefs.isTimeExpired(keyForStandByFetchRequest(client, date))) {
                 val standBys = appIbartiFaceApi.findStandBysByClientAndDate(
-                    authorization = getAuthInfo().token, client = client, date = date
+                    authorization = prefs[TOKEN], client = client, date = date
                 )
                 prefs.saveTime(keyForStandByFetchRequest(client, date))
                 standByDao.replaceStandBysByClientAndDate(client, date, *standBys.toTypedArray())
@@ -303,7 +227,7 @@ class AppMaestrosRepository
     override suspend fun deleteStandBy(client: String, date: String, url: String): Result<Unit> {
         return mapToResult {
             appIbartiFaceApi.deleteStandBy(
-                authorization = getAuthInfo().token,
+                authorization = prefs[TOKEN],
                 client = client,
                 date = date,
                 deleteStandBy = DeleteStandBy(
@@ -321,48 +245,6 @@ class AppMaestrosRepository
                 date = standBy.date,
                 url = standBy.url
             )
-        }
-    }
-
-    override fun findAsistencias(
-        iniDate: CustomDate,
-        endDate: CustomDate
-    ): LiveData<List<Asistencia>> {
-        return asistenciaDao.findAsistencias(iniDate.toString(), endDate.toString())
-    }
-
-    override suspend fun refreshAsistencias(
-        iniDate: CustomDate,
-        endDate: CustomDate
-    ): Result<Unit> {
-        return mapToResult {
-            val asistencias =
-                appIbartiFaceApi.findAsistencias(
-                    authorization = getAuthInfo().token,
-                    iniDate = iniDate.toString(),
-                    endDate = endDate.toString()
-                )
-                    .map { asis ->
-                        // the api may return names o surnames as null
-                        asis.names = asis.names?.trim() ?: ""
-                        asis.surnames = asis.surnames?.trim() ?: ""
-                        asis
-                    }
-            debug("refreshAsistencias($iniDate: String, $endDate: String)=${asistencias.take(2)}")
-            asistenciaDao.replaceAsistencias(
-                iniDate.toString(),
-                endDate.toString(),
-                *asistencias.toTypedArray()
-            )
-        }
-    }
-
-    private suspend fun <T> mapToResult(sth: suspend () -> T): Result<T> {
-        return try {
-            Result(sth())
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Result(error = e)
         }
     }
 }

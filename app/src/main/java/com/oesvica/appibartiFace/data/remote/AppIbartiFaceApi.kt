@@ -43,6 +43,8 @@ interface AppIbartiFaceApi {
         const val DELETE_STAND_BY = "standby/fotos/{client}/{date}/"
 
         const val ASISTENCIAS = "reporte/asistencia-ibarti/{iniDate}/{endDate}/"
+        const val APTOS = "reporte/asistencia-apto/{iniDate}/{endDate}/"
+        const val NO_APTOS = "reporte/asistencia-noapto/{iniDate}/{endDate}/"
 
         const val SEND_FIREBASE_TOKEN_ID = "fireUser/{userId}"
 

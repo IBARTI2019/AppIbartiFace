@@ -5,18 +5,17 @@ import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.FirebaseTokenId
 import com.oesvica.appibartiFace.data.model.Result
 import com.oesvica.appibartiFace.data.model.auth.AuthInfo
-import com.oesvica.appibartiFace.data.repository.MaestrosRepository
+import com.oesvica.appibartiFace.data.remote.UserRepository
 import com.oesvica.appibartiFace.utils.SingleLiveEvent
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug
-import com.oesvica.appibartiFace.utils.schedulers.SchedulerProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class MainViewModel
 @Inject constructor(
-    private val maestrosRepository: MaestrosRepository
+    private val userRepository: UserRepository
 ) : BaseViewModel() {
 
     companion object {
@@ -29,10 +28,10 @@ class MainViewModel
         )
     }
 
-    fun getUsername() = maestrosRepository.getUserData()?.usuario
+    fun getUsername() = userRepository.getUserData()?.usuario
 
     fun getMenusToDisplayForUser(): List<Int>? {
-        return maestrosRepository.getUserData()?.permissions?.mapNotNull { permission ->
+        return userRepository.getUserData()?.permissions?.mapNotNull { permission ->
             val keyFound = ITEM_MENU_TO_PERMISSIONS.keys.find { key ->
                 permission.path.contains(key)
             }
@@ -45,16 +44,16 @@ class MainViewModel
 
     fun loadAuthInfo() {
         if (authInfo.value == null)
-            authInfo.value = Result(success = maestrosRepository.getAuthInfo())
+            authInfo.value = Result(success = userRepository.getAuthInfo())
     }
 
     fun logIn(user: String, password: String) {
         authInfo.value = Result()
         launch {
-            val result = withContext(IO) { maestrosRepository.logIn(user, password) }
+            val result = withContext(IO) { userRepository.logIn(user, password) }
             result.error?.printStackTrace()
             debug("error loggin in=${result.error?.message}")
-            val loggedUserAuthInfo = maestrosRepository.getAuthInfo()
+            val loggedUserAuthInfo = userRepository.getAuthInfo()
             authInfo.value = Result(success = loggedUserAuthInfo, error = result.error)
             if (result.error != null) snackBarMsg.value = result.error.message
             if (loggedUserAuthInfo.logIn && !loggedUserAuthInfo.token.isNullOrEmpty()) {
@@ -65,9 +64,9 @@ class MainViewModel
 
     private suspend fun uploadFirebaseTokenId() {
         val fbToken =
-            withContext(IO) { maestrosRepository.getFirebaseTokenId() } ?: return
+            withContext(IO) { userRepository.getFirebaseTokenId() } ?: return
         val result = withContext(IO) {
-            maestrosRepository.sendFirebaseTokenId(FirebaseTokenId(fbToken))
+            userRepository.sendFirebaseTokenId(FirebaseTokenId(fbToken))
         }
         debug("uploadFirebaseTokenId result=$result")
     }
@@ -76,8 +75,8 @@ class MainViewModel
     fun logOut() {
         authInfo.value = Result()
         launch {
-            withContext(IO) { maestrosRepository.logOut() }
-            authInfo.value = Result(success = maestrosRepository.getAuthInfo())
+            withContext(IO) { userRepository.logOut() }
+            authInfo.value = Result(success = userRepository.getAuthInfo())
         }
     }
 

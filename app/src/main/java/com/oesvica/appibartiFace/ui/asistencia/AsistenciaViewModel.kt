@@ -5,6 +5,7 @@ import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
 import com.oesvica.appibartiFace.data.model.CustomDate
 import com.oesvica.appibartiFace.data.model.toCustomDate
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
+import com.oesvica.appibartiFace.data.repository.ReportsRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.schedulers.SchedulerProvider
@@ -19,14 +20,14 @@ data class AsistenciaFilter(
 
 class AsistenciaViewModel
 @Inject constructor(
-    private val maestrosRepository: MaestrosRepository
+    private val reportsRepository: ReportsRepository
 ) : BaseViewModel() {
 
     private val asistenciasQueryRange: MutableLiveData<AsistenciaFilter> =
         MutableLiveData()
 
     val asistencias: LiveData<List<Asistencia>> = asistenciasQueryRange.switchMap { filter ->
-        maestrosRepository.findAsistencias(
+        reportsRepository.findAsistencias(
             iniDate = filter.iniDate,
             endDate = filter.endDate
         ).map { list ->
@@ -42,7 +43,7 @@ class AsistenciaViewModel
         asistenciasQueryRange.value = AsistenciaFilter(iniDate ?: return, endDate ?: return)
         launch {
             val asistenciasResult = withContext(IO) {
-                maestrosRepository.refreshAsistencias(iniDate, endDate)
+                reportsRepository.refreshAsistencias(iniDate, endDate)
             }
             debug("asistenciasResult = $asistenciasResult")
         }
