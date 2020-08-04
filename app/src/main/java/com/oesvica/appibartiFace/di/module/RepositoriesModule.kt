@@ -16,7 +16,7 @@
 
 package com.oesvica.appibartiFace.di.module
 
-import com.oesvica.appibartiFace.data.remote.UserRepository
+import com.oesvica.appibartiFace.data.repository.UserRepository
 import com.oesvica.appibartiFace.data.repository.*
 import dagger.Binds
 import dagger.Module

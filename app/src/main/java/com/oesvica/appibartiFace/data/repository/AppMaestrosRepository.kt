@@ -16,7 +16,7 @@ import com.oesvica.appibartiFace.data.model.status.StatusRequest
 import com.oesvica.appibartiFace.data.preferences.AppPreferencesHelper.Companion.CLIENTS
 import com.oesvica.appibartiFace.data.preferences.AppPreferencesHelper.Companion.TOKEN
 import com.oesvica.appibartiFace.data.preferences.PreferencesHelper
-import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi
+import com.oesvica.appibartiFace.data.api.AppIbartiFaceApi
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.mapToResult
 import javax.inject.Inject
@@ -49,8 +49,8 @@ class AppMaestrosRepository
         return categoryDao.findCategories()
     }
 
-    override suspend fun findCategoriesBlocking(): List<Category> {
-        return categoryDao.findCategoriesBlocking()
+    override suspend fun findCategoriesSynchronous(): List<Category> {
+        return categoryDao.findCategoriesSynchronous()
     }
 
     override suspend fun refreshCategories(): Result<Unit> {
@@ -95,7 +95,7 @@ class AppMaestrosRepository
         }
     }
 
-    override suspend fun refreshStatuses(): Result<Unit> {
+    override suspend fun refreshStatuses(): Result<List<Status>> {
         return mapToResult {
             val statuses = appIbartiFaceApi.findStatuses(
                 authorization = prefs[TOKEN]
@@ -103,6 +103,7 @@ class AppMaestrosRepository
             debug("statuses=$statuses")
             statusDao.deleteAllStatuses()
             statusDao.insertStatuses(*statuses.toTypedArray())
+            statuses
         }
     }
 
@@ -110,8 +111,8 @@ class AppMaestrosRepository
         return statusDao.findStatuses()
     }
 
-    override suspend fun findStatusesBlocking(): List<Status> {
-        return statusDao.findStatusesBlocking()
+    override suspend fun findStatusesSynchronous(): List<Status> {
+        return statusDao.findStatusesSynchronous()
     }
 
     override suspend fun insertStatus(statusRequest: StatusRequest): Result<Status> {

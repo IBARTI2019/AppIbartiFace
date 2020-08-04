@@ -1,6 +1,8 @@
 package com.oesvica.appibartiFace.ui.categories
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
 import com.oesvica.appibartiFace.data.model.category.Category
 import com.oesvica.appibartiFace.data.model.NetworkRequestStatus
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
@@ -23,10 +25,7 @@ class CategoriesViewModel
     fun refreshCategories() {
         debug("refreshCategories")
         statusCategories.value = NetworkRequestStatus(isOngoing = true)
-//        viewModelScope.launch {
-//
-//        }
-        launch {
+        viewModelScope.launch {
             val resultQuery = withContext(IO) { maestrosRepository.refreshCategories() }
             debug("resultQuery=$resultQuery")
             statusCategories.value =
@@ -37,7 +36,7 @@ class CategoriesViewModel
     fun addCategory(description: String) {
         debug("addCategory $description")
         snackBarMsg.value = "Agregando categoria"
-        launch {
+        viewModelScope.launch {
             val result = withContext(IO) { maestrosRepository.insertCategory(description) }
             debug("addCategory result $result")
             if (result.success != null) {
@@ -52,7 +51,7 @@ class CategoriesViewModel
     fun updateCategory(category: Category) {
         debug("updating category $category")
         snackBarMsg.value = "Actualizando categoria"
-        launch {
+        viewModelScope.launch {
             val result = withContext(IO) { maestrosRepository.updateCategory(category) }
             debug("updateCategory result $result")
             if (result.success != null) {
@@ -67,7 +66,7 @@ class CategoriesViewModel
     fun deleteCategory(idCategory: String) {
         debug("deleteCategory $idCategory")
         snackBarMsg.value = "Eliminando categoria"
-        launch {
+        viewModelScope.launch {
             val result = withContext(IO) { maestrosRepository.deleteCategory(idCategory) }
             debug("deleteCategory result $result")
             if (result.success != null) {

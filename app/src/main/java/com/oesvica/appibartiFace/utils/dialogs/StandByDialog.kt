@@ -15,8 +15,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.standby.StandBy
 import com.oesvica.appibartiFace.data.model.standby.properUrl
-import com.squareup.picasso.Picasso
-
 
 class StandByDialog : DialogFragment() {
 
@@ -43,10 +41,6 @@ class StandByDialog : DialogFragment() {
         }
 
         val standByImageView = view.findViewById<ImageView>(R.id.standByImageView)
-//        Picasso.get()
-//            .load(standBy.properUrl())
-//            .placeholder(R.drawable.photo_placeholder)
-//            .into(standByImageView)
         Glide.with(this)
             .load(standBy.properUrl())
             .placeholder(R.drawable.photo_placeholder)

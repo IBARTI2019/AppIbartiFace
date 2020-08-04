@@ -1,4 +1,4 @@
-package com.oesvica.appibartiFace.data.remote
+package com.oesvica.appibartiFace.data.repository
 
 import com.oesvica.appibartiFace.data.model.FirebaseTokenId
 import com.oesvica.appibartiFace.data.model.Result

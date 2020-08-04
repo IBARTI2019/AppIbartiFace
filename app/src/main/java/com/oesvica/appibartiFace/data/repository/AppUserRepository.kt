@@ -9,8 +9,7 @@ import com.oesvica.appibartiFace.data.model.Result
 import com.oesvica.appibartiFace.data.model.auth.*
 import com.oesvica.appibartiFace.data.preferences.AppPreferencesHelper
 import com.oesvica.appibartiFace.data.preferences.PreferencesHelper
-import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi
-import com.oesvica.appibartiFace.data.remote.UserRepository
+import com.oesvica.appibartiFace.data.api.AppIbartiFaceApi
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.decoded
 import com.oesvica.appibartiFace.utils.mapToResult

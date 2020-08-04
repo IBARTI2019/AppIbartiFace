@@ -36,7 +36,7 @@ class StandByViewModel @Inject constructor(
         if (fetchStandBysNetworkRequest.value?.isOngoing == false || force) {
             fetchStandBysNetworkRequest.value = NetworkRequestStatus(isOngoing = true)
             standBysQuery.value = query
-            launch {
+            viewModelScope.launch {
                 val standsBysResult = withContext(IO) {
                     maestrosRepository.refreshStandBysByClientAndDate(
                         query.client,
@@ -51,7 +51,7 @@ class StandByViewModel @Inject constructor(
     }
 
     fun deleteStandBy(standBy: StandBy) {
-        launch {
+        viewModelScope.launch {
             val resultDelete = withContext(IO) {
                 maestrosRepository.deleteStandBy(standBy.client, standBy.date, standBy.url)
             }

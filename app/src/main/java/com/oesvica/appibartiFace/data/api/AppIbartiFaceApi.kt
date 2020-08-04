@@ -1,5 +1,6 @@
-package com.oesvica.appibartiFace.data.remote
+package com.oesvica.appibartiFace.data.api
 
+import com.google.gson.annotations.SerializedName
 import com.oesvica.appibartiFace.data.model.FirebaseTokenId
 import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
 import com.oesvica.appibartiFace.data.model.auth.LogInRequest
@@ -17,6 +18,33 @@ import com.oesvica.appibartiFace.data.model.standby.StandBy
 import com.oesvica.appibartiFace.data.model.status.Status
 import com.oesvica.appibartiFace.data.model.status.StatusRequest
 import retrofit2.http.*
+
+data class Doc(
+    @SerializedName("_id")
+    var id: String = "",
+    @SerializedName("cedula")
+    var cedula: String = "",
+    @SerializedName("fecha")
+    var date: String = "",
+    @SerializedName("fecha_captura")
+    var dateCapture: String = "",
+    @SerializedName("foto")
+    var photo: String = "",
+    @SerializedName("hora")
+    var time: String = ""
+)
+data class PersonPhotos(
+    @SerializedName("cedula")
+    var cedula: String = "",
+    @SerializedName("documentos")
+    var docs: List<Doc> = emptyList()
+)
+data class CedulasByDate(
+    @SerializedName("cedulas")
+    var cedulas: List<PersonPhotos> = emptyList(),
+    @SerializedName("fecha_query")
+    var dateQuery: String = ""
+)
 
 interface AppIbartiFaceApi {
 
@@ -53,6 +81,13 @@ interface AppIbartiFaceApi {
 
         fun imgUrlForStandBy(client: String, date: String, url: String) = "$END_POINT/view/standby/$client/$date/$url"
     }
+
+    @GET(APTOS)
+    suspend fun getAptos(
+        @Header("Authorization") authorization: String?,
+        @Path("iniDate") iniDate: String,
+        @Path("endDate") endDate: String
+    ): List<CedulasByDate>
 
     @PUT(SEND_FIREBASE_TOKEN_ID)
     suspend fun sendFirebaseTokenId(

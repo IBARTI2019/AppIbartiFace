@@ -10,7 +10,6 @@ import com.oesvica.appibartiFace.data.model.person.UpdatePersonRequest
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug
-import com.oesvica.appibartiFace.utils.schedulers.SchedulerProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -21,13 +20,13 @@ class EditPersonViewModel
 ) : BaseViewModel() {
 
     val categories: LiveData<List<Category>> = liveData {
-        val list = maestrosRepository.findCategoriesBlocking()
+        val list = maestrosRepository.findCategoriesSynchronous()
         if (list.isEmpty()) {
             val result = withContext(IO) {
                 maestrosRepository.refreshCategories()
             }
             if (result.success != null) {
-                emit(maestrosRepository.findCategoriesBlocking())
+                emit(maestrosRepository.findCategoriesSynchronous())
             } else {
                 emit(emptyList())
             }
@@ -37,13 +36,13 @@ class EditPersonViewModel
     }
 
     val statuses: LiveData<List<Status>> = liveData {
-        val list = maestrosRepository.findStatusesBlocking()
+        val list = maestrosRepository.findStatusesSynchronous()
         if (list.isEmpty()) {
             val result = withContext(IO) {
                 maestrosRepository.refreshStatuses()
             }
             if (result.success != null) {
-                emit(maestrosRepository.findStatusesBlocking())
+                emit(maestrosRepository.findStatusesSynchronous())
             } else {
                 emit(emptyList())
             }

@@ -2,6 +2,7 @@ package com.oesvica.appibartiFace.ui.addPerson
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
 import com.oesvica.appibartiFace.data.model.*
 import com.oesvica.appibartiFace.data.model.person.AddPersonRequest
 import com.oesvica.appibartiFace.data.model.standby.Prediction
@@ -9,7 +10,6 @@ import com.oesvica.appibartiFace.data.model.standby.StandBy
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug
-import com.oesvica.appibartiFace.utils.schedulers.SchedulerProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -30,13 +30,13 @@ class AddPersonViewModel
     }
 
     val categories = liveData {
-        val list = maestrosRepository.findCategoriesBlocking()
-        if (list.isEmpty()) {
+        val list = maestrosRepository.findCategoriesSynchronous()
+        if (list.isNullOrEmpty()) {
             val result = withContext(IO) {
                 maestrosRepository.refreshCategories()
             }
             if (result.success != null) {
-                emit(maestrosRepository.findCategoriesBlocking())
+                emit(maestrosRepository.findCategoriesSynchronous())
             } else {
                 emit(emptyList())
             }
@@ -44,14 +44,15 @@ class AddPersonViewModel
             emit(list)
         }
     }
+
     val statuses = liveData {
-        val list = maestrosRepository.findStatusesBlocking()
-        if (list.isEmpty()) {
+        val list = maestrosRepository.findStatusesSynchronous()
+        if (list.isNullOrEmpty()) {
             val result = withContext(IO) {
                 maestrosRepository.refreshStatuses()
             }
             if (result.success != null) {
-                emit(maestrosRepository.findStatusesBlocking())
+                emit(result.success)
             } else {
                 emit(emptyList())
             }
@@ -82,7 +83,7 @@ class AddPersonViewModel
                     "        $photo: String"
         )
         addPersonNetworkRequest.value = NetworkRequestStatus(isOngoing = true)
-        launch {
+        viewModelScope.launch {
             val result = withContext(IO) {
                 maestrosRepository.insertPerson(
                     AddPersonRequest(

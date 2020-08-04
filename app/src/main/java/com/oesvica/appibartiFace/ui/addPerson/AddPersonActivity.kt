@@ -15,7 +15,7 @@ import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.category.Category
 import com.oesvica.appibartiFace.data.model.standby.StandBy
 import com.oesvica.appibartiFace.data.model.status.Status
-import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi.Companion.imgUrlForStandBy
+import com.oesvica.appibartiFace.data.api.AppIbartiFaceApi.Companion.imgUrlForStandBy
 import com.oesvica.appibartiFace.ui.standby.StandByFragment
 import com.oesvica.appibartiFace.utils.base.DaggerActivity
 import com.oesvica.appibartiFace.utils.debug
@@ -58,7 +58,7 @@ class AddPersonActivity : DaggerActivity() {
     private val photo by lazy { intent.getStringExtra(EXTRA_PHOTO) }
 
     private val predictionsAdapter by lazy {
-        PredictionsAdapter(context = this, onImageSelected = { cedula ->
+        PredictionsAdapter(onImageSelected = { cedula ->
             cedulaEditText.setText(cedula)
             debug("cedula $cedula")
         })

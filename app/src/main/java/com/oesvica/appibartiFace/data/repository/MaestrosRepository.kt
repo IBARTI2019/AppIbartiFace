@@ -23,14 +23,14 @@ abstract class MaestrosRepository {
 
     abstract suspend fun refreshCategories(): Result<Unit>
     abstract fun findCategories(): LiveData<List<Category>>
-    abstract suspend fun findCategoriesBlocking(): List<Category>
+    abstract suspend fun findCategoriesSynchronous(): List<Category>
     abstract suspend fun insertCategory(description: String): Result<Category>
     abstract suspend fun updateCategory(category: Category): Result<Category>
     abstract suspend fun deleteCategory(idCategory: String): Result<Unit>
 
-    abstract suspend fun refreshStatuses(): Result<Unit>
+    abstract suspend fun refreshStatuses(): Result<List<Status>>
     abstract fun findStatuses(): LiveData<List<Status>>
-    abstract suspend fun findStatusesBlocking(): List<Status>
+    abstract suspend fun findStatusesSynchronous(): List<Status>
     abstract suspend fun insertStatus(statusRequest: StatusRequest): Result<Status>
     abstract suspend fun updateStatus(status: Status): Result<Status>
     abstract suspend fun deleteStatus(idStatus: String): Result<Unit>

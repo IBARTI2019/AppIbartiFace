@@ -5,7 +5,7 @@ import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.FirebaseTokenId
 import com.oesvica.appibartiFace.data.model.Result
 import com.oesvica.appibartiFace.data.model.auth.AuthInfo
-import com.oesvica.appibartiFace.data.remote.UserRepository
+import com.oesvica.appibartiFace.data.repository.UserRepository
 import com.oesvica.appibartiFace.utils.SingleLiveEvent
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug

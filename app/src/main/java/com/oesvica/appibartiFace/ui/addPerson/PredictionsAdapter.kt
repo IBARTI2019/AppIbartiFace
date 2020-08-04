@@ -8,13 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.standby.Prediction
-import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_add_person.*
 import kotlinx.android.synthetic.main.list_prediction_item.view.*
 
 class PredictionsAdapter(
-    private val context: Context,
     private val onImageSelected: (String) -> Unit
 ) : RecyclerView.Adapter<PredictionsAdapter.PredictionViewHolder>() {
 
@@ -41,7 +37,7 @@ class PredictionsAdapter(
         private val predictionImageView by lazy { view.predictionImageView }
 
         fun bind(prediction: Prediction) {
-            Glide.with(context)
+            Glide.with(view)
                 .load(prediction.completeUrl)
                 .placeholder(R.drawable.photo_placeholder)
                 .centerCrop()

@@ -7,7 +7,7 @@ import com.oesvica.appibartiFace.data.model.Result
 import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
 import com.oesvica.appibartiFace.data.preferences.AppPreferencesHelper.Companion.TOKEN
 import com.oesvica.appibartiFace.data.preferences.PreferencesHelper
-import com.oesvica.appibartiFace.data.remote.AppIbartiFaceApi
+import com.oesvica.appibartiFace.data.api.AppIbartiFaceApi
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.mapToResult
 import javax.inject.Inject

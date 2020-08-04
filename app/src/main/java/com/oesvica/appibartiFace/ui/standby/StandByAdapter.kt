@@ -16,7 +16,6 @@ import kotlin.properties.Delegates
  * [RecyclerView.Adapter] that can display a [StandBy]
  */
 class StandByAdapter(
-    private val context: Context,
     private val onStandBySelected: (StandBy) -> Unit
 ) :
     RecyclerView.Adapter<StandByAdapter.StandByViewHolder>() {
@@ -48,7 +47,7 @@ class StandByAdapter(
                 clientTextView.text = client
                 dateTextView.text = date
                 timeTextView.text = time
-                Glide.with(context)
+                Glide.with(view)
                     .load(standBy.properUrl())
                     .placeholder(R.drawable.photo_placeholder)
                     .centerCrop()
