@@ -8,6 +8,8 @@ import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
 import com.oesvica.appibartiFace.data.preferences.AppPreferencesHelper.Companion.TOKEN
 import com.oesvica.appibartiFace.data.preferences.PreferencesHelper
 import com.oesvica.appibartiFace.data.api.AppIbartiFaceApi
+import com.oesvica.appibartiFace.data.api.CedulasByDate
+import com.oesvica.appibartiFace.data.api.Doc
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.mapToResult
 import javax.inject.Inject
@@ -51,6 +53,38 @@ class AppReportsRepository
                 endDate.toString(),
                 *asistencias.toTypedArray()
             )
+        }
+    }
+
+    override suspend fun refreshAptos(
+        iniDate: CustomDate,
+        endDate: CustomDate
+    ): Result<List<Doc>> {
+        return mapToResult {
+            val aptos = appIbartiFaceApi.getAptos(
+                authorization = prefs[TOKEN],
+                iniDate = iniDate.toString(),
+                endDate = endDate.toString())
+            val docs = aptos.flatMap {
+                it.cedulas.flatMap { it.docs }
+            }
+            docs
+        }
+    }
+
+    override suspend fun refreshNoAptos(
+        iniDate: CustomDate,
+        endDate: CustomDate
+    ): Result<List<Doc>> {
+        return mapToResult {
+            val aptos = appIbartiFaceApi.getNoAptos(
+                authorization = prefs[TOKEN],
+                iniDate = iniDate.toString(),
+                endDate = endDate.toString())
+            val docs = aptos.flatMap {
+                it.cedulas.flatMap { it.docs }
+            }
+            docs
         }
     }
 }

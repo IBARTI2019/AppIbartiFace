@@ -24,7 +24,9 @@ class MainViewModel
             "/maestros/category/" to R.id.nav_categorias,
             "/maestros/status/" to R.id.nav_status,
             "/maestros/persons/" to R.id.nav_personas,
-            "/reporte/asistencia-ibarti/" to R.id.nav_asistencia_ibarti
+            "/reporte/asistencia-ibarti/" to R.id.nav_asistencia_ibarti,
+            "/reporte/asistencia-apto/" to R.id.nav_aptos,
+            "/reporte/asistencia-noapto/" to R.id.nav_no_aptos
         )
     }
 

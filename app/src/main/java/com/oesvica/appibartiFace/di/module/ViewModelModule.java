@@ -24,6 +24,7 @@ import com.oesvica.appibartiFace.ViewModelProviderFactory;
 import com.oesvica.appibartiFace.di.ViewModelKey;
 import com.oesvica.appibartiFace.ui.addPerson.AddPersonViewModel;
 import com.oesvica.appibartiFace.ui.addStatus.AddStatusViewModel;
+import com.oesvica.appibartiFace.ui.aptos.DocsViewModel;
 import com.oesvica.appibartiFace.ui.asistencia.AsistenciaViewModel;
 import com.oesvica.appibartiFace.ui.categories.CategoriesViewModel;
 import com.oesvica.appibartiFace.ui.editPerson.EditPersonViewModel;
@@ -36,6 +37,7 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoMap;
 
+@SuppressWarnings(value = "unused")
 @Module
 public abstract class ViewModelModule {
 
@@ -78,6 +80,11 @@ public abstract class ViewModelModule {
   @IntoMap
   @ViewModelKey(AsistenciaViewModel.class)
   abstract ViewModel bindAsistenciaViewModel(AsistenciaViewModel AsistenciaViewModel);
+
+  @Binds
+  @IntoMap
+  @ViewModelKey(DocsViewModel.class)
+  abstract ViewModel bindDocsViewModel(DocsViewModel DocsViewModel);
 
   @Binds
   @IntoMap

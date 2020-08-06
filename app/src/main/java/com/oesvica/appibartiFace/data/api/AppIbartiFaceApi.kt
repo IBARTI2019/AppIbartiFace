@@ -1,6 +1,7 @@
 package com.oesvica.appibartiFace.data.api
 
 import com.google.gson.annotations.SerializedName
+import com.oesvica.appibartiFace.data.api.AppIbartiFaceApi.Companion.END_POINT
 import com.oesvica.appibartiFace.data.model.FirebaseTokenId
 import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
 import com.oesvica.appibartiFace.data.model.auth.LogInRequest
@@ -18,6 +19,8 @@ import com.oesvica.appibartiFace.data.model.standby.StandBy
 import com.oesvica.appibartiFace.data.model.status.Status
 import com.oesvica.appibartiFace.data.model.status.StatusRequest
 import retrofit2.http.*
+
+fun Doc.fullPhotoUrl(): String = "${END_POINT}view$photo"
 
 data class Doc(
     @SerializedName("_id")
@@ -84,6 +87,13 @@ interface AppIbartiFaceApi {
 
     @GET(APTOS)
     suspend fun getAptos(
+        @Header("Authorization") authorization: String?,
+        @Path("iniDate") iniDate: String,
+        @Path("endDate") endDate: String
+    ): List<CedulasByDate>
+
+    @GET(NO_APTOS)
+    suspend fun getNoAptos(
         @Header("Authorization") authorization: String?,
         @Path("iniDate") iniDate: String,
         @Path("endDate") endDate: String

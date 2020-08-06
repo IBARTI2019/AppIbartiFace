@@ -46,9 +46,9 @@ class StandByAdapter(
             with(standBy) {
                 clientTextView.text = client
                 dateTextView.text = date
-                timeTextView.text = time
+                timeTextView.text = time.take(8)
                 Glide.with(view)
-                    .load(standBy.properUrl())
+                    .load(properUrl())
                     .placeholder(R.drawable.photo_placeholder)
                     .centerCrop()
                     .into(urlImageView)

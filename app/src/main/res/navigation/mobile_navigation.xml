@@ -39,6 +39,18 @@
         android:label="@string/menu_asistencia"
         tools:layout="@layout/fragment_person_list" />
 
+    <fragment
+        android:id="@+id/nav_aptos"
+        android:name="com.oesvica.appibartiFace.ui.aptos.DocsFragment"
+        android:label="@string/menu_aptos"
+        tools:layout="@layout/fragment_docs_list" />
+
+    <fragment
+        android:id="@+id/nav_no_aptos"
+        android:name="com.oesvica.appibartiFace.ui.aptos.DocsFragment"
+        android:label="@string/menu_no_aptos"
+        tools:layout="@layout/fragment_docs_list" />
+
     <dialog
         android:id="@+id/dialog_standby"
         android:name="com.oesvica.appibartiFace.utils.dialogs.StandByDialog">

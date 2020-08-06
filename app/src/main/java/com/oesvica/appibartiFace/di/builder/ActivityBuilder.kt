@@ -18,6 +18,7 @@ package com.oesvica.appibartiFace.di.builder
 
 import com.oesvica.appibartiFace.ui.addPerson.AddPersonActivity
 import com.oesvica.appibartiFace.ui.addStatus.AddStatusActivity
+import com.oesvica.appibartiFace.ui.aptos.DocsProvider
 import com.oesvica.appibartiFace.ui.asistencia.AsistenciaProvider
 import com.oesvica.appibartiFace.ui.categories.CategoriesProvider
 import com.oesvica.appibartiFace.ui.editPerson.EditPersonActivity
@@ -28,10 +29,11 @@ import com.oesvica.appibartiFace.ui.statuses.StatusesProvider
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
+@Suppress("unused")
 @Module
 abstract class ActivityBuilder {
 
-    @ContributesAndroidInjector(modules = [CategoriesProvider::class, PersonsProvider::class, StatusesProvider::class, StandByProvider::class, AsistenciaProvider::class])
+    @ContributesAndroidInjector(modules = [CategoriesProvider::class, PersonsProvider::class, StatusesProvider::class, StandByProvider::class, AsistenciaProvider::class, DocsProvider::class])
     abstract fun bindMainActivity(): MainActivity
 
     @ContributesAndroidInjector()

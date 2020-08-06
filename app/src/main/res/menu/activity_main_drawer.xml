@@ -35,6 +35,16 @@
                 android:icon="@drawable/ic_home_24dp"
                 android:visible="false"
                 android:title="@string/menu_asistencia" />
+            <item
+                android:id="@+id/nav_aptos"
+                android:icon="@drawable/ic_home_24dp"
+                android:visible="false"
+                android:title="@string/menu_aptos" />
+            <item
+                android:id="@+id/nav_no_aptos"
+                android:icon="@drawable/ic_home_24dp"
+                android:visible="false"
+                android:title="@string/menu_no_aptos" />
         </menu>
     </item>
 </menu>

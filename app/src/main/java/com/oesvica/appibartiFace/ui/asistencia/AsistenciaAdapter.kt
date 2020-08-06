@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
+import kotlinx.android.synthetic.main.fragment_asistencia.view.*
 
 /**
  * [RecyclerView.Adapter] that can display a [Asistencia].
@@ -55,12 +56,12 @@ class AsistenciaAdapter : RecyclerView.Adapter<AsistenciaAdapter.AsistenciaViewH
     override fun getItemCount(): Int = filteredAsistencias.size
 
     inner class AsistenciaViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        private val docId: TextView = view.findViewById(R.id.cedulaTextView)
-        private val ficha: TextView = view.findViewById(R.id.fichaTextView)
-        private val names: TextView = view.findViewById(R.id.nombresTextView)
-        private val surnames: TextView = view.findViewById(R.id.apellidosTextView)
-        private val date: TextView = view.findViewById(R.id.fechaTextView)
-        private val time: TextView = view.findViewById(R.id.horaTextView)
+        private val docId: TextView by lazy { view.cedulaTextView }
+        private val ficha: TextView by lazy { view.fichaTextView }
+        private val names: TextView by lazy { view.nombresTextView }
+        private val surnames: TextView by lazy { view.apellidosTextView }
+        private val date: TextView by lazy { view.fechaTextView }
+        private val time: TextView by lazy { view.horaTextView }
 
         @SuppressLint("DefaultLocale")
         fun bind(index: Int, asistencia: Asistencia) {

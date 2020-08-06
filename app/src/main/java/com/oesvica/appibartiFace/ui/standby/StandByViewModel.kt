@@ -22,8 +22,7 @@ class StandByViewModel @Inject constructor(
             client = filter.client,
             date = filter.date.toString()
         ).map { list ->
-            list.map { standBy -> standBy.apply { time = time.take(8) } }
-                .sortedWith(compareBy({ it.date.toCustomDate() }, { it.time })).reversed()
+            list.sortedWith(compareBy({ it.date.toCustomDate() }, { it.time })).reversed()
         }
     }
     val fetchStandBysNetworkRequest = MutableLiveData<NetworkRequestStatus>()

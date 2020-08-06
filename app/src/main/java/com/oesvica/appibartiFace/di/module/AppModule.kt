@@ -31,6 +31,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 
+@Suppress("unused")
 @Module(includes = [(ViewModelModule::class), (RepositoriesModule::class), (RoomDatabaseModule::class), (RetrofitModule::class)])
 abstract class AppModule {
 

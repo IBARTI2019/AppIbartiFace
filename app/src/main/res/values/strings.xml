@@ -27,6 +27,8 @@
     <string name="standby_client">Cliente</string>
     <string name="standby_date">Fecha</string>
     <string name="menu_asistencia">Asistencia Ibarti</string>
+    <string name="menu_aptos">Aptos</string>
+    <string name="menu_no_aptos">No Aptos</string>
     <string name="login_button_login">Iniciar sesion</string>
     <string name="login_hint_user">Usuario</string>
     <string name="login_hint_password">Clave</string>

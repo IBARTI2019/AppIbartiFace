@@ -26,7 +26,6 @@ import com.oesvica.appibartiFace.utils.base.DaggerFragment
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.dialogs.StandByDialog
 import com.oesvica.appibartiFace.utils.hideSoftInput
-import com.oesvica.appibartiFace.utils.screenWidth
 import distinct
 import kotlinx.android.synthetic.main.fragment_stand_by_list.*
 
@@ -89,8 +88,10 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
             lastQueryTriggered = tempLastQueryTriggered
             standByViewModel.searchStandBys(tempLastQueryTriggered)
         }
+        handleDialogResponse()
+    }
 
-
+    private fun handleDialogResponse() {
         val navController = findNavController()
         // After a configuration change or process death, the currentBackStackEntry
         // points to the dialog destination, so you must use getBackStackEntry()
