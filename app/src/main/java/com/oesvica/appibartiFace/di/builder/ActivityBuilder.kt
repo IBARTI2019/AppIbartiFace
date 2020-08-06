@@ -18,7 +18,7 @@ package com.oesvica.appibartiFace.di.builder
 
 import com.oesvica.appibartiFace.ui.addPerson.AddPersonActivity
 import com.oesvica.appibartiFace.ui.addStatus.AddStatusActivity
-import com.oesvica.appibartiFace.ui.aptos.DocsProvider
+import com.oesvica.appibartiFace.ui.personAsistencia.DocsProvider
 import com.oesvica.appibartiFace.ui.asistencia.AsistenciaProvider
 import com.oesvica.appibartiFace.ui.categories.CategoriesProvider
 import com.oesvica.appibartiFace.ui.editPerson.EditPersonActivity

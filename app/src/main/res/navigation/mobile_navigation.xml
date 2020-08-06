@@ -31,7 +31,11 @@
         android:id="@+id/nav_personas"
         android:name="com.oesvica.appibartiFace.ui.persons.PersonsFragment"
         android:label="@string/menu_persons"
-        tools:layout="@layout/fragment_person_list" />
+        tools:layout="@layout/fragment_person_list">
+        <action
+            android:id="@+id/action_nav_personas_to_dialog_person"
+            app:destination="@id/dialog_person"/>
+    </fragment>
 
     <fragment
         android:id="@+id/nav_asistencia_ibarti"
@@ -41,13 +45,13 @@
 
     <fragment
         android:id="@+id/nav_aptos"
-        android:name="com.oesvica.appibartiFace.ui.aptos.DocsFragment"
+        android:name="com.oesvica.appibartiFace.ui.personAsistencia.DocsFragment"
         android:label="@string/menu_aptos"
         tools:layout="@layout/fragment_docs_list" />
 
     <fragment
         android:id="@+id/nav_no_aptos"
-        android:name="com.oesvica.appibartiFace.ui.aptos.DocsFragment"
+        android:name="com.oesvica.appibartiFace.ui.personAsistencia.DocsFragment"
         android:label="@string/menu_no_aptos"
         tools:layout="@layout/fragment_docs_list" />
 
@@ -58,6 +62,15 @@
             android:name="standby"
             app:argType="com.oesvica.appibartiFace.data.model.standby.StandBy"
             app:nullable="false" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/dialog_person"
+        android:name="com.oesvica.appibartiFace.ui.persons.dialog.PersonDialog">
+        <argument
+            android:name="person"
+            app:argType="com.oesvica.appibartiFace.data.model.person.Person"
+            app:nullable="false"/>
     </dialog>
 
 </navigation>

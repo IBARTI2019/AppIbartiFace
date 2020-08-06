@@ -1,10 +1,7 @@
 package com.oesvica.appibartiFace.data.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.oesvica.appibartiFace.data.model.category.Category
 
 @Dao
@@ -24,4 +21,10 @@ abstract class CategoryDao: BaseDao<Category> {
     // Delete
     @Query("DELETE FROM ${Category.TABLE_NAME}")
     abstract suspend fun deleteAllCategories()
+
+    @Transaction
+    open suspend fun replaceCategories(vararg categories: Category){
+        deleteAllCategories()
+        insertCategories(*categories)
+    }
 }

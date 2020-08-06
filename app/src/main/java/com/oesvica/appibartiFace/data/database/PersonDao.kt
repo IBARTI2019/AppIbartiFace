@@ -19,6 +19,9 @@ abstract class PersonDao: BaseDao<Person> {
     @Query("DELETE FROM ${Person.TABLE_NAME}")
     abstract suspend fun deleteAllPersons()
 
+    @Query("DELETE FROM ${Person.TABLE_NAME} WHERE id=:personId")
+    abstract suspend fun deletePerson(personId: String)
+
     @Transaction
     open suspend fun replacePersons(vararg persons: Person){
         deleteAllPersons()

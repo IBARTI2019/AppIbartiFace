@@ -9,15 +9,16 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.*
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.oesvica.appibartiFace.R
+import com.oesvica.appibartiFace.data.model.person.Person
+import com.oesvica.appibartiFace.data.model.person.fullPhotoUrl
 import com.oesvica.appibartiFace.ui.editPerson.EditPersonActivity
-import com.oesvica.appibartiFace.ui.standby.StandByFragment
+import com.oesvica.appibartiFace.ui.persons.dialog.PersonDialog
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
 import com.oesvica.appibartiFace.utils.debug
-import distinct
 import kotlinx.android.synthetic.main.fragment_person_list.*
 import java.util.*
 
@@ -36,16 +37,13 @@ class PersonsFragment : DaggerFragment() {
 
     private val personsAdapter by lazy {
         PersonsAdapter(onPersonSelected = {
-            startActivity(
-                EditPersonActivity.starterIntent(
-                    requireContext(),
-                    it.id,
-                    it.doc_id,
-                    it.category,
-                    it.status
-                )
-            )
+            showOptionsDialog(it)
         })
+    }
+
+    private fun showOptionsDialog(person: Person) {
+        val action = PersonsFragmentDirections.actionNavPersonasToDialogPerson(person)
+        findNavController().navigate(action)
     }
 
     override fun onCreateView(
@@ -61,6 +59,63 @@ class PersonsFragment : DaggerFragment() {
         setUpFieldSpinner()
         observePersons()
         personsViewModel.refreshPersons()
+        handleDialogResponse()
+    }
+
+    private fun handleDialogResponse() {
+        val navController = findNavController()
+        // After a configuration change or process death, the currentBackStackEntry
+        // points to the dialog destination, so you must use getBackStackEntry()
+        // with the specific ID of your destination to ensure we always
+        // get the right NavBackStackEntry
+        val navBackStackEntry = navController.getBackStackEntry(R.id.nav_personas)
+
+        // Create our observer and add it to the NavBackStackEntry's lifecycle
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                if (navBackStackEntry.savedStateHandle.contains(PersonDialog.ARG_PERSON) && navBackStackEntry.savedStateHandle.contains(
+                        PersonDialog.ARG_IS_DELETE
+                    )
+                ) {
+                    val person =
+                        navBackStackEntry.savedStateHandle.get<Person>(PersonDialog.ARG_PERSON)
+                            ?: return@LifecycleEventObserver
+                    val isDelete =
+                        navBackStackEntry.savedStateHandle.get<Boolean>(PersonDialog.ARG_IS_DELETE)
+                            ?: return@LifecycleEventObserver
+                    navBackStackEntry.savedStateHandle.remove<Person>(PersonDialog.ARG_PERSON)
+                    navBackStackEntry.savedStateHandle.remove<Boolean>(PersonDialog.ARG_IS_DELETE)
+                    debug("person $person $isDelete")
+                    if (isDelete) {
+                        personsViewModel.deletePerson(person)
+                    } else {
+                        openEditPersonActivity(person)
+                    }
+                }
+            }
+        }
+        navBackStackEntry.lifecycle.addObserver(observer)
+
+        // As addObserver() does not automatically remove the observer, we
+        // call removeObserver() manually when the view lifecycle is destroyed
+        viewLifecycleOwner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                navBackStackEntry.lifecycle.removeObserver(observer)
+            }
+        })
+    }
+
+    private fun openEditPersonActivity(person: Person) {
+        startActivity(
+            EditPersonActivity.starterIntent(
+                requireContext(),
+                id = person.id,
+                cedula = person.doc_id,
+                category = person.category,
+                status =  person.status,
+                photo =  person.fullPhotoUrl()
+            )
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -83,11 +138,29 @@ class PersonsFragment : DaggerFragment() {
         personsRefreshLayout.setOnRefreshListener { personsViewModel.refreshPersons() }
     }
 
+    private val filters = arrayOf(
+        FilterItem("Seleccione campo:") { _, _ -> true },
+        FilterItem("Nombre") { person, query ->
+            person.names?.contains(query, ignoreCase = true) ?: false
+        },
+        FilterItem("Cedula") { person, query -> person.doc_id.indexOf(query) == 0 },
+        FilterItem("Cliente") { person, query -> person.client.indexOf(query) == 0 },
+        FilterItem("Categoria") { person, query ->
+            person.category.contains(
+                query,
+                ignoreCase = true
+            )
+        },
+        FilterItem("Estatus") { person, query -> person.status.contains(query, ignoreCase = true) }
+    )
+
+    data class FilterItem(var name: String, var condition: (Person, String) -> Boolean)
+
     private fun setUpFieldSpinner() {
         fieldSpinner.adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_dropdown_item,
-            listOf("Seleccione campo:", "Cedula", "Cliente", "Categoria", "Estatus")
+            filters.map { it.name }
         )
         fieldSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
@@ -115,23 +188,17 @@ class PersonsFragment : DaggerFragment() {
     private fun updatePersonsFilter() {
         val query = fieldEditText.text.toString().trim().toLowerCase(Locale.getDefault())
         personsAdapter.personsFilter = { person ->
-            when (fieldSpinner.selectedItemPosition) {
-                1 -> person.doc_id.indexOf(query) == 0
-                2 -> person.client.indexOf(query) == 0
-                3 -> person.category.contains(query, ignoreCase = true)
-                4 -> person.status.contains(query, ignoreCase = true)
-                else -> true
-            }
+            filters[fieldSpinner.selectedItemPosition].condition(person, query)
         }
     }
 
     private fun observePersons() {
-        personsViewModel.persons.distinct().observe(viewLifecycleOwner, Observer { persons ->
+        personsViewModel.persons.distinctUntilChanged().observe(viewLifecycleOwner) { persons ->
             debug("observe persons = ${persons.take(3)}")
-            persons?.let { personsAdapter.allPersons = it }
-        })
-        personsViewModel.personsNetworkRequest.observe(viewLifecycleOwner, Observer {
+            personsAdapter.allPersons = persons
+        }
+        personsViewModel.personsNetworkRequest.observe(viewLifecycleOwner) {
             personsRefreshLayout.isRefreshing = it.isOngoing
-        })
+        }
     }
 }

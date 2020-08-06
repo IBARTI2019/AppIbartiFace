@@ -59,8 +59,7 @@ class AppMaestrosRepository
                 authorization = prefs[TOKEN]
             )
             debug("categories=$categories")
-            categoryDao.deleteAllCategories()
-            categoryDao.insertCategories(*categories.toTypedArray())
+            categoryDao.replaceCategories(*categories.toTypedArray())
         }
     }
 
@@ -101,8 +100,7 @@ class AppMaestrosRepository
                 authorization = prefs[TOKEN]
             )
             debug("statuses=$statuses")
-            statusDao.deleteAllStatuses()
-            statusDao.insertStatuses(*statuses.toTypedArray())
+            statusDao.replaceStatuses(*statuses.toTypedArray())
             statuses
         }
     }
@@ -185,6 +183,16 @@ class AppMaestrosRepository
                 id = personId,
                 updatePersonRequest = updatePersonRequest
             )
+        }
+    }
+
+    override suspend fun deletePerson(personId: String): Result<Unit> {
+        return mapToResult {
+            appIbartiFaceApi.deletePerson(
+                authorization = prefs[TOKEN],
+                id = personId
+            )
+            personDao.deletePerson(personId)
         }
     }
 

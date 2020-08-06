@@ -3,7 +3,6 @@ package com.oesvica.appibartiFace.di.module
 import android.app.Application
 import androidx.room.Room
 import com.oesvica.appibartiFace.data.database.AppDatabase
-import com.oesvica.appibartiFace.data.database.MIGRATION_1_2
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -14,8 +13,8 @@ class RoomDatabaseModule {
     @Singleton
     @Provides
     fun provideAppDatabase(application: Application) =
-        Room.databaseBuilder(application, AppDatabase::class.java, "AppIbartiFaceVer2.0.db")
-            .addMigrations(MIGRATION_1_2)
+        Room.databaseBuilder(application, AppDatabase::class.java, "TheAppIbartiFaceDB.db")
+//            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
             .fallbackToDestructiveMigration()
             .build()
 
@@ -38,5 +37,9 @@ class RoomDatabaseModule {
     @Singleton
     @Provides
     fun provideAsistenciaDao(appDatabase: AppDatabase) = appDatabase.asistenciaDao()
+
+    @Singleton
+    @Provides
+    fun providePersonAsistenciaDao(appDatabase: AppDatabase) = appDatabase.personAsistenciaDao()
 
 }

@@ -40,6 +40,7 @@ abstract class MaestrosRepository {
     abstract fun findPersons(): LiveData<List<Person>>
     abstract suspend fun insertPerson(addPersonRequest: AddPersonRequest): Result<Unit>
     abstract suspend fun updatePerson(personId: String, updatePersonRequest: UpdatePersonRequest): Result<Person>
+    abstract suspend fun deletePerson(personId: String): Result<Unit>
 
 
     abstract fun findCurrentDayStandBys(): LiveData<List<StandBy>>

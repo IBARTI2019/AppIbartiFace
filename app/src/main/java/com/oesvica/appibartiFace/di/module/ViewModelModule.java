@@ -24,7 +24,7 @@ import com.oesvica.appibartiFace.ViewModelProviderFactory;
 import com.oesvica.appibartiFace.di.ViewModelKey;
 import com.oesvica.appibartiFace.ui.addPerson.AddPersonViewModel;
 import com.oesvica.appibartiFace.ui.addStatus.AddStatusViewModel;
-import com.oesvica.appibartiFace.ui.aptos.DocsViewModel;
+import com.oesvica.appibartiFace.ui.personAsistencia.DocsViewModel;
 import com.oesvica.appibartiFace.ui.asistencia.AsistenciaViewModel;
 import com.oesvica.appibartiFace.ui.categories.CategoriesViewModel;
 import com.oesvica.appibartiFace.ui.editPerson.EditPersonViewModel;

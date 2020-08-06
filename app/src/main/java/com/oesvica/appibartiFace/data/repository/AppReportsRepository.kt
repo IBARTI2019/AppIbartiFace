@@ -8,8 +8,8 @@ import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
 import com.oesvica.appibartiFace.data.preferences.AppPreferencesHelper.Companion.TOKEN
 import com.oesvica.appibartiFace.data.preferences.PreferencesHelper
 import com.oesvica.appibartiFace.data.api.AppIbartiFaceApi
-import com.oesvica.appibartiFace.data.api.CedulasByDate
-import com.oesvica.appibartiFace.data.api.Doc
+import com.oesvica.appibartiFace.data.database.PersonAsistenciaDao
+import com.oesvica.appibartiFace.data.model.personAsistencia.PersonAsistencia
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.mapToResult
 import javax.inject.Inject
@@ -20,7 +20,8 @@ class AppReportsRepository
 @Inject constructor(
     private val appIbartiFaceApi: AppIbartiFaceApi,
     private val prefs: PreferencesHelper,
-    private val asistenciaDao: AsistenciaDao
+    private val asistenciaDao: AsistenciaDao,
+    private val personAsistenciaDao: PersonAsistenciaDao
 ) : ReportsRepository() {
 
     override fun findAsistencias(
@@ -56,35 +57,51 @@ class AppReportsRepository
         }
     }
 
-    override suspend fun refreshAptos(
+    override fun findPersonAsistencias(
         iniDate: CustomDate,
-        endDate: CustomDate
-    ): Result<List<Doc>> {
+        endDate: CustomDate,
+        isApto: Boolean
+    ): LiveData<List<PersonAsistencia>> {
+        return personAsistenciaDao.findPersonAsistencias(
+            iniDate = iniDate.toString(),
+            endDate = endDate.toString(),
+            isApto = isApto
+        )
+    }
+
+    override suspend fun refreshPersonAsistencias(
+        iniDate: CustomDate,
+        endDate: CustomDate,
+        isApto: Boolean
+    ): Result<List<PersonAsistencia>> {
         return mapToResult {
-            val aptos = appIbartiFaceApi.getAptos(
-                authorization = prefs[TOKEN],
-                iniDate = iniDate.toString(),
-                endDate = endDate.toString())
-            val docs = aptos.flatMap {
-                it.cedulas.flatMap { it.docs }
+            val aptos = if (isApto) {
+                appIbartiFaceApi.getAptos(
+                    authorization = prefs[TOKEN],
+                    iniDate = iniDate.toString(),
+                    endDate = endDate.toString()
+                )
+            } else {
+                appIbartiFaceApi.getNoAptos(
+                    authorization = prefs[TOKEN],
+                    iniDate = iniDate.toString(),
+                    endDate = endDate.toString()
+                )
             }
-            docs
+            val personAsistencias = aptos.flatMap { it.cedulas }.map { personAsistencia ->
+                personAsistencia.apply {
+                    this.isApto = isApto
+                }
+            }
+            debug("refreshPersonAsistencias($iniDate: String, $endDate: String, $isApto: Boolean)=${personAsistencias.take(2)}")
+            personAsistenciaDao.replacePersonAsistencias(
+                iniDate = iniDate.toString(),
+                endDate = endDate.toString(),
+                isApto = isApto,
+                persons = *personAsistencias.toTypedArray()
+            )
+            personAsistencias
         }
     }
 
-    override suspend fun refreshNoAptos(
-        iniDate: CustomDate,
-        endDate: CustomDate
-    ): Result<List<Doc>> {
-        return mapToResult {
-            val aptos = appIbartiFaceApi.getNoAptos(
-                authorization = prefs[TOKEN],
-                iniDate = iniDate.toString(),
-                endDate = endDate.toString())
-            val docs = aptos.flatMap {
-                it.cedulas.flatMap { it.docs }
-            }
-            docs
-        }
-    }
 }

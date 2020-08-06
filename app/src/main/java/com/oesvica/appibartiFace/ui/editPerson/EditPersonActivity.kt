@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.category.Category
 import com.oesvica.appibartiFace.data.model.status.Status
@@ -26,19 +27,22 @@ class EditPersonActivity : DaggerActivity() {
         private const val EXTRA_CEDULA = "EXTRA_CEDULA"
         private const val EXTRA_CATEGORY = "EXTRA_CATEGORY"
         private const val EXTRA_STATUS = "EXTRA_STATUS"
+        private const val EXTRA_PHOTO = "EXTRA_PHOTO"
 
         fun starterIntent(
             context: Context,
             id: String,
             cedula: String,
             category: String,
-            status: String
+            status: String,
+            photo: String
         ): Intent {
             val starter = Intent(context, EditPersonActivity::class.java)
             starter.putExtra(EXTRA_ID, id)
             starter.putExtra(EXTRA_CEDULA, cedula)
             starter.putExtra(EXTRA_CATEGORY, category)
             starter.putExtra(EXTRA_STATUS, status)
+            starter.putExtra(EXTRA_PHOTO, photo)
             return starter
         }
 
@@ -52,6 +56,7 @@ class EditPersonActivity : DaggerActivity() {
     private val cedula by lazy { intent.getStringExtra(EXTRA_CEDULA) }
     private val category by lazy { intent.getStringExtra(EXTRA_CATEGORY) }
     private val status by lazy { intent.getStringExtra(EXTRA_STATUS) }
+    private val photo by lazy { intent.getStringExtra(EXTRA_PHOTO) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +66,13 @@ class EditPersonActivity : DaggerActivity() {
         debug("cedula=$cedula category=$category status=$status")
         cedulaEditText.setText(cedula)
         cedulaEditText.isEnabled = false
+        if (photo != null) {
+            Glide.with(this)
+                .load(photo)
+                .placeholder(R.drawable.photo_placeholder)
+                .centerCrop()
+                .into(personImageView)
+        }
         observeStatuses()
         observeCategories()
         observeEditPersonNetworkRequest()

@@ -23,7 +23,7 @@ class RetrofitModule {
             .connectTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)// TODO add interceptor po provide for more time in case of a long request like aptos/noAptos request
-            .addInterceptor(RetryInterceptor())
+//            .addInterceptor(RetryInterceptor())
 //            .addInterceptor { chain ->
 //                val RETRY_LIMIT = 3
 //                val request: Request = chain.request()

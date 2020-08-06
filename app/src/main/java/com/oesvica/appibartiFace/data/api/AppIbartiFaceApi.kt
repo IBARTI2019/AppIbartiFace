@@ -1,7 +1,5 @@
 package com.oesvica.appibartiFace.data.api
 
-import com.google.gson.annotations.SerializedName
-import com.oesvica.appibartiFace.data.api.AppIbartiFaceApi.Companion.END_POINT
 import com.oesvica.appibartiFace.data.model.FirebaseTokenId
 import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
 import com.oesvica.appibartiFace.data.model.auth.LogInRequest
@@ -13,41 +11,14 @@ import com.oesvica.appibartiFace.data.model.category.CategoryRequest
 import com.oesvica.appibartiFace.data.model.person.AddPersonRequest
 import com.oesvica.appibartiFace.data.model.person.Person
 import com.oesvica.appibartiFace.data.model.person.UpdatePersonRequest
+import com.oesvica.appibartiFace.data.model.personAsistencia.CedulasByDate
 import com.oesvica.appibartiFace.data.model.standby.DeleteStandBy
 import com.oesvica.appibartiFace.data.model.standby.Prediction
 import com.oesvica.appibartiFace.data.model.standby.StandBy
 import com.oesvica.appibartiFace.data.model.status.Status
 import com.oesvica.appibartiFace.data.model.status.StatusRequest
 import retrofit2.http.*
-
-fun Doc.fullPhotoUrl(): String = "${END_POINT}view$photo"
-
-data class Doc(
-    @SerializedName("_id")
-    var id: String = "",
-    @SerializedName("cedula")
-    var cedula: String = "",
-    @SerializedName("fecha")
-    var date: String = "",
-    @SerializedName("fecha_captura")
-    var dateCapture: String = "",
-    @SerializedName("foto")
-    var photo: String = "",
-    @SerializedName("hora")
-    var time: String = ""
-)
-data class PersonPhotos(
-    @SerializedName("cedula")
-    var cedula: String = "",
-    @SerializedName("documentos")
-    var docs: List<Doc> = emptyList()
-)
-data class CedulasByDate(
-    @SerializedName("cedulas")
-    var cedulas: List<PersonPhotos> = emptyList(),
-    @SerializedName("fecha_query")
-    var dateQuery: String = ""
-)
+import java.util.*
 
 interface AppIbartiFaceApi {
 
@@ -57,6 +28,7 @@ interface AppIbartiFaceApi {
         const val FIND_PERSONS = "maestros/persons"
         const val ADD_PERSON = "maestros/persons/"
         const val UPDATE_PERSON = "maestros/persons/{id}/"
+        const val DELETE_PERSON = "maestros/persons/{id}/"
 
         const val FIND_CATEGORIES = "maestros/category"
         const val ADD_CATEGORY = "maestros/category/"
@@ -134,6 +106,12 @@ interface AppIbartiFaceApi {
         @Body updatePersonRequest: UpdatePersonRequest
     ): Person
 
+    @DELETE(DELETE_PERSON)
+    suspend fun deletePerson(
+        @Header("Authorization") authorization: String?,
+        @Path("id") id: String
+    )
+
     @GET
     suspend fun findCategories(
         @Header("Authorization") authorization: String?,
@@ -158,7 +136,6 @@ interface AppIbartiFaceApi {
         @Header("Authorization") authorization: String?,
         @Path("id") id: String
     )
-
 
     @GET
     suspend fun findStatuses(

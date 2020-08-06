@@ -14,13 +14,16 @@ data class Category(
     @SerializedName("alerta") @Expose var alert: Boolean = false
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString()?:"",
-        parcel.readString()?:""
-    )
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readByte() != 0.toByte()
+    ) {
+    }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)
         parcel.writeString(description)
+        parcel.writeByte(if (alert) 1 else 0)
     }
 
     override fun describeContents(): Int {
@@ -37,4 +40,5 @@ data class Category(
             return arrayOfNulls(size)
         }
     }
+
 }

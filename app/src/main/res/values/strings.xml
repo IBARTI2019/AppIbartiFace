@@ -43,4 +43,6 @@
     <string name="status_delete">Delete status</string>
     <string name="menu_maestros">Maestros</string>
     <string name="menu_reportes">Reportes</string>
+    <string name="person_button_delete">Eliminar</string>
+    <string name="person_button_edit">Editar</string>
 </resources>
