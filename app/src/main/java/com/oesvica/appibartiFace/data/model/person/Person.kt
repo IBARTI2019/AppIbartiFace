@@ -6,6 +6,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.oesvica.appibartiFace.data.api.AppIbartiFaceApi
+import java.util.*
 
 @Entity(tableName = Person.TABLE_NAME)
 data class Person(
@@ -13,9 +15,17 @@ data class Person(
     @SerializedName("category") @Expose var category: String = "",
     @SerializedName("client") @Expose var client: String = "",
     @SerializedName("doc_id") @Expose var doc_id: String = "",
-    @SerializedName("status") @Expose var status: String = ""
+    @SerializedName("status") @Expose var status: String = "",
+    @SerializedName("foto") @Expose var photo: String = "",
+    @SerializedName("nombres") @Expose var names: String? = "",
+    @SerializedName("apellidos") @Expose var surnames: String? = "",
+    @SerializedName("fec_nacimiento") @Expose var dateBorn: String = ""
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
@@ -29,6 +39,10 @@ data class Person(
         parcel.writeString(client)
         parcel.writeString(doc_id)
         parcel.writeString(status)
+        parcel.writeString(photo)
+        parcel.writeString(names)
+        parcel.writeString(surnames)
+        parcel.writeString(dateBorn)
     }
 
     override fun describeContents(): Int {
@@ -47,3 +61,7 @@ data class Person(
     }
 
 }
+
+fun Person.fullName(): String = (names?.split(" ")?.get(0)?.toLowerCase(Locale.getDefault())?.capitalize() ?: "") + " " + (surnames?.split(" ")?.get(0)?.toLowerCase(Locale.getDefault())?.capitalize() ?: "")
+
+fun Person.fullPhotoUrl(): String = "${AppIbartiFaceApi.END_POINT}view${photo.trimStart('.')}"

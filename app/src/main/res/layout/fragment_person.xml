@@ -1,71 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:background="#37E0F7FA"
+    android:layout_margin="8dp"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:id="@+id/personPhotoImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:contentDescription="@null"
+        tools:src="@drawable/photo_placeholder" />
 
     <TextView
-        android:id="@+id/cedula"
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="2.4"
+        android:id="@+id/fullnameTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/person_text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/cliente"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        android:textColor="#000"
+        tools:text="Jhon Doe" />
+
+    <TextView
+        android:id="@+id/cedulaTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/person_text"
         tools:text="27195451" />
 
     <TextView
-        android:id="@+id/cliente"
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="1.2"
+        android:id="@+id/clienteTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/person_text"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/cedula"
-        app:layout_constraintEnd_toStartOf="@id/categoria"
-        app:layout_constraintBottom_toBottomOf="parent"
         tools:text="001"/>
 
     <TextView
-        android:id="@+id/categoria"
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="2"
+        android:id="@+id/categoriaTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/person_text"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/status"
-        app:layout_constraintStart_toEndOf="@id/cliente"
         tools:text="Empleado Oesvica"/>
 
     <TextView
-        android:id="@+id/status"
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="4"
+        android:id="@+id/statusTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/person_text"
-        app:layout_constraintStart_toEndOf="@id/categoria"
-        app:layout_constraintEnd_toStartOf="@id/edit"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:text="454g56"/>
+        tools:text="Estatus Activo"/>
 
-    <ImageView
-        android:id="@+id/edit"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:scaleType="center"
-        app:layout_constraintStart_toEndOf="@id/status"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_edit_24dp"
-        tools:ignore="PrivateResource"
-        android:contentDescription="@string/edit_person" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

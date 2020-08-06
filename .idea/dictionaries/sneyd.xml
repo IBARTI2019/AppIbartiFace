@@ -1,6 +1,7 @@
 <component name="ProjectDictionaryState">
   <dictionary name="sneyd">
     <words>
+      <w>apellidos</w>
       <w>apto</w>
       <w>aptos</w>
       <w>asistencia</w>
@@ -15,8 +16,11 @@
       <w>fecha</w>
       <w>ficha</w>
       <w>foto</w>
+      <w>fullname</w>
       <w>gson</w>
       <w>ibarti</w>
+      <w>nacimiento</w>
+      <w>nombres</w>
       <w>snackbar</w>
     </words>
   </dictionary>

@@ -51,7 +51,8 @@
             android:id="@+id/personsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3"
             tools:listitem="@layout/fragment_person" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

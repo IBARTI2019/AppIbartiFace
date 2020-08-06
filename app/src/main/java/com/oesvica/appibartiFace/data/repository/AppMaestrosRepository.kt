@@ -148,7 +148,12 @@ class AppMaestrosRepository
         return mapToResult {
             val persons = appIbartiFaceApi.findPersons(
                 authorization = prefs[TOKEN]
-            )
+            ).map { person ->
+                // the api may return names o surnames as null
+                person.names = person.names?.trim() ?: ""
+                person.surnames = person.surnames?.trim() ?: ""
+                person
+            }
             personDao.replacePersons(*persons.toTypedArray())
         }
     }

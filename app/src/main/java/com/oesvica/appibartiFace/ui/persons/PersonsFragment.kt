@@ -10,9 +10,11 @@ import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.ui.editPerson.EditPersonActivity
+import com.oesvica.appibartiFace.ui.standby.StandByFragment
 import com.oesvica.appibartiFace.utils.base.DaggerFragment
 import com.oesvica.appibartiFace.utils.debug
 import distinct
@@ -27,12 +29,13 @@ class PersonsFragment : DaggerFragment() {
 
     companion object {
         const val KEY_RECYCLER_STATE = "PersonsRecyclerViewState"
+        const val COLUMNS_COUNT = 3
     }
 
     private val personsViewModel: PersonsViewModel by viewModels { viewModelFactory }
 
     private val personsAdapter by lazy {
-        PersonsAdapter(onEditPerson = {
+        PersonsAdapter(onPersonSelected = {
             startActivity(
                 EditPersonActivity.starterIntent(
                     requireContext(),
@@ -68,7 +71,7 @@ class PersonsFragment : DaggerFragment() {
 
     private fun setUpRecyclerView(savedInstanceState: Bundle?) {
         with(personsRecyclerView) {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = GridLayoutManager(context, COLUMNS_COUNT)
             adapter = personsAdapter
         }
         personsRecyclerView.post {
