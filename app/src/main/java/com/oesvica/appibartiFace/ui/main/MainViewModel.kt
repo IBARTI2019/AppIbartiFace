@@ -5,6 +5,7 @@ import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.FirebaseTokenId
 import com.oesvica.appibartiFace.data.model.Result
 import com.oesvica.appibartiFace.data.model.auth.AuthInfo
+import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.data.repository.UserRepository
 import com.oesvica.appibartiFace.utils.SingleLiveEvent
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 class MainViewModel
 @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val maestrosRepository: MaestrosRepository
 ) : BaseViewModel() {
 
     companion object {
@@ -60,6 +62,8 @@ class MainViewModel
             if (result.error != null) snackBarMsg.value = result.error.message
             if (loggedUserAuthInfo.logIn && !loggedUserAuthInfo.token.isNullOrEmpty()) {
                 uploadFirebaseTokenId()
+                fetchCategories()
+                fetchStatuses()
             }
         }
     }
@@ -73,6 +77,13 @@ class MainViewModel
         debug("uploadFirebaseTokenId result=$result")
     }
 
+    private suspend fun fetchCategories() {
+        withContext(IO){ maestrosRepository.refreshCategories() }
+    }
+
+    private suspend fun fetchStatuses() {
+        withContext(IO){ maestrosRepository.refreshStatuses() }
+    }
 
     fun logOut() {
         authInfo.value = Result()
