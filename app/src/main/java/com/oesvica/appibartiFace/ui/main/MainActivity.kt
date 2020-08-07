@@ -1,6 +1,7 @@
 package com.oesvica.appibartiFace.ui.main
 
 import android.annotation.TargetApi
+import android.app.Dialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
@@ -16,7 +17,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEach
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
-import androidx.navigation.ui.*
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.Snackbar
 import com.oesvica.appibartiFace.CHANNEL_ID
 import com.oesvica.appibartiFace.R
@@ -26,6 +32,7 @@ import com.oesvica.appibartiFace.utils.isOreoOrLater
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
+
 
 class MainActivity : DaggerActivity() {
 
@@ -50,6 +57,21 @@ class MainActivity : DaggerActivity() {
         observeAuth()
         observeSnackbarMessages()
         mainViewModel.loadAuthInfo()
+        checkForGooglePlayServices() // check because of FirebaseCloudMessaging needing that sdk
+    }
+
+    /**
+     * Verify Google Play Services is available and in case it is not show an ErrorDialog
+     */
+    private fun checkForGooglePlayServices(){
+        val status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
+        // Showing status
+        if (status != ConnectionResult.SUCCESS) {
+            Snackbar.make(drawerLayout, "Google Play Services no esta disponible", Snackbar.LENGTH_LONG)
+            val requestCode = 10
+            val dialog: Dialog = GoogleApiAvailability.getInstance().getErrorDialog(this, status, requestCode)
+            dialog.show()
+        }
     }
 
     private fun observeAuth() {
