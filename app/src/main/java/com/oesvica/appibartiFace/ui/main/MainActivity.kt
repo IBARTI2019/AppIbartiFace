@@ -1,7 +1,6 @@
 package com.oesvica.appibartiFace.ui.main
 
 import android.annotation.TargetApi
-import android.app.Dialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
@@ -21,14 +20,11 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.snackbar.Snackbar
 import com.oesvica.appibartiFace.CHANNEL_ID
 import com.oesvica.appibartiFace.R
+import com.oesvica.appibartiFace.utils.*
 import com.oesvica.appibartiFace.utils.base.DaggerActivity
-import com.oesvica.appibartiFace.utils.debug
-import com.oesvica.appibartiFace.utils.isOreoOrLater
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -58,19 +54,18 @@ class MainActivity : DaggerActivity() {
         observeSnackbarMessages()
         mainViewModel.loadAuthInfo()
         checkForGooglePlayServices() // check because of FirebaseCloudMessaging needing that sdk
+        checkForInternetConnection() // check to warn of missing functionality in case of no connection
     }
 
-    /**
-     * Verify Google Play Services is available and in case it is not show an ErrorDialog
-     */
     private fun checkForGooglePlayServices(){
-        val status = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)
-        // Showing status
-        if (status != ConnectionResult.SUCCESS) {
-            Snackbar.make(drawerLayout, "Google Play Services no esta disponible", Snackbar.LENGTH_LONG)
-            val requestCode = 10
-            val dialog: Dialog = GoogleApiAvailability.getInstance().getErrorDialog(this, status, requestCode)
-            dialog.show()
+        if (!isGooglePlayServicesAvailable()) {
+            drawerLayout.displayLongTextSnackBar("Google Play Services no esta disponible, asi, funciones como las notificaciones podrian no funcionar correctamente")
+        }
+    }
+
+    private fun checkForInternetConnection(){
+        if(!isNetworkAvailable()){
+            drawerLayout.displayLongTextSnackBarWithOkBtn("No se encuentra conectado a la red, algunas funcionalidades del app no estaran disponibles")
         }
     }
 
