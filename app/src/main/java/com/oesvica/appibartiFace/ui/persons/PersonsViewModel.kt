@@ -7,7 +7,6 @@ import com.oesvica.appibartiFace.data.model.person.Person
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug
-import com.oesvica.appibartiFace.utils.schedulers.SchedulerProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -17,7 +16,7 @@ class PersonsViewModel
     private val maestrosRepository: MaestrosRepository
 ) : BaseViewModel() {
 
-    val persons by lazy { maestrosRepository.findPersons() }
+    val persons by lazy { maestrosRepository.loadPersons() }
     val personsNetworkRequest = MutableLiveData<NetworkRequestStatus>()
 
     fun refreshPersons() {

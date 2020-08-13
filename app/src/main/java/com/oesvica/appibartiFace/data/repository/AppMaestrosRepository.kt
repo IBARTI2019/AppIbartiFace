@@ -45,7 +45,7 @@ class AppMaestrosRepository
         return clients.toList()
     }
 
-    override fun findCategories(): LiveData<List<Category>> {
+    override fun loadCategories(): LiveData<List<Category>> {
         return categoryDao.findCategories()
     }
 
@@ -105,7 +105,7 @@ class AppMaestrosRepository
         }
     }
 
-    override fun findStatuses(): LiveData<List<Status>> {
+    override fun loadStatuses(): LiveData<List<Status>> {
         return statusDao.findStatuses()
     }
 
@@ -156,7 +156,7 @@ class AppMaestrosRepository
         }
     }
 
-    override fun findPersons(): LiveData<List<Person>> {
+    override fun loadPersons(): LiveData<List<Person>> {
         return personDao.findAllPersons()
     }
 
@@ -196,31 +196,14 @@ class AppMaestrosRepository
         }
     }
 
-    override fun findCurrentDayStandBys(): LiveData<List<StandBy>> {
-        return standByDao.findStandBysByDate()
-    }
-
-    override fun findStandBysByClientAndDate(
+    override fun loadStandBys(
         client: String,
         date: String
     ): LiveData<List<StandBy>> {
         return standByDao.findStandBysByClientAndDate(client, date)
     }
 
-    override suspend fun refreshCurrentDayStandBys(force: Boolean): Result<Unit> {
-        return mapToResult {
-            if (force || prefs.isTimeExpired("${defaultDate()}")) {
-                val todayStandBys = appIbartiFaceApi.findStandBysCurrentDay()
-                prefs.saveTime("${defaultDate()}")
-                standByDao.replaceStandBysByDate(
-                    currentDay().toString(),
-                    *todayStandBys.toTypedArray()
-                )
-            }
-        }
-    }
-
-    override suspend fun refreshStandBysByClientAndDate(
+    override suspend fun refreshStandBys(
         client: String,
         date: String,
         force: Boolean
@@ -252,7 +235,7 @@ class AppMaestrosRepository
         }
     }
 
-    override suspend fun findPredictionsByStandBy(standBy: StandBy): Result<List<Prediction>> {
+    override suspend fun fetchPredictionsByStandBy(standBy: StandBy): Result<List<Prediction>> {
         return mapToResult {
             appIbartiFaceApi.findPredictionsByStandBy(
                 client = standBy.client,

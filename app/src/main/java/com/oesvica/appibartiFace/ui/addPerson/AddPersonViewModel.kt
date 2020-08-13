@@ -23,8 +23,8 @@ class AddPersonViewModel
 
     fun loadPredictionsForStandBy(standBy: StandBy) {
         if (predictions.value?.success != null) return
-        launch {
-            val result = withContext(IO) { maestrosRepository.findPredictionsByStandBy(standBy) }
+        viewModelScope.launch {
+            val result = withContext(IO) { maestrosRepository.fetchPredictionsByStandBy(standBy) }
             predictions.value = result
         }
     }
@@ -72,16 +72,6 @@ class AddPersonViewModel
         date: String,
         photo: String
     ) {
-        debug(
-            "addPerson(\n" +
-                    "        $cedula: String,\n" +
-                    "        $category: String,\n" +
-                    "        $status: String,\n" +
-                    "        $client: String,\n" +
-                    "        $device: String,\n" +
-                    "        $date: String,\n" +
-                    "        $photo: String"
-        )
         addPersonNetworkRequest.value = NetworkRequestStatus(isOngoing = true)
         viewModelScope.launch {
             val result = withContext(IO) {

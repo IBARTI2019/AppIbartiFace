@@ -7,7 +7,6 @@ import com.oesvica.appibartiFace.data.model.standby.StandByQuery
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
 import com.oesvica.appibartiFace.utils.debug
-import com.oesvica.appibartiFace.utils.schedulers.SchedulerProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -18,7 +17,7 @@ class StandByViewModel @Inject constructor(
 
     private val standBysQuery: MutableLiveData<StandByQuery> = MutableLiveData()
     var standBys: LiveData<List<StandBy>> = standBysQuery.switchMap { filter ->
-        maestrosRepository.findStandBysByClientAndDate(
+        maestrosRepository.loadStandBys(
             client = filter.client,
             date = filter.date.toString()
         ).map { list ->
@@ -37,7 +36,7 @@ class StandByViewModel @Inject constructor(
             standBysQuery.value = query
             viewModelScope.launch {
                 val standsBysResult = withContext(IO) {
-                    maestrosRepository.refreshStandBysByClientAndDate(
+                    maestrosRepository.refreshStandBys(
                         query.client,
                         query.date.toString(),
                         force

@@ -1,5 +1,6 @@
 package com.oesvica.appibartiFace.ui.main
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -69,6 +70,7 @@ class MainActivity : DaggerActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun observeAuth() {
         mainViewModel.authInfo.observe(this) {
             debug("authInfo = $it")

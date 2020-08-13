@@ -35,7 +35,7 @@
         android:id="@+id/timeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="17:05:56.712504"
+        tools:text="17:05:56"
         android:textAppearance="@style/stand_by_text"/>
 
 </LinearLayout>

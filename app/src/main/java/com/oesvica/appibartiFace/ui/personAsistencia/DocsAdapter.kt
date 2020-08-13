@@ -1,5 +1,6 @@
 package com.oesvica.appibartiFace.ui.personAsistencia
 
+import android.annotation.SuppressLint
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,7 @@ import com.oesvica.appibartiFace.data.model.personAsistencia.fullPhotoUrl
 import kotlinx.android.synthetic.main.fragment_doc.view.*
 import kotlin.properties.Delegates
 
-class DocsAdapter() : RecyclerView.Adapter<DocsAdapter.DocViewHolder>() {
+class DocsAdapter : RecyclerView.Adapter<DocsAdapter.DocViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DocViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -43,13 +44,14 @@ class DocsAdapter() : RecyclerView.Adapter<DocsAdapter.DocViewHolder>() {
 
     inner class DocViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
+        @SuppressLint("SetTextI18n")
         fun bind(doc: PersonAsistencia) {
             with(doc) {
                 view.nameTextView.text = fullName()
-                view.idTextView.text = "CI: " + cedula
+                view.idTextView.text = "CI: $cedula"
                 view.dateTextView.text = dateEntry
                 view.timeTextView.text = timeEntry
-                Glide.with(view)
+                Glide.with(view.docImageView.context)
                     .load(fullPhotoUrl())
                     .placeholder(R.drawable.photo_placeholder)
                     .centerCrop()

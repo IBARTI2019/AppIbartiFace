@@ -1,11 +1,11 @@
 package com.oesvica.appibartiFace.ui.statuses
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.oesvica.appibartiFace.data.model.NetworkRequestStatus
 import com.oesvica.appibartiFace.data.model.status.Status
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
-import com.oesvica.appibartiFace.utils.schedulers.SchedulerProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -15,12 +15,12 @@ class StatusesViewModel
     private val maestrosRepository: MaestrosRepository
 ) : BaseViewModel() {
 
-    val statuses by lazy { maestrosRepository.findStatuses() }
+    val statuses by lazy { maestrosRepository.loadStatuses() }
     val networkRequestStatuses = MutableLiveData<NetworkRequestStatus>()
 
     fun refreshStatuses(){
         networkRequestStatuses.value = NetworkRequestStatus(isOngoing = true)
-        launch {
+        viewModelScope.launch {
             val result = withContext(IO){
                 maestrosRepository.refreshStatuses()
             }
@@ -29,7 +29,7 @@ class StatusesViewModel
     }
 
     fun deleteStatus(status: Status){
-        launch {
+        viewModelScope.launch {
             withContext(IO){ maestrosRepository.deleteStatus(status.id) }
             refreshStatuses()
         }

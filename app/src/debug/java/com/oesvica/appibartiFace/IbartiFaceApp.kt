@@ -6,9 +6,9 @@ import timber.log.Timber
 class IbartiFaceApp : BaseApp() {
 
     override fun onCreate() {
+        setStrictMode()
         super.onCreate()
         initTimber()
-        setStrictMode()
     }
 
     private fun initTimber() {

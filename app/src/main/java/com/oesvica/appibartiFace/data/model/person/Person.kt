@@ -46,6 +46,7 @@ data class Person(
     }
 
     override fun describeContents(): Int {
+        val g = CREATOR
         return 0
     }
 

@@ -25,7 +25,6 @@ abstract class PersonAsistenciaDao : BaseDao<PersonAsistencia> {
 
     @Transaction
     open suspend fun replacePersonAsistencias(iniDate: String, endDate: String, isApto: Boolean, vararg persons: PersonAsistencia) {
-        debug("replacePersonAsistencias $iniDate $endDate $isApto ${persons.toList()}")
         deletePersonAsistencias(iniDate, endDate, isApto)
         insertPersonAsistencias(*persons)
     }

@@ -17,15 +17,7 @@
 package com.oesvica.appibartiFace.utils.base
 
 import androidx.lifecycle.ViewModel
-import com.oesvica.appibartiFace.utils.schedulers.SchedulerProvider
 import com.oesvica.appibartiFace.utils.coroutines.CoroutineContextProvider
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -33,31 +25,10 @@ import kotlin.coroutines.CoroutineContext
 
 abstract class BaseViewModel(
     private val coroutineContextProvider: CoroutineContextProvider? = null
-) : ViewModel(), CoroutineScope {
+) : ViewModel() {
 
-    val compositeDisposable by lazy { CompositeDisposable() }
+    val IO by lazy { coroutineContextProvider?.IO ?: Dispatchers.IO }
+    val Main by lazy { coroutineContextProvider?.Main ?: Dispatchers.Main }
+    val Unconfined by lazy { coroutineContextProvider?.Unconfined ?: Dispatchers.Unconfined }
 
-    private val job by lazy { SupervisorJob() }
-
-    override val coroutineContext: CoroutineContext
-        get() = Main
-
-    val IO by lazy { coroutineContextProvider?.IO ?: Dispatchers.IO + job }
-    val Main by lazy { coroutineContextProvider?.Main ?: Dispatchers.Main + job }
-    val Unconfined by lazy { coroutineContextProvider?.Unconfined ?: Dispatchers.Unconfined + job }
-
-    /**
-     * Adds a disposable to compositeDisposable
-     */
-    fun add(disposable: Disposable): Boolean {
-        return compositeDisposable.add(disposable)
-    }
-
-    override fun onCleared() {
-        if (!compositeDisposable.isDisposed) {
-            compositeDisposable.dispose()
-        }
-        job.cancel()
-        super.onCleared()
-    }
 }

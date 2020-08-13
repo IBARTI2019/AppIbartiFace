@@ -3,6 +3,7 @@ package com.oesvica.appibartiFace.ui.editPerson
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
 import com.oesvica.appibartiFace.data.model.category.Category
 import com.oesvica.appibartiFace.data.model.NetworkRequestStatus
 import com.oesvica.appibartiFace.data.model.status.Status
@@ -58,7 +59,7 @@ class EditPersonViewModel
     ) {
         editPersonNetworkRequest.value = NetworkRequestStatus(isOngoing = true)
         debug("editPerson($idPerson: String, $idCategory: String, $idStatus: String)")
-        launch {
+        viewModelScope.launch {
             val result = withContext(IO) {
                 maestrosRepository.updatePerson(
                     idPerson,

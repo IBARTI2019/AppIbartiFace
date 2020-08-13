@@ -1,7 +1,6 @@
 package com.oesvica.appibartiFace.ui.categories
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.oesvica.appibartiFace.data.model.category.Category
 import com.oesvica.appibartiFace.data.model.NetworkRequestStatus
@@ -18,7 +17,7 @@ class CategoriesViewModel
     private val maestrosRepository: MaestrosRepository
 ) : BaseViewModel() {
 
-    val categories by lazy { maestrosRepository.findCategories() }
+    val categories by lazy { maestrosRepository.loadCategories() }
     val statusCategories = MutableLiveData<NetworkRequestStatus>()
     val snackBarMsg = SingleLiveEvent<String>()
 

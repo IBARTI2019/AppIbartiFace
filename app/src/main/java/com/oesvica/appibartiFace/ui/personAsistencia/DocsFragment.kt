@@ -198,7 +198,7 @@ class DocsFragment : DaggerFragment() {
 
     private fun observePersonAsistencias() {
         docsViewModel.personAsistencias.distinctUntilChanged().observe(viewLifecycleOwner) { list ->
-            debug("observe personAsistencias = $list")
+            debug("observe personAsistencias = ${list.take(2)}")
             docsAdapter.allAsistenciasPersons = list
         }
         docsViewModel.fetchPersonAsistenciasNetworkRequest.observe(viewLifecycleOwner) {

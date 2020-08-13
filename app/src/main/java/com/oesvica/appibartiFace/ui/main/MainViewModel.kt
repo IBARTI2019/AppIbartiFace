@@ -1,6 +1,7 @@
 package com.oesvica.appibartiFace.ui.main
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.FirebaseTokenId
 import com.oesvica.appibartiFace.data.model.Result
@@ -53,7 +54,7 @@ class MainViewModel
 
     fun logIn(user: String, password: String) {
         authInfo.value = Result()
-        launch {
+        viewModelScope.launch {
             val result = withContext(IO) { userRepository.logIn(user, password) }
             result.error?.printStackTrace()
             debug("error loggin in=${result.error?.message}")
@@ -78,16 +79,16 @@ class MainViewModel
     }
 
     private suspend fun fetchCategories() {
-        withContext(IO){ maestrosRepository.refreshCategories() }
+        withContext(IO) { maestrosRepository.refreshCategories() }
     }
 
     private suspend fun fetchStatuses() {
-        withContext(IO){ maestrosRepository.refreshStatuses() }
+        withContext(IO) { maestrosRepository.refreshStatuses() }
     }
 
     fun logOut() {
         authInfo.value = Result()
-        launch {
+        viewModelScope.launch {
             withContext(IO) { userRepository.logOut() }
             authInfo.value = Result(success = userRepository.getAuthInfo())
         }

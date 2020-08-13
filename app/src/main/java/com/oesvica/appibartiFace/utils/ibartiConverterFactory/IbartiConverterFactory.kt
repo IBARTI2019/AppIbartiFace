@@ -21,18 +21,11 @@ private constructor() : Converter.Factory() {
         annotations: Array<Annotation>,
         retrofit: Retrofit
     ): Converter<ResponseBody, *>? {
-        debug(
-            "responseBodyConverter(\n" +
-                    "        $type: Type,\n" +
-                    "        annotations: Array<Annotation>,\n" +
-                    "        retrofit: Retrofit"
-        )
         if (type.toString() == "class ${LogInResponse::class.qualifiedName}"){ // look for a better way to compare this
             return BodyConverter()
         }
         return super.responseBodyConverter(type, annotations, retrofit)
     }
-
 }
 
 class BodyConverter : Converter<ResponseBody, LogInResponse> {
@@ -40,7 +33,6 @@ class BodyConverter : Converter<ResponseBody, LogInResponse> {
         var logInResponse: LogInResponse? = null
         val response = value.string()
         value.use {
-            debug("converting $response")
             if (response.matches("^.+\$".toRegex())) {
                 it.close()
                 throw LogInException(response)

@@ -179,6 +179,10 @@ interface AppIbartiFaceApi {
         @Path("url") url: String
     ): List<Prediction>
 
+    /**
+     * Delete a standby
+     * NOTE: Cannot use @DELETE annotation because @DELETE methods cannot have a body in retrofit so need to use this workaround
+     */
     @HTTP(method = "DELETE", path = DELETE_STAND_BY, hasBody = true)
     suspend fun deleteStandBy(
         @Header("Authorization") authorization: String?,

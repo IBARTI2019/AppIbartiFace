@@ -41,7 +41,7 @@ class AsistenciaViewModel
     ) {
         debug("refreshAsistencia")
         asistenciasQueryRange.value = AsistenciaFilter(iniDate ?: return, endDate ?: return)
-        launch {
+        viewModelScope.launch {
             val asistenciasResult = withContext(IO) {
                 reportsRepository.refreshAsistencias(iniDate, endDate)
             }
