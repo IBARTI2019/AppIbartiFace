@@ -1,9 +1,11 @@
 package com.oesvica.appibartiFace
 
 import android.app.Notification
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
 import com.bumptech.glide.Glide
@@ -46,11 +48,19 @@ fun buildNotificationBig(
     setContentTitle(title)
     setContentText(description)
     //val intent = Intent(Intent.ACTION_VIEW)
+    //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
     val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
     //val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.)
-    img?.let { setStyle(NotificationCompat.BigPictureStyle().bigPicture(it)) }
+    img?.let {
+        setLargeIcon(it)
+        setStyle(NotificationCompat.BigPictureStyle()
+            .bigPicture(it)
+            .bigLargeIcon(null))
+    }
+    color = Color.argb(1, 255, 215, 212)
     setSound(soundUri)
     val v = longArrayOf(200, 100)
     setVibrate(v)
+    priority = NotificationCompat.PRIORITY_DEFAULT
     setAutoCancel(true)
 }.build()

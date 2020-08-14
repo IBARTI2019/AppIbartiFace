@@ -1,6 +1,5 @@
 package com.oesvica.appibartiFace.data.service
 
-import android.R.attr.bitmap
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import com.bumptech.glide.Glide
@@ -8,8 +7,6 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.oesvica.appibartiFace.NOTIFICATION_ID_EVENT
-import com.oesvica.appibartiFace.buildNotification
 import com.oesvica.appibartiFace.buildNotificationBig
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.notificationManager
@@ -55,7 +52,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             channel = channel,
             img = img
         )
-        notificationManager().notify(NOTIFICATION_ID_EVENT, notification)
+        notificationManager().notify(System.currentTimeMillis().toInt(), notification)
     }
 
     override fun onNewToken(token: String) {
