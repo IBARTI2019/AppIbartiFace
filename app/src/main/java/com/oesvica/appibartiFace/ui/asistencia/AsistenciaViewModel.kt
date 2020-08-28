@@ -1,29 +1,28 @@
 package com.oesvica.appibartiFace.ui.asistencia
 
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.PRIVATE
 import androidx.lifecycle.*
-import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
 import com.oesvica.appibartiFace.data.model.CustomDate
+import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
+import com.oesvica.appibartiFace.data.model.asistencia.AsistenciaFilter
 import com.oesvica.appibartiFace.data.model.toCustomDate
-import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.data.repository.ReportsRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
+import com.oesvica.appibartiFace.utils.coroutines.CoroutineContextProvider
 import com.oesvica.appibartiFace.utils.debug
-import com.oesvica.appibartiFace.utils.schedulers.SchedulerProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-data class AsistenciaFilter(
-    var iniDate: CustomDate,
-    var endDate: CustomDate
-)
-
 class AsistenciaViewModel
 @Inject constructor(
-    private val reportsRepository: ReportsRepository
-) : BaseViewModel() {
+    private val reportsRepository: ReportsRepository,
+    coroutineContextProvider: CoroutineContextProvider
+) : BaseViewModel(coroutineContextProvider) {
 
-    private val asistenciasQueryRange: MutableLiveData<AsistenciaFilter> =
+    @VisibleForTesting(otherwise = PRIVATE)
+    val asistenciasQueryRange: MutableLiveData<AsistenciaFilter> =
         MutableLiveData()
 
     val asistencias: LiveData<List<Asistencia>> = asistenciasQueryRange.switchMap { filter ->
@@ -40,7 +39,11 @@ class AsistenciaViewModel
         endDate: CustomDate?
     ) {
         debug("refreshAsistencia")
-        asistenciasQueryRange.value = AsistenciaFilter(iniDate ?: return, endDate ?: return)
+        asistenciasQueryRange.value =
+            AsistenciaFilter(
+                iniDate ?: return,
+                endDate ?: return
+            )
         viewModelScope.launch {
             val asistenciasResult = withContext(IO) {
                 reportsRepository.refreshAsistencias(iniDate, endDate)

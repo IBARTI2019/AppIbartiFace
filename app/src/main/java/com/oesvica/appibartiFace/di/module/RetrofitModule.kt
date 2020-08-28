@@ -1,9 +1,9 @@
 package com.oesvica.appibartiFace.di.module
 
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.oesvica.appibartiFace.data.api.AppIbartiFaceApi
-import com.oesvica.appibartiFace.data.api.RetryInterceptor
 import com.oesvica.appibartiFace.utils.ibartiConverterFactory.IbartiConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -23,27 +23,7 @@ class RetrofitModule {
             .connectTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)// TODO add interceptor po provide for more time in case of a long request like aptos/noAptos request
-//            .addInterceptor(RetryInterceptor())
-//            .addInterceptor { chain ->
-//                val RETRY_LIMIT = 3
-//                val request: Request = chain.request()
-//                var response: Response? = null
-//                var responseOK = false
-//                var tryCount = 0
-//
-//                while (!responseOK && tryCount < RETRY_LIMIT - 1) {
-//                    try {
-//                        response = chain.proceed(request)
-//                        responseOK = response.isSuccessful
-//                    } catch (e: Exception) {
-//                        debug("Request is not successful - $tryCount ${request.url()}")
-//                    } finally {
-//                        tryCount++
-//                    }
-//                }
-//                // otherwise just pass the original response on
-//                response ?: chain.proceed(request)
-//            }
+            .addNetworkInterceptor(StethoInterceptor())
             .followRedirects(true)
             .followSslRedirects(true)
             .retryOnConnectionFailure(true)

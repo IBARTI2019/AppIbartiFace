@@ -1,6 +1,7 @@
 package com.oesvica.appibartiFace
 
 import android.os.StrictMode
+import com.facebook.stetho.Stetho
 import timber.log.Timber
 
 class IbartiFaceApp : BaseApp() {
@@ -9,6 +10,7 @@ class IbartiFaceApp : BaseApp() {
         setStrictMode()
         super.onCreate()
         initTimber()
+        Stetho.initializeWithDefaults(this)
     }
 
     private fun initTimber() {

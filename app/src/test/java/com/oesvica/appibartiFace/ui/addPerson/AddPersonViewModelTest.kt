@@ -1,8 +1,10 @@
 package com.oesvica.appibartiFace.ui.addPerson
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.Observer
 import com.nhaarman.mockitokotlin2.*
 import com.oesvica.appibartiFace.*
+import com.oesvica.appibartiFace.data.model.NetworkRequestStatus
 import com.oesvica.appibartiFace.data.model.Result
 import com.oesvica.appibartiFace.data.model.category.Category
 import com.oesvica.appibartiFace.data.model.status.Status
@@ -19,8 +21,8 @@ import org.junit.Test
 
 class AddPersonViewModelTest {
 
-
-    @get:Rule val instantExecutorRule = InstantTaskExecutorRule()
+    @get:Rule
+    val instantExecutorRule = InstantTaskExecutorRule()
 
     @ExperimentalCoroutinesApi
     @get:Rule
@@ -32,7 +34,7 @@ class AddPersonViewModelTest {
     @Before
     fun setUp() {
         maestrosRepository = mock()
-        viewModel = AddPersonViewModel(maestrosRepository)
+        viewModel = AddPersonViewModel(maestrosRepository, TestingCoroutineContextProvider())
     }
 
     @ExperimentalCoroutinesApi
@@ -54,18 +56,19 @@ class AddPersonViewModelTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun `should not fetch predictions for standby already cached`() = coroutineRule.runBlockingTest {
-        // Given
-        val standBy = getStandBy()
-        val predictions = listOf(getPrediction())
-        viewModel.predictions.value = predictions.asResult()
+    fun `should not fetch predictions for standby already cached`() =
+        coroutineRule.runBlockingTest {
+            // Given
+            val standBy = getStandBy()
+            val predictions = listOf(getPrediction())
+            viewModel.predictions.value = predictions.asResult()
 
-        // When
-        viewModel.loadPredictionsForStandBy(standBy)
+            // When
+            viewModel.loadPredictionsForStandBy(standBy)
 
-        // Then
-        verify(maestrosRepository, times(0)).fetchPredictionsByStandBy(any())
-    }
+            // Then
+            verify(maestrosRepository, times(0)).fetchPredictionsByStandBy(any())
+        }
 
     @ExperimentalCoroutinesApi
     @Test
@@ -84,19 +87,20 @@ class AddPersonViewModelTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun `should display emptyList of categories when cache is empty and fetching fails`() = coroutineRule.runBlockingTest {
-        // Given
-        whenever(maestrosRepository.findCategoriesSynchronous()).thenReturn(emptyList())
-        whenever(maestrosRepository.refreshCategories()).thenReturn(Result(error = Throwable()))
+    fun `should display emptyList of categories when cache is empty and fetching fails`() =
+        coroutineRule.runBlockingTest {
+            // Given
+            whenever(maestrosRepository.findCategoriesSynchronous()).thenReturn(emptyList())
+            whenever(maestrosRepository.refreshCategories()).thenReturn(Result(error = Throwable()))
 
-        // When
-        val categories = viewModel.categories.getOrAwaitValue()
+            // When
+            val categories = viewModel.categories.getOrAwaitValue()
 
-        // Then
-        verify(maestrosRepository, times(1)).findCategoriesSynchronous()
-        verify(maestrosRepository, times(1)).refreshCategories()
-        assertEquals(emptyList<Category>(), categories)
-    }
+            // Then
+            verify(maestrosRepository, times(1)).findCategoriesSynchronous()
+            verify(maestrosRepository, times(1)).refreshCategories()
+            assertEquals(emptyList<Category>(), categories)
+        }
 
     @ExperimentalCoroutinesApi
     @Test
@@ -130,19 +134,20 @@ class AddPersonViewModelTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun `should display emptyList of statuses when cache is empty and fetching fails`() = coroutineRule.runBlockingTest {
-        // Given
-        whenever(maestrosRepository.findStatusesSynchronous()).thenReturn(emptyList())
-        whenever(maestrosRepository.refreshStatuses()).thenReturn(Result(error = Throwable()))
+    fun `should display emptyList of statuses when cache is empty and fetching fails`() =
+        coroutineRule.runBlockingTest {
+            // Given
+            whenever(maestrosRepository.findStatusesSynchronous()).thenReturn(emptyList())
+            whenever(maestrosRepository.refreshStatuses()).thenReturn(Result(error = Throwable()))
 
-        // When
-        val statuses = viewModel.statuses.getOrAwaitValue()
+            // When
+            val statuses = viewModel.statuses.getOrAwaitValue()
 
-        // Then
-        verify(maestrosRepository, times(1)).findStatusesSynchronous()
-        verify(maestrosRepository, times(1)).refreshStatuses()
-        assertEquals(emptyList<Status>(), statuses)
-    }
+            // Then
+            verify(maestrosRepository, times(1)).findStatusesSynchronous()
+            verify(maestrosRepository, times(1)).refreshStatuses()
+            assertEquals(emptyList<Status>(), statuses)
+        }
 
     @ExperimentalCoroutinesApi
     @Test
@@ -159,20 +164,32 @@ class AddPersonViewModelTest {
         assertEquals(list, statuses)
     }
 
-//    @ExperimentalCoroutinesApi
-//    @Test
-//    fun `should add a person successfully`() = coroutineRule.runBlockingTest {
-//        // Given
-//        whenever(maestrosRepository.insertPerson(any())).thenReturn(Unit.asResult())
-//
-//        // When
-//        val mockedObserver = mock<Observer<NetworkRequestStatus>>()
-//        viewModel.addPersonNetworkRequest.observeForever(mockedObserver)
-//        viewModel.addPerson(cedula = "1321", category = "xd", date = "2020-05-12", device = "0001", client = "001", photo = "xd.jpg", status = "ok")
-//
-//        // Then
-//        verify(mockedObserver).onChanged(NetworkRequestStatus(isOngoing = false))
-//        //assertEquals(NetworkRequestStatus(isOngoing = false), viewModel.addPersonNetworkRequest.value)
-//    }
+    @ExperimentalCoroutinesApi
+    @Test
+    fun `should add a person successfully`() = coroutineRule.runBlockingTest {
+        // Given
+        whenever(maestrosRepository.insertPerson(any())).thenReturn(Unit.asResult())
+
+        // When
+        val mockedObserver = mock<Observer<NetworkRequestStatus>>()
+        viewModel.addPersonNetworkRequest.observeForever(mockedObserver)
+        viewModel.addPerson(
+            cedula = "1321",
+            category = "xd",
+            date = "2020-05-12",
+            device = "0001",
+            client = "001",
+            photo = "xd.jpg",
+            status = "ok"
+        )
+
+        // Then
+        verify(mockedObserver).onChanged(NetworkRequestStatus(isOngoing = true))
+        verify(mockedObserver).onChanged(NetworkRequestStatus(isOngoing = false))
+        assertEquals(
+            NetworkRequestStatus(isOngoing = false),
+            viewModel.addPersonNetworkRequest.getOrAwaitValue()
+        )
+    }
 
 }

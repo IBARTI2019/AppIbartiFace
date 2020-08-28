@@ -7,6 +7,7 @@ import com.oesvica.appibartiFace.data.model.status.Status
 import com.oesvica.appibartiFace.data.model.status.StatusRequest
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
+import com.oesvica.appibartiFace.utils.coroutines.CoroutineContextProvider
 import com.oesvica.appibartiFace.utils.debug
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -14,8 +15,9 @@ import javax.inject.Inject
 
 class AddStatusViewModel
 @Inject constructor(
-    private val maestrosRepository: MaestrosRepository
-) : BaseViewModel() {
+    private val maestrosRepository: MaestrosRepository,
+    coroutineContextProvider: CoroutineContextProvider
+) : BaseViewModel(coroutineContextProvider) {
 
     val categories by lazy { maestrosRepository.loadCategories() }
     val addStatusNetworkRequest = MutableLiveData<NetworkRequestStatus>()

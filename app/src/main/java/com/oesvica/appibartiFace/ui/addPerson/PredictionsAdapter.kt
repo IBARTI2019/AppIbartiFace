@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.standby.Prediction
+import com.oesvica.appibartiFace.utils.debug
 import kotlinx.android.synthetic.main.list_prediction_item.view.*
 
 class PredictionsAdapter(
@@ -35,13 +36,16 @@ class PredictionsAdapter(
 
     inner class PredictionViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         private val predictionImageView by lazy { view.predictionImageView }
+        private val semejanzaTextView by lazy { view.semejanzaTextView }
 
         fun bind(prediction: Prediction) {
+            debug("prediction=$prediction")
             Glide.with(view)
                 .load(prediction.completeUrl)
                 .placeholder(R.drawable.photo_placeholder)
                 .centerCrop()
                 .into(predictionImageView)
+            semejanzaTextView.text = prediction.semejanza
             predictionImageView.setOnClickListener {
                 onImageSelected(prediction.cedula)
             }

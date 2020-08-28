@@ -127,10 +127,17 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-messaging:20.2.4'
 
+    // Analise network traffic
+    implementation 'com.facebook.stetho:stetho:1.5.1'
+    // for OkHttp3, if you're using an older version,
+    // check the stetho website
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
+
 
     // JUnit Unit tests
     testImplementation 'junit:junit:4.13'
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
+    testImplementation "org.mockito:mockito-core:3.3.3"
     testAnnotationProcessor "com.google.dagger:dagger-compiler:2.17"
     testImplementation("androidx.arch.core:core-testing:2.1.0")
     testImplementation "com.google.truth:truth:1.0.1"

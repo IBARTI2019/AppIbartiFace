@@ -10,6 +10,7 @@ import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.data.repository.UserRepository
 import com.oesvica.appibartiFace.utils.SingleLiveEvent
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
+import com.oesvica.appibartiFace.utils.coroutines.CoroutineContextProvider
 import com.oesvica.appibartiFace.utils.debug
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -18,8 +19,9 @@ import javax.inject.Inject
 class MainViewModel
 @Inject constructor(
     private val userRepository: UserRepository,
-    private val maestrosRepository: MaestrosRepository
-) : BaseViewModel() {
+    private val maestrosRepository: MaestrosRepository,
+    coroutineContextProvider: CoroutineContextProvider
+) : BaseViewModel(coroutineContextProvider) {
 
     companion object {
         val ITEM_MENU_TO_PERMISSIONS = mapOf(
@@ -56,8 +58,6 @@ class MainViewModel
         authInfo.value = Result()
         viewModelScope.launch {
             val result = withContext(IO) { userRepository.logIn(user, password) }
-            result.error?.printStackTrace()
-            debug("error loggin in=${result.error?.message}")
             val loggedUserAuthInfo = userRepository.getAuthInfo()
             authInfo.value = Result(success = loggedUserAuthInfo, error = result.error)
             if (result.error != null) snackBarMsg.value = result.error.message

@@ -9,6 +9,7 @@ import com.oesvica.appibartiFace.data.model.standby.Prediction
 import com.oesvica.appibartiFace.data.model.standby.StandBy
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
 import com.oesvica.appibartiFace.utils.base.BaseViewModel
+import com.oesvica.appibartiFace.utils.coroutines.CoroutineContextProvider
 import com.oesvica.appibartiFace.utils.debug
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -16,8 +17,9 @@ import javax.inject.Inject
 
 class AddPersonViewModel
 @Inject constructor(
-    private val maestrosRepository: MaestrosRepository
-) : BaseViewModel() {
+    private val maestrosRepository: MaestrosRepository,
+    coroutineContextProvider: CoroutineContextProvider
+) : BaseViewModel(coroutineContextProvider) {
 
     val predictions: MutableLiveData<Result<List<Prediction>>> = MutableLiveData()
 
