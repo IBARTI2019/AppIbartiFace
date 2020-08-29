@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a732f200c1d5831dbf72b7de34bc1c08",
+    "identityHash": "4c1c6d95676d94d42abc278f57c9deae",
     "entities": [
       {
         "tableName": "Category",
@@ -114,7 +114,7 @@
       },
       {
         "tableName": "Person",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `category` TEXT NOT NULL, `client` TEXT NOT NULL, `doc_id` TEXT NOT NULL, `status` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `category` TEXT NOT NULL, `client` TEXT NOT NULL, `doc_id` TEXT NOT NULL, `status` TEXT NOT NULL, `photo` TEXT NOT NULL, `names` TEXT, `surnames` TEXT, `dateBorn` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -143,6 +143,30 @@
           {
             "fieldPath": "status",
             "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "photo",
+            "columnName": "photo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "names",
+            "columnName": "names",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "surnames",
+            "columnName": "surnames",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateBorn",
+            "columnName": "dateBorn",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -254,12 +278,132 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "PersonAsistencia",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cedula` TEXT NOT NULL, `names` TEXT, `surnames` TEXT, `dateEntry` TEXT NOT NULL, `timeEntry` TEXT NOT NULL, `photoEntry` TEXT NOT NULL, `isApto` INTEGER, PRIMARY KEY(`cedula`, `dateEntry`, `timeEntry`))",
+        "fields": [
+          {
+            "fieldPath": "cedula",
+            "columnName": "cedula",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "names",
+            "columnName": "names",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "surnames",
+            "columnName": "surnames",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateEntry",
+            "columnName": "dateEntry",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timeEntry",
+            "columnName": "timeEntry",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "photoEntry",
+            "columnName": "photoEntry",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isApto",
+            "columnName": "isApto",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "cedula",
+            "dateEntry",
+            "timeEntry"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Location",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `codeSucursal` TEXT NOT NULL, `description` TEXT NOT NULL, `address` TEXT NOT NULL, `email` TEXT NOT NULL, `observation` TEXT NOT NULL, `phone` TEXT NOT NULL, `status` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "codeSucursal",
+            "columnName": "codeSucursal",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "observation",
+            "columnName": "observation",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "phone",
+            "columnName": "phone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a732f200c1d5831dbf72b7de34bc1c08')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4c1c6d95676d94d42abc278f57c9deae')"
     ]
   }
 }

@@ -1,7 +1,9 @@
 package com.oesvica.appibartiFace.ui.standby
 
+import CachedResourceList
 import androidx.lifecycle.*
 import com.oesvica.appibartiFace.data.model.*
+import com.oesvica.appibartiFace.data.model.location.Location
 import com.oesvica.appibartiFace.data.model.standby.StandBy
 import com.oesvica.appibartiFace.data.model.standby.StandByQuery
 import com.oesvica.appibartiFace.data.repository.MaestrosRepository
@@ -14,6 +16,31 @@ import javax.inject.Inject
 class StandByViewModel @Inject constructor(
     private val maestrosRepository: MaestrosRepository
 ) : BaseViewModel() {
+
+    val locations by lazy {
+        object : CachedResourceList<Location>() {
+            override suspend fun loadFromDb(): List<Location> =
+                maestrosRepository.findLocationsSynchronous()
+            override suspend fun fetch(): Result<List<Location>> =
+                maestrosRepository.refreshLocations()
+        }.asLiveData(IO)
+    }
+
+//    val locationsTraditionalWay = liveData {
+//        val list = maestrosRepository.findLocationsSynchronous()
+//        if (list.isNullOrEmpty()) {
+//            val result = withContext(IO) {
+//                maestrosRepository.refreshLocations()
+//            }
+//            if (result.success != null) {
+//                emit(result.success)
+//            } else {
+//                emit(emptyList())
+//            }
+//        } else {
+//            emit(list)
+//        }
+//    }
 
     private val standBysQuery: MutableLiveData<StandByQuery> = MutableLiveData()
     var standBys: LiveData<List<StandBy>> = standBysQuery.switchMap { filter ->

@@ -8,6 +8,7 @@ import com.oesvica.appibartiFace.data.model.auth.LogOutRequest
 import com.oesvica.appibartiFace.data.model.auth.LogOutResponse
 import com.oesvica.appibartiFace.data.model.category.Category
 import com.oesvica.appibartiFace.data.model.category.CategoryRequest
+import com.oesvica.appibartiFace.data.model.location.Location
 import com.oesvica.appibartiFace.data.model.person.AddPersonRequest
 import com.oesvica.appibartiFace.data.model.person.Person
 import com.oesvica.appibartiFace.data.model.person.UpdatePersonRequest
@@ -18,7 +19,6 @@ import com.oesvica.appibartiFace.data.model.standby.StandBy
 import com.oesvica.appibartiFace.data.model.status.Status
 import com.oesvica.appibartiFace.data.model.status.StatusRequest
 import retrofit2.http.*
-import java.util.*
 
 interface AppIbartiFaceApi {
 
@@ -39,6 +39,8 @@ interface AppIbartiFaceApi {
         const val ADD_STATUS = "maestros/status"
         const val UPDATE_STATUS = "maestros/status/{id}/"
         const val DELETE_STATUS = "maestros/status/{id}/"
+
+        const val FIND_LOCATIONS = "maestros/location"
 
         const val STAND_BY = "standby/fotos/"
         const val STAND_BY_BY_DATE = "standby/fotos/{client}/{date}"
@@ -162,8 +164,13 @@ interface AppIbartiFaceApi {
         @Path("id") id: String
     )
 
-    @GET(STAND_BY)
-    suspend fun findStandBysCurrentDay(): List<StandBy>
+    @GET(FIND_LOCATIONS)
+    suspend fun findLocations(
+        @Header("Authorization") authorization: String?
+    ): List<Location>
+
+//    @GET(STAND_BY)
+//    suspend fun findStandBysCurrentDay(): List<StandBy>
 
     @GET(STAND_BY_BY_DATE)
     suspend fun findStandBysByClientAndDate(

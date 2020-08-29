@@ -29,7 +29,7 @@ class EditPersonViewModel
             if (result.success != null) {
                 emit(maestrosRepository.findCategoriesSynchronous())
             } else {
-                emit(emptyList())
+                emit(emptyList<Category>())
             }
         } else {
             emit(list)
@@ -45,7 +45,7 @@ class EditPersonViewModel
             if (result.success != null) {
                 emit(maestrosRepository.findStatusesSynchronous())
             } else {
-                emit(emptyList())
+                emit(emptyList<Status>())
             }
         } else {
             emit(list)

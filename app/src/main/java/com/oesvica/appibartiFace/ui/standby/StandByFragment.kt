@@ -14,11 +14,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.data.model.CustomDate
 import com.oesvica.appibartiFace.data.model.currentDay
+import com.oesvica.appibartiFace.data.model.location.Location
 import com.oesvica.appibartiFace.data.model.standby.StandBy
 import com.oesvica.appibartiFace.data.model.standby.StandByQuery
 import com.oesvica.appibartiFace.ui.addPerson.AddPersonActivity
@@ -43,6 +45,8 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     private val standByViewModel: StandByViewModel by viewModels { viewModelFactory }
+
+    private var locations: List<Location>? = null
 
     private var datePickerDialog: DatePickerDialog? = null
     private var selectedDate: CustomDate? = null
@@ -80,7 +84,7 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
         dateTextView.setOnClickListener { showDatePickerDialog() }
         searchStandBysIcon.setOnClickListener { queryStandBys() }
         observeStandBys()
-        setUpClientAutocomplete()
+        setUpLocationsSpinner()
         val tempLastQueryTriggered =
             savedInstanceState?.getParcelable<StandByQuery?>(KEY_LAST_QUERY_TRIGGERED)
         debug("onViewCreated tempLastQueryTriggered $tempLastQueryTriggered")
@@ -142,19 +146,27 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
         })
     }
 
-    private fun setUpClientAutocomplete() {
-        val adapter: ArrayAdapter<String> = ArrayAdapter(
+    private fun setUpLocationsSpinner() {
+        locationsSpinner.adapter = ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_dropdown_item_1line,
-            standByViewModel.getClients()
+            android.R.layout.simple_spinner_dropdown_item,
+            listOf("Cargando ubicaciones...")
         )
-        clientEditText.setAdapter(adapter)
+        standByViewModel.locations.observe(viewLifecycleOwner, { list ->
+            locations = list
+            locationsSpinner.adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                listOf("Seleccione ubicacion:") + list.map { loc -> loc.description }
+            ).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            }
+        })
     }
 
     private fun queryStandBys() {
         val query = getQueryForStandBys(displayErrorMessages = true)
         if (query != null) {
-            clientEditText.clearFocus()
             context?.hideSoftInput(searchContainer)
             standByViewModel.searchStandBys(query, force = true)
             lastQueryTriggered = query
@@ -171,12 +183,13 @@ class StandByFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
     }
 
     private fun getQueryForStandBys(displayErrorMessages: Boolean = true): StandByQuery? {
-        val client = clientEditText.text.toString()
-        if (client.isEmpty()) {
+        val client = locations?.getOrNull(locationsSpinner.selectedItemPosition-1)?.codeSucursal
+//        val client = clientEditText.text.toString()
+        if (client.isNullOrEmpty()) {
             if (displayErrorMessages) {
                 Toast.makeText(
                     context,
-                    "Debe ingresar un valor en el campo cliente",
+                    "Debe seleccionar una ubicacion",
                     Toast.LENGTH_SHORT
                 ).show()
             }

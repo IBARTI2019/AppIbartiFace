@@ -17,6 +17,7 @@ import com.oesvica.appibartiFace.data.preferences.AppPreferencesHelper.Companion
 import com.oesvica.appibartiFace.data.preferences.AppPreferencesHelper.Companion.TOKEN
 import com.oesvica.appibartiFace.data.preferences.PreferencesHelper
 import com.oesvica.appibartiFace.data.api.AppIbartiFaceApi
+import com.oesvica.appibartiFace.data.model.location.Location
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.mapToResult
 import javax.inject.Inject
@@ -30,6 +31,7 @@ class AppMaestrosRepository
     private val statusDao: StatusDao,
     private val standByDao: StandByDao,
     private val personDao: PersonDao,
+    private val locationDao: LocationDao,
     private val prefs: PreferencesHelper
 ) : MaestrosRepository() {
 
@@ -194,6 +196,19 @@ class AppMaestrosRepository
             )
             personDao.deletePerson(personId)
         }
+    }
+
+
+    override suspend fun refreshLocations(): Result<List<Location>> {
+        return mapToResult {
+            val locations = appIbartiFaceApi.findLocations(authorization = prefs[TOKEN])
+            locationDao.replaceLocations(*locations.toTypedArray())
+            locations
+        }
+    }
+
+    override suspend fun findLocationsSynchronous(): List<Location> {
+        return locationDao.findLocationsSynchronous()
     }
 
     override fun loadStandBys(

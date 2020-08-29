@@ -1,7 +1,7 @@
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.Observer
+import androidx.lifecycle.*
+import com.oesvica.appibartiFace.data.model.Result
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.CoroutineContext
 
 /*
  * Copyright (C) 2018 Sneyder Angulo.
@@ -46,4 +46,46 @@ fun <T> LiveData<T>.distinct(): LiveData<T> {
         }
     })
     return distinctLiveData
+}
+
+//suspend fun <T> findOrRefresh(
+//    findSync: suspend () -> List<T>,
+//    refresh: suspend () -> Result<List<T>>
+//): LiveData<List<T>> {
+//    return liveData<List<T>> {
+//        val list = findSync()
+//        if (list.isNullOrEmpty()) {
+//            val result = withContext(IO) { refresh() }
+//            if (result.success != null) {
+//                emit(result.success)
+//            } else {
+//                emit(emptyList())
+//            }
+//        } else {
+//            emit(list)
+//        }
+//    }
+//}
+
+abstract class CachedResourceList<T>(){
+
+    protected abstract suspend fun loadFromDb(): List<T>
+    protected abstract suspend fun fetch(): Result<List<T>>
+
+    fun asLiveData(context: CoroutineContext): LiveData<List<T>> {
+        return liveData<List<T>> {
+            val list = loadFromDb()
+            if (list.isNullOrEmpty()) {
+                val result = withContext(context) { fetch() }
+                if (result.success != null) {
+                    emit(result.success)
+                } else {
+                    emit(emptyList())
+                }
+            } else {
+                emit(list)
+            }
+        }
+    }
+
 }

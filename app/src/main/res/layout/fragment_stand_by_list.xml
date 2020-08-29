@@ -17,32 +17,40 @@
 
         <FrameLayout
             android:id="@+id/clientContainer"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
             android:paddingEnd="8dp"
+            app:layout_constraintWidth_percent="0.44"
             app:layout_constraintEnd_toStartOf="@id/dateTextView"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="RtlSymmetry">
 
-            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                android:id="@+id/clientEditText"
-                android:layout_width="match_parent"
+            <Spinner
+                android:id="@+id/locationsSpinner"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/standby_client"
-                android:completionThreshold="0"
-                android:inputType="number"
-                android:minWidth="120dp"
-                android:textSize="17sp" />
+                android:textSize="17sp"/>
+
+<!--            <androidx.appcompat.widget.AppCompatAutoCompleteTextView-->
+<!--                android:id="@+id/clientEditText"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:hint="@string/standby_client"-->
+<!--                android:completionThreshold="0"-->
+<!--                android:inputType="number"-->
+<!--                android:minWidth="120dp"-->
+<!--                android:textSize="17sp" />-->
 
         </FrameLayout>
 
         <TextView
             android:id="@+id/dateTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.42"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:text="@string/standby_date"

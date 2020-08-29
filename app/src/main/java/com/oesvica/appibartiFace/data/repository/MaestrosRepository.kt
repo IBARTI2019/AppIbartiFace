@@ -2,12 +2,8 @@ package com.oesvica.appibartiFace.data.repository
 
 import androidx.lifecycle.LiveData
 import com.oesvica.appibartiFace.data.model.*
-import com.oesvica.appibartiFace.data.model.asistencia.Asistencia
-import com.oesvica.appibartiFace.data.model.auth.AuthInfo
-import com.oesvica.appibartiFace.data.model.auth.LogInResponse
-import com.oesvica.appibartiFace.data.model.auth.LogOutResponse
-import com.oesvica.appibartiFace.data.model.auth.UserData
 import com.oesvica.appibartiFace.data.model.category.Category
+import com.oesvica.appibartiFace.data.model.location.Location
 import com.oesvica.appibartiFace.data.model.person.AddPersonRequest
 import com.oesvica.appibartiFace.data.model.person.Person
 import com.oesvica.appibartiFace.data.model.person.UpdatePersonRequest
@@ -35,12 +31,17 @@ abstract class MaestrosRepository {
     abstract suspend fun updateStatus(status: Status): Result<Status>
     abstract suspend fun deleteStatus(idStatus: String): Result<Unit>
 
+    abstract suspend fun refreshLocations(): Result<List<Location>>
+    abstract suspend fun findLocationsSynchronous(): List<Location>
+
 
     abstract suspend fun refreshPersons(): Result<Unit>
     abstract fun loadPersons(): LiveData<List<Person>>
     abstract suspend fun insertPerson(addPersonRequest: AddPersonRequest): Result<Unit>
     abstract suspend fun updatePerson(personId: String, updatePersonRequest: UpdatePersonRequest): Result<Person>
     abstract suspend fun deletePerson(personId: String): Result<Unit>
+
+
 
     abstract fun loadStandBys(client: String, date: String): LiveData<List<StandBy>>
     abstract suspend fun refreshStandBys(client: String, date: String, force: Boolean): Result<Unit>

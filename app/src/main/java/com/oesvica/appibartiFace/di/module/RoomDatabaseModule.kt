@@ -13,8 +13,7 @@ class RoomDatabaseModule {
     @Singleton
     @Provides
     fun provideAppDatabase(application: Application) =
-        Room.databaseBuilder(application, AppDatabase::class.java, "TheAppIbartiFaceDB.db")
-//            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+        Room.databaseBuilder(application, AppDatabase::class.java, "TheAppIbartiFaceDBV3.1.db")
             .fallbackToDestructiveMigration()
             .build()
 
@@ -41,5 +40,9 @@ class RoomDatabaseModule {
     @Singleton
     @Provides
     fun providePersonAsistenciaDao(appDatabase: AppDatabase) = appDatabase.personAsistenciaDao()
+
+    @Singleton
+    @Provides
+    fun provideLocationDao(appDatabase: AppDatabase) = appDatabase.locationDao()
 
 }

@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.oesvica.appibartiFace.di.module
 
 import com.facebook.stetho.okhttp3.StethoInterceptor

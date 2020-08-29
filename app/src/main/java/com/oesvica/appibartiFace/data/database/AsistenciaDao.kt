@@ -15,6 +15,10 @@ abstract class AsistenciaDao {
     @Query("SELECT * FROM ${Asistencia.TABLE_NAME} WHERE date BETWEEN :iniDate AND :endDate")
     abstract fun findAsistencias(iniDate: String, endDate: String): LiveData<List<Asistencia>>
 
+    // Delete
+    @Query("DELETE FROM ${Asistencia.TABLE_NAME} WHERE date BETWEEN :iniDate AND :endDate")
+    abstract suspend fun deleteAsistencias(iniDate: String, endDate: String)
+
     @Transaction
     open suspend fun replaceAsistencias(
         iniDate: String,
@@ -24,9 +28,5 @@ abstract class AsistenciaDao {
         deleteAsistencias(iniDate, endDate)
         insertAsistencias(*asistencias)
     }
-
-    // Delete
-    @Query("DELETE FROM ${Asistencia.TABLE_NAME} WHERE date BETWEEN :iniDate AND :endDate")
-    abstract suspend fun deleteAsistencias(iniDate: String, endDate: String)
 
 }

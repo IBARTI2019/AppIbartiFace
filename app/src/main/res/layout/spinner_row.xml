@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cust_view"
+    android:layout_width="match_parent"
+    android:textColor="#000"
+    android:ellipsize="marquee"
+    android:singleLine="true"
+    tools:text="Metalurgica Carabobo Valencia loremloremloremloremloremloremloremloremloremloremloremloremloremlorem"
+    android:textSize="12dp"
+    android:layout_height="36dp"
+    android:gravity="left|center_vertical" />
