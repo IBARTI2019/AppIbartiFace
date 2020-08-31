@@ -59,7 +59,7 @@ class DocsFragment : DaggerFragment() {
         return inflater.inflate(R.layout.fragment_docs_list, container, false)
     }
 
-    private val isAptos by lazy { findNavController().currentDestination?.id == R.id.nav_aptos }
+    private val isAptos by lazy { findNavController().currentDestination?.id != R.id.nav_no_aptosfr }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

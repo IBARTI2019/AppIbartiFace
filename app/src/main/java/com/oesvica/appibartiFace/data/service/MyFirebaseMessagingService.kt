@@ -22,35 +22,47 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val channel = remoteMessage.data["channel"] ?: return
         if (photo != null) {
             debug("loading stuff $photo")
-            Glide.with(this)
-                .asBitmap()
-                .load(photo)
-                .into(object : CustomTarget<Bitmap?>() {
-                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap?>?) {
-                        debug("onResourceReady")
-                        displayNotification(title, description, channel, resource)
-                    }
-                    override fun onLoadCleared(placeholder: Drawable?) {
-                        debug("onLoadCleared")
-                    }
-                })
-        }  else {
+            loadImg(photo) { resource ->
+                displayNotification(title, description, channel, resource, photo)
+            }
+        } else {
             displayNotification(title, description, channel)
         }
+    }
+
+    private fun loadImg(photo: String, func: (Bitmap) -> Unit) {
+        Glide.with(this)
+            .asBitmap()
+            .load(photo)
+            .into(object : CustomTarget<Bitmap?>() {
+                override fun onResourceReady(
+                    resource: Bitmap,
+                    transition: Transition<in Bitmap?>?
+                ) {
+                    debug("onResourceReady")
+                    func(resource)
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    debug("onLoadCleared")
+                }
+            })
     }
 
     private fun displayNotification(
         title: String,
         description: String,
         channel: String,
-        img: Bitmap? = null
+        photoBitmap: Bitmap? = null,
+        photoUrl: String? = null
     ) {
         val notification = buildNotificationBig(
             context = this@MyFirebaseMessagingService,
             title = title,
             description = description,
             channel = channel,
-            img = img
+            photoBitmap = photoBitmap,
+            photoUrl = photoUrl
         )
         notificationManager().notify(System.currentTimeMillis().toInt(), notification)
     }

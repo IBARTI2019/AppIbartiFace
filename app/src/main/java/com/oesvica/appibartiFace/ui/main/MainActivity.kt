@@ -3,7 +3,6 @@ package com.oesvica.appibartiFace.ui.main
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -13,7 +12,6 @@ import android.widget.TextView
 import androidx.activity.result.launch
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEach
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
@@ -22,7 +20,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
-import com.oesvica.appibartiFace.CHANNEL_ID
+import com.oesvica.appibartiFace.CHANNELS
 import com.oesvica.appibartiFace.R
 import com.oesvica.appibartiFace.utils.*
 import com.oesvica.appibartiFace.utils.base.DaggerActivity
@@ -48,6 +46,7 @@ class MainActivity : DaggerActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        debug("MainActivity onCreate $savedInstanceState")
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         if (isOreoOrLater()) createNotificationChannel()
@@ -159,19 +158,19 @@ class MainActivity : DaggerActivity() {
         return appBarConfiguration?.let { navController.navigateUp(it) } == true || super.onSupportNavigateUp()
     }
 
+
+
     @TargetApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {
-        // Create the NotificationChannel
-        val name = "IbartiAppChannel"
-        val descriptionText = "Notifications from Ibarti App"
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val mChannel = NotificationChannel(CHANNEL_ID, name, importance)
-        mChannel.importance = NotificationManager.IMPORTANCE_HIGH
-        mChannel.description = descriptionText
+        // Create the NotificationChannels
         // Register the channel with the system; you can't change the importance
         // or other notification behaviors after this
-        val notificationManager =
-            getSystemService(AppCompatActivity.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(mChannel)
+        with(notificationManager()){
+            CHANNELS.forEach { (id, data) ->
+                val notificationChannel = NotificationChannel(id, data.name, data.importance.asChannelPriority())
+                notificationChannel.description = data.description
+                createNotificationChannel(notificationChannel)
+            }
+        }
     }
 }

@@ -43,17 +43,51 @@
         android:label="@string/menu_asistencia"
         tools:layout="@layout/fragment_person_list" />
 
-    <fragment
-        android:id="@+id/nav_aptos"
-        android:name="com.oesvica.appibartiFace.ui.personAsistencia.DocsFragment"
-        android:label="@string/menu_aptos"
-        tools:layout="@layout/fragment_docs_list" />
 
-    <fragment
+    <navigation
+        android:id="@+id/nav_aptos"
+        app:startDestination="@+id/nav_aptosfr">
+
+        <fragment
+            android:id="@+id/nav_aptosfr"
+            android:name="com.oesvica.appibartiFace.ui.personAsistencia.DocsFragment"
+            android:label="@string/menu_aptos"
+            tools:layout="@layout/fragment_docs_list">
+        </fragment>
+
+        <dialog
+            android:id="@+id/dialog_person_img_aptos"
+            android:label="@string/menu_aptos"
+            android:name="com.oesvica.appibartiFace.ui.personAsistencia.personImage.PersonImgDialog">
+            <argument
+                android:name="photoUrl"
+                app:argType="string"
+                app:nullable="false" />
+        </dialog>
+
+    </navigation>
+
+    <navigation
         android:id="@+id/nav_no_aptos"
-        android:name="com.oesvica.appibartiFace.ui.personAsistencia.DocsFragment"
-        android:label="@string/menu_no_aptos"
-        tools:layout="@layout/fragment_docs_list" />
+        app:startDestination="@+id/nav_no_aptosfr">
+
+        <fragment
+            android:id="@+id/nav_no_aptosfr"
+            android:name="com.oesvica.appibartiFace.ui.personAsistencia.DocsFragment"
+            android:label="@string/menu_no_aptos"
+            tools:layout="@layout/fragment_docs_list" />
+
+        <dialog
+            android:id="@+id/dialog_person_img_no_aptos"
+            android:label="@string/menu_no_aptos"
+            android:name="com.oesvica.appibartiFace.ui.personAsistencia.personImage.PersonImgDialog">
+            <argument
+                android:name="photoUrl"
+                app:argType="string"
+                app:nullable="false" />
+        </dialog>
+
+    </navigation>
 
     <dialog
         android:id="@+id/dialog_standby"
