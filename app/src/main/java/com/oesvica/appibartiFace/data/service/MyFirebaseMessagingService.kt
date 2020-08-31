@@ -2,11 +2,13 @@ package com.oesvica.appibartiFace.data.service
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.oesvica.appibartiFace.CHANNELS
 import com.oesvica.appibartiFace.buildNotificationBig
 import com.oesvica.appibartiFace.utils.debug
 import com.oesvica.appibartiFace.utils.notificationManager
@@ -64,7 +66,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             photoBitmap = photoBitmap,
             photoUrl = photoUrl
         )
-        notificationManager().notify(System.currentTimeMillis().toInt(), notification)
+        if (notification != null) {
+            notificationManager().notify(System.currentTimeMillis().toInt(), notification)
+        } else {
+            Toast.makeText(this@MyFirebaseMessagingService, "Acaba de recibir una notificacion del canal$channel el cual no es un canal valido. Canales validos son: ${CHANNELS.keys.joinToString(",")}", Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun onNewToken(token: String) {

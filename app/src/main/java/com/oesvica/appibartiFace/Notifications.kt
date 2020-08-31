@@ -114,13 +114,13 @@ fun buildNotificationBig(
     channel: String,
     photoBitmap: Bitmap? = null,
     photoUrl: String? = null,
-): Notification = NotificationCompat.Builder(context, channel).apply {
+): Notification? = NotificationCompat.Builder(context, channel).apply {
     setSmallIcon(R.mipmap.ic_launcher)
     setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
     setContentTitle(title)
     setContentText(description)
 
-    val channelData = CHANNELS[channel] ?: throw IllegalStateException("There is no channel for id = $channel")
+    val channelData = CHANNELS[channel] ?: return null//throw IllegalStateException("There is no channel for id = $channel")
     color = channelData.color
     setSound(channelData.sound)
     if (photoUrl != null && channelData.idDestination != null){
