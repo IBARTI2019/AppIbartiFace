@@ -13,7 +13,7 @@ class RoomDatabaseModule {
     @Singleton
     @Provides
     fun provideAppDatabase(application: Application) =
-        Room.databaseBuilder(application, AppDatabase::class.java, "TheAppIbartiFaceDBV3.1.db")
+        Room.databaseBuilder(application, AppDatabase::class.java, "TheAppIbartiFaceDBV3.2.db")
             .fallbackToDestructiveMigration()
             .build()
 

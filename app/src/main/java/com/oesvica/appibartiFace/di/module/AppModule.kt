@@ -50,7 +50,7 @@ abstract class AppModule {
         @Provides
         @Reusable
         @JvmStatic
-        fun provideSharedPreferences(context: Context): SharedPreferences = context.getSharedPreferences("AppIbartiV3.1", MODE_PRIVATE)
+        fun provideSharedPreferences(context: Context): SharedPreferences = context.getSharedPreferences("AppIbartiV3.2", MODE_PRIVATE)
 
         @Provides
         @JvmStatic

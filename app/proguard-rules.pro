@@ -20,4 +20,36 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# AndroidX
+-dontwarn com.google.android.material.**
+-keep class com.google.android.material.** { *; }
+-dontwarn androidx.**
+-keep class androidx.** { *; }
+-keep interface androidx.** { *; }
 
+# Retrofit
+-dontwarn retrofit.**
+-keep class retrofit.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+
+# OkHttp3
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okhttp3.**
+-dontnote okhttp3.**
+
+# Okio
+-keep class sun.misc.Unsafe { *; }
+-dontwarn java.nio.file.*
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+
+# Gson
+-keep class sun.misc.Unsafe { *; }
+-keep class com.google.gson.stream.** { *; }
+
+# Keep models for nav components use
+-keepnames class com.oesvica.appibartiFace.data.model.standby.StandBy
+-keepnames class com.oesvica.appibartiFace.data.model.person.Person
