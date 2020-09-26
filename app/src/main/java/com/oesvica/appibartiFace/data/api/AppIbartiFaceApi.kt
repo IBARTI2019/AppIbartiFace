@@ -23,7 +23,7 @@ import retrofit2.http.*
 interface AppIbartiFaceApi {
 
     companion object {
-        const val END_POINT = "http://oesvica.ddns.net:5005/"
+        const val END_POINT = "http://161.97.112.156:5002/"
 
         const val FIND_PERSONS = "maestros/persons"
         const val ADD_PERSON = "maestros/persons/"

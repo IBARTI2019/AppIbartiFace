@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AppIbartiFace</string>
+    <string name="app_name">IFacial</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Ibarti</string>
@@ -19,8 +19,8 @@
     <string name="edit_status">Editar Status</string>
     <string name="menu_save">Guardar</string>
     <string name="description">Descripcion</string>
-    <string name="add_status_message_loading">Guardando...</string>
-    <string name="add_status_message_saving_changes">Actualizando cambios...</string>
+    <string name="add_status_message_loading">Guardando&#8230;</string>
+    <string name="add_status_message_saving_changes">Actualizando cambios&#8230;</string>
     <string name="cedula">Cedula</string>
     <string name="add_person">Registrar persona</string>
     <string name="edit_person">Editar persona</string>
