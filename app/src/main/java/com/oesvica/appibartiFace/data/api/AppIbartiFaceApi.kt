@@ -42,7 +42,6 @@ interface AppIbartiFaceApi {
 
         const val FIND_LOCATIONS = "maestros/location"
 
-        const val STAND_BY = "standby/fotos/"
         const val STAND_BY_BY_DATE = "standby/fotos/{client}/{date}"
         const val STAND_BY_PREDICT = "standby/standbyPredict/{client}/{date}/{url}"
         const val DELETE_STAND_BY = "standby/fotos/{client}/{date}/"

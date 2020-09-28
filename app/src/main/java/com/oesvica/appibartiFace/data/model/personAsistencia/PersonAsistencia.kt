@@ -63,7 +63,7 @@ data class PersonAsistencia(
 
 }
 
-fun PersonAsistencia.fullPhotoUrl(): String = "${AppIbartiFaceApi.END_POINT}view$photoEntry"
+fun PersonAsistencia.fullPhotoUrl(): String = "${AppIbartiFaceApi.END_POINT}view/$photoEntry"
 fun PersonAsistencia.fullName(): String =
     (names?.split(" ")?.get(0)?.toLowerCase(Locale.getDefault())?.capitalize()
         ?: "") + " " + (surnames?.split(" ")?.get(0)?.toLowerCase(

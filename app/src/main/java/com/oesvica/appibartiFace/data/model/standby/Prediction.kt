@@ -3,6 +3,7 @@ package com.oesvica.appibartiFace.data.model.standby
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.oesvica.appibartiFace.data.api.AppIbartiFaceApi
+import com.oesvica.appibartiFace.data.api.AppIbartiFaceApi.Companion.END_POINT
 
 data class Prediction(
     @SerializedName("cedula") @Expose var cedula: String,
@@ -10,6 +11,8 @@ data class Prediction(
     @SerializedName("semejanza") @Expose var semejanza: String,
     @SerializedName("url") @Expose var url: String
 ) {
+//    val completeUrl: String
+//        get() = "${END_POINT.dropLast(1)}${url}"
     val completeUrl: String
         get() = "http://oesvica.ddns.net:5003${url}"
 
