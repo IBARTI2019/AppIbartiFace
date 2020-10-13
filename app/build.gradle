@@ -21,8 +21,8 @@ android {
         applicationId "com.oesvica.appibartiFace"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 5
-        versionName "3.2"
+        versionCode 7
+        versionName "3.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

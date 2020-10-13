@@ -1,19 +1,17 @@
 {
-  "version": 1,
+  "version": 2,
   "artifactType": {
     "type": "APK",
     "kind": "Directory"
   },
   "applicationId": "com.oesvica.appibartiFace",
-  "variantName": "debug",
+  "variantName": "processDebugResources",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
-      "properties": [],
-      "versionCode": 5,
-      "versionName": "3.2",
-      "enabled": true,
+      "versionCode": 7,
+      "versionName": "3.4",
       "outputFile": "app-debug.apk"
     }
   ]

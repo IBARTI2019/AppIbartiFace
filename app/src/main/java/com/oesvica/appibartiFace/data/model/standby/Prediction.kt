@@ -11,10 +11,8 @@ data class Prediction(
     @SerializedName("semejanza") @Expose var semejanza: String,
     @SerializedName("url") @Expose var url: String
 ) {
-//    val completeUrl: String
-//        get() = "${END_POINT.dropLast(1)}${url}"
     val completeUrl: String
-        get() = "http://oesvica.ddns.net:5003${url}"
+        get() = "${END_POINT.dropLast(1)}/view${url}"
 
     override fun toString(): String {
         return "Prediction(cedula='$cedula', distancia='$distancia', semejanza='$semejanza', completeUrl='$completeUrl')"
